@@ -4,11 +4,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'ui/**'
+      - 'Front/**'
   pull_request:
     branches: [ main ]
     paths:
-      - 'ui/**'
+      - 'Front/**'
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ui/app
+        working-directory: UI/apps/web
 
     steps:
       - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: 'ui/app/package-lock.json'
+          cache-dependency-path: 'UI/package-lock.json'
 
       - name: Install Chrome
         run: |
