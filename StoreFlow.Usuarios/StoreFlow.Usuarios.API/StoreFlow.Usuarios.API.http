@@ -1,0 +1,6 @@
+@StoreFlow.Usuarios.API_HostAddress = http://localhost:5082
+
+GET {{StoreFlow.Usuarios.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
