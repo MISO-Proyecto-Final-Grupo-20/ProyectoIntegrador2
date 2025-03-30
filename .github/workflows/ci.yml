@@ -91,18 +91,18 @@ jobs:
       - name: install dotnet tool ef
         run: dotnet tool install --global dotnet-ef
 
-      - name: Run dotnet db ensure created
-        env:
-          CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
-          RABBITMQ_HOST: localhost
-          ELASTIC_URI: http://localhost:9200
-          ELASTIC_APM_URI: http://localhost:8200
-        run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
+      # - name: Run dotnet db ensure created
+      #   env:
+      #     CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
+      #     RABBITMQ_HOST: localhost
+      #     ELASTIC_URI: http://localhost:9200
+      #     ELASTIC_APM_URI: http://localhost:8200
+      #   run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
   
           
       - name: Test projects
         env:
-          CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
+          # CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
           RABBITMQ_HOST: localhost
           ELASTIC_URI: http://localhost:9200
           ELASTIC_APM_URI: http://localhost:8200
