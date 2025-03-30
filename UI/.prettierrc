@@ -1,0 +1,20 @@
+{
+  "singleQuote": true,
+  "endOfLine": "auto",
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": "index.html",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
+}

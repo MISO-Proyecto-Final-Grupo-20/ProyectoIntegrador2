@@ -1,0 +1,12 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './colores' as colores;
+@use './tipografias-web' as tipografias-web;
+
+@include mat.core();
+@include mat.core-theme(colores.$light-theme);
+@include mat.button-theme(colores.$light-theme);
+@include mat.all-component-themes(colores.$light-theme);
+@include mat.all-component-typographies(
+  tipografias-web.$typography-web-global-config
+);

@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round');
+
+html {
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  line-height: normal;
+  font-family: 'Nunito', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+.mat-body-1,
+p,
+.mat-body-2,
+.mat-h5,
+h5,
+.mat-h6,
+h6 {
+  margin: 0 !important;
+}
+
+:root {
+  --mat-sidenav-container-shape: 0;
+}
+
+.mat-icon-outlined {
+  font-family: 'Material Icons Outlined' !important;
+}

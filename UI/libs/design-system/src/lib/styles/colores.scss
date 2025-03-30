@@ -1,0 +1,166 @@
+@use '@angular/material' as mat;
+$primary: (
+  50: #c7e9ff,
+  100: #b1dbf6,
+  200: #88c0e5,
+  300: #1ca7e3,
+  400: #239ef0ef,
+  500: #0099ff,
+  600: #0088e3,
+  700: #007ccf,
+  800: #0070ba,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+  ),
+);
+$accent: (
+  50: #febfdc,
+  100: #edb2cd,
+  200: #d98caf,
+  300: #d2588f,
+  400: #d9357f,
+  500: #df1b74,
+  600: #dd0165,
+  700: #cb005c,
+  800: #b60053,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+  ),
+);
+$warn: (
+  50: #ffe9ee,
+  100: #f9cdd8,
+  200: #ea9eb0,
+  300: #e6607f,
+  400: #f23662,
+  500: #ff134a,
+  600: #f40039,
+  700: #de0034,
+  800: #c8002f,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+  ),
+);
+
+$success: (
+  50: #def5e2,
+  100: #cde6d1,
+  200: #a9ceb0eb,
+  300: #7dbb80,
+  400: #63b873,
+  500: #4eb862,
+  600: #36b34d,
+  700: #25af3f,
+  800: #229d39,
+
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+  ),
+);
+
+$warning: (
+  50: #fff7ea,
+  100: #f9e9d0,
+  200: #e8cda1,
+  300: #e3b364,
+  400: #eeaa3b,
+  500: #faa419,
+  600: #f59700,
+  700: #df8a00,
+  800: #c97c00,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+  ),
+);
+
+$colores: (
+  'primary': $primary,
+  'accent': $accent,
+  'warn': $warn,
+  'success': $success,
+  'warning': $warn,
+);
+
+$grey: (
+  50: #ffffff,
+  100: #f5f5f5,
+  200: #ededed,
+  300: #e0e0e0,
+  400: #bdbdbd,
+  500: #9e9e9e,
+  600: #8a8a8a,
+  700: #616161,
+  800: #424242,
+);
+
+$light-primary: mat.m2-define-palette($primary, 800);
+$light-accent: mat.m2-define-palette($accent, 800);
+$light-warn: mat.m2-define-palette($warn, 800);
+$light-success: mat.m2-define-palette($success, 800);
+$light-warning: mat.m2-define-palette($warning, 800);
+
+$light-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn,
+      success: $light-success,
+      warning: $light-warning,
+    ),
+  )
+);
+
+$light-theme-variants: (
+  success: $success,
+  warning: $warning,
+);
+
+$variant-colors: (
+  'primary': $primary,
+  'accent': $accent,
+  'warn': $warn,
+  'success': $success,
+  'warning': $warning,
+  'grey': $grey,
+);

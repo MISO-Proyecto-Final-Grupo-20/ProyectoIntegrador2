@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+$typography-web-global-config: mat.m2-define-typography-config(
+  $font-family: 'nunito',
+  $headline-5: mat.m2-define-typography-level(
+      $font-weight: 700,
+      $font-size: 32px,
+    ),
+  $headline-6: mat.m2-define-typography-level(
+      $font-weight: 700,
+      $font-size: 24px,
+    ),
+  $subtitle-1: mat.m2-define-typography-level(
+      $font-size: 16px,
+      $font-weight: 700,
+    ),
+  $subtitle-2: mat.m2-define-typography-level(
+      $font-weight: 700,
+      $font-size: 16px,
+    ),
+  $body-1: mat.m2-define-typography-level(
+      $font-weight: 400,
+      $font-size: 14px,
+    ),
+  $body-2: mat.m2-define-typography-level(
+      $font-weight: 400,
+      $font-size: 14px,
+    ),
+  $button: mat.m2-define-typography-level(
+      $font-weight: 700,
+      $font-size: 14px,
+    ),
+);
