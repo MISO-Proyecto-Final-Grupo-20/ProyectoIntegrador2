@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Usuarios.API.Datos;
@@ -52,6 +52,13 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapUsuariosEndpoints();
+
+//Aplicar migraciones
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
 
