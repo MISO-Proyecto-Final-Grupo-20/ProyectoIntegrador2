@@ -18,8 +18,8 @@ public sealed class ProveedorToken(IConfiguration configuracion)
         {
             Subject = new ClaimsIdentity(
             [
-                new Claim(ClaimTypes.Email, correoElectronico),
-                new Claim(ClaimTypes.Role, "Usuario")
+                new Claim("correo", correoElectronico),
+                new Claim("rol", "Usuario")
             ]),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = credenciales
