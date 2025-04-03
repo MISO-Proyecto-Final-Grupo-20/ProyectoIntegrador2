@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
+using StoreFlow.Usuarios.API.Infraestructura;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<ProveedorToken>();
 
 var app = builder.Build();
 

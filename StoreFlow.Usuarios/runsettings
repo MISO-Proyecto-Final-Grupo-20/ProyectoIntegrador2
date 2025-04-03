@@ -1,0 +1,17 @@
+<RunSettings>
+	<DataCollectionRunSettings>
+		<DataCollectors>
+			<DataCollector friendlyName="XPlat Code Coverage">
+				<Configuration>
+					<ExcludeByFile>
+						<!-- Excluir todos los archivos de Migraciones -->
+						**/Migrations/*.cs
+					</ExcludeByFile>
+					<Exclude>
+						[StoreFlow.Usuarios.Tests*]*
+					</Exclude>
+				</Configuration>
+			</DataCollector>
+		</DataCollectors>
+	</DataCollectionRunSettings>
+</RunSettings>

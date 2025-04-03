@@ -40,14 +40,30 @@ namespace StoreFlow.Usuarios.Tests
 
             // ASSERT
             response.EnsureSuccessStatusCode();
-   
+            var token = await response.Content.ReadAsStringAsync();
 
-            var contenido = await response.Content.ReadFromJsonAsync<JsonElement>();
+            Assert.False(string.IsNullOrWhiteSpace(token), "El token no debe ser vacío");
+        }
 
-            var mensaje = contenido.GetProperty("mensaje").GetString();
+        [Fact]
+        public async Task Login_Invalido_Retorna401Unauthorized()
+        {
+            // ARRANGE
+            var app = TestApplicationFactory.Create();
+            await app.StartAsync();
+            var client = app.GetTestClient();
 
+            // No se inserta ningún usuario
 
-            Assert.Equal("Login exitoso", mensaje);
+            var loginRequest = new UsuarioLoginRequest("falso@correo.com", "incorrecta");
+
+            // ACT
+            var response = await client.PostAsJsonAsync("/login", loginRequest);
+
+            // ASSERT
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+
+            await app.StopAsync();
         }
     }
 }

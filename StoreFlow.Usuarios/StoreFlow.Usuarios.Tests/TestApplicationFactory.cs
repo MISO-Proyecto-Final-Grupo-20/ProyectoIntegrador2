@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
+using StoreFlow.Usuarios.API.Infraestructura;
 
 namespace StoreFlow.Usuarios.Tests
 {
@@ -21,6 +22,9 @@ namespace StoreFlow.Usuarios.Tests
 
             builder.Services.AddDbContext<UsuariosDbContext>(options =>
                 options.UseInMemoryDatabase("UsuariosTestDb"));
+
+
+            builder.Services.AddSingleton<ProveedorToken>();
 
             var app = builder.Build();
 
