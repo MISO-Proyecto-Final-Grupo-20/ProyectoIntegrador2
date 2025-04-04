@@ -82,7 +82,7 @@ jobs:
         if: needs.detect-changes.outputs.usuarios-service == 'true'
         uses: docker/build-push-action@v4
         with:
-          context: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API
+          context: .
           file: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
           platforms: linux/amd64
           push: true
