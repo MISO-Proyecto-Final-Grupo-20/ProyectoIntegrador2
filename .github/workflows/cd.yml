@@ -1,33 +1,29 @@
-name: "Build and Push Docker Images"
+name: "Build, Push & Deploy to AKS - StoreFlow"
 
 on:
   workflow_dispatch:
     inputs:
       build_all:
-        description: 'Build all services regardless of changes'
+        description: 'Build regardless of changes'
         type: boolean
         required: false
         default: false
   push:
-    branches: 
+    branches:
       - main
 
 env:
-  CONNECTIONSTRINGS__VENTAS: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
-  RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository_owner }}/${{ github.event.repository.name }}
-  ELASTIC_URI: ${{ secrets.ELASTIC_URI }}
-  ELASTIC_APM_URI: ${{ secrets.ELASTIC_APM_URI }}
+  AKS_RESOURCE_GROUP: terraform-aks-dev
+  AKS_CLUSTER_NAME: terraform-aks-dev-cluster
 
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
       should_build_all: ${{ steps.set-build-all.outputs.should_build_all }}
-      ventas-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.ventas-service }}
-    
+      usuarios-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.usuarios-service }}
     steps:
       - name: Set build all flag
         id: set-build-all
@@ -49,10 +45,10 @@ jobs:
         id: filter
         with:
           filters: |
-            ventas-service:
-              - 'experimento-hu012-ha10/Ventas/**'
-              - 'experimento-hu012-ha10/Ventas/Dockerfile'
-              - 'experimento-hu012-ha10/docker-compose.yaml'
+            usuarios-service:
+              - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/**'
+              - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile'
+              - 'docker-compose.yaml'
 
   build-and-push:
     needs: detect-changes
@@ -60,7 +56,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -81,39 +76,72 @@ jobs:
       - name: Set lowercase image prefix and version
         run: |
           echo "LOWERCASE_PREFIX=$(echo ${{ env.IMAGE_PREFIX }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          # Use current date in YYYY-MM-DD format for versioning
-          echo "VERSION=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "VERSION=$(date +'%Y-%m-%d-%H%M')" >> $GITHUB_ENV
 
-      - name: Build and push Ventas Service
-        if: needs.detect-changes.outputs.ventas-service == 'true'
+      - name: Build and push Usuarios Service
+        if: needs.detect-changes.outputs.usuarios-service == 'true'
         uses: docker/build-push-action@v4
         with:
-          context: ./experimento-hu012-ha10
-          file: ./experimento-hu012-ha10/Ventas/Dockerfile
+          context: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API
+          file: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
           tags: |
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:${{ env.VERSION }}
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:latest
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:latest
+
+  deploy-to-aks:
+    needs: [detect-changes, build-and-push]
+    runs-on: ubuntu-latest
+    if: needs.detect-changes.outputs.usuarios-service == 'true'
+    steps:
+      - name: Set lowercase image prefix
+        run: echo "LOWERCASE_PREFIX=$(echo ${{ env.IMAGE_PREFIX }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Check if AKS cluster exists
+        id: aks-check
+        run: |
+          if az aks show --name ${{ env.AKS_CLUSTER_NAME }} --resource-group ${{ env.AKS_RESOURCE_GROUP }} &> /dev/null; then
+            echo "AKS_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "AKS_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Get AKS credentials
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          az aks get-credentials --resource-group ${{ env.AKS_RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER_NAME }} --admin --overwrite-existing
+
+      - name: Update usuarios image in AKS
+        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.usuarios-service == 'true'
+        run: |
+          kubectl set image deployment/usuarios usuarios=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }} -n storeflow
 
   cleanup:
     needs: [detect-changes, build-and-push]
     runs-on: ubuntu-latest
     permissions:
       packages: write
-    
     steps:
       - name: Set lowercase repository name
         run: |
           echo "REPO_NAME=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      - name: Delete old Ventas images
-        if: needs.detect-changes.outputs.ventas-service == 'true'
+      - name: Delete old Usuarios images
+        if: needs.detect-changes.outputs.usuarios-service == 'true'
         continue-on-error: true
         uses: actions/delete-package-versions@v4
         with:
-          package-name: '${{ env.REPO_NAME }}/ventas'
+          package-name: '${{ env.REPO_NAME }}/usuarios'
           package-type: 'container'
           min-versions-to-keep: 3
           delete-only-untagged-versions: false
