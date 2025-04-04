@@ -5,13 +5,22 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace StoreFlow.Usuarios.API.Infraestructura;
 
-public sealed class ProveedorToken(IConfiguration configuracion)
+public sealed class ProveedorToken
 {
-    public string ObtenerToken(string correoElectronico, string contrasena)
-    {
-        var claveSecreta = "ClaveSuperLargaParaJwtDePrueba12345!"; //  Solo para pruebas
+    private readonly string _jwtSecret;
 
-        var llaveSeguridad = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(claveSecreta));
+    public ProveedorToken()
+    {
+        _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
+        if (string.IsNullOrEmpty(_jwtSecret))
+        {
+            throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
+        }
+    }
+
+    public string ObtenerToken(string correoElectronico, string rol)
+    {
+        var llaveSeguridad = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_jwtSecret));
         var credenciales = new SigningCredentials(llaveSeguridad, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -19,7 +28,7 @@ public sealed class ProveedorToken(IConfiguration configuracion)
             Subject = new ClaimsIdentity(
             [
                 new Claim("correo", correoElectronico),
-                new Claim("rol", "Usuario")
+                new Claim(  ClaimTypes.Role, rol)
             ]),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = credenciales
@@ -31,5 +40,4 @@ public sealed class ProveedorToken(IConfiguration configuracion)
 
         return token;
     }
-
 }

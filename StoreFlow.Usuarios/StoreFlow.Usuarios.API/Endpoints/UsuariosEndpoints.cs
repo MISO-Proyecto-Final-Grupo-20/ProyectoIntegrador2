@@ -22,7 +22,7 @@ namespace StoreFlow.Usuarios.API.Endpoints
                 if (usuario is null)
                     return Results.Unauthorized();
 
-                string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.Contrasena);
+                string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.TipoUsuario.ToString());
 
                 return Results.Ok(token);
             });

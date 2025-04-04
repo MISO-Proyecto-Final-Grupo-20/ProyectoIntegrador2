@@ -1,0 +1,22 @@
+services:
+  dbusuarios:
+    image: postgres:15
+    container_name: dbusuarios
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: usuarios
+    ports:
+        - "5433:5432"
+
+  usuarios:
+    build: 
+      context: StoreFlow.Usuarios
+      dockerfile: StoreFlow.Usuarios.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8090:8080' 
+    depends_on: 
+          - 'dbusuarios'

@@ -1,10 +1,11 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
-using Microsoft.AspNetCore.TestHost;
+﻿using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.DTOs;
 using StoreFlow.Usuarios.API.Entidades;
+using System.Net.Http.Json;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 
 namespace StoreFlow.Usuarios.Tests
 {
@@ -40,9 +41,20 @@ namespace StoreFlow.Usuarios.Tests
 
             // ASSERT
             response.EnsureSuccessStatusCode();
-            var token = await response.Content.ReadAsStringAsync();
+            var tokenString = await response.Content.ReadAsStringAsync();
 
-            Assert.False(string.IsNullOrWhiteSpace(token), "El token no debe ser vacío");
+            tokenString = tokenString.Trim('"'); // Eliminar comillas dobles
+
+            Assert.False(string.IsNullOrWhiteSpace(tokenString), "El token no debe ser vacío");
+
+            var handler = new JsonWebTokenHandler();
+            var token =  handler.ReadJsonWebToken(tokenString);
+
+            var rolClaim = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            Assert.False(string.IsNullOrEmpty(rolClaim),"El token debe tener el claim rol");
+            Assert.Equal("Cliente", rolClaim);
+
         }
 
         [Fact]
@@ -62,6 +74,7 @@ namespace StoreFlow.Usuarios.Tests
 
             // ASSERT
             Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+
 
             await app.StopAsync();
         }

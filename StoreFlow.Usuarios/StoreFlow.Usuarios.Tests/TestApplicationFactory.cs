@@ -23,6 +23,7 @@ namespace StoreFlow.Usuarios.Tests
             builder.Services.AddDbContext<UsuariosDbContext>(options =>
                 options.UseInMemoryDatabase("UsuariosTestDb"));
 
+            Environment.SetEnvironmentVariable("JWT_SECRET", "EstaEsUnaClaveSuperSecretaDe32Caracteres!");
 
             builder.Services.AddSingleton<ProveedorToken>();
 
