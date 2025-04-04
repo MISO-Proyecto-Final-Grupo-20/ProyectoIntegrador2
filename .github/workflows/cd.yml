@@ -93,6 +93,9 @@ jobs:
 
   deploy-to-aks:
     needs: [detect-changes, build-and-push]
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     if: needs.detect-changes.outputs.usuarios-service == 'true'
     steps:
