@@ -33,27 +33,30 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: UI/ 
 
       - name: Cache Nx workspace
         uses: actions/cache@v4
         with:
-          path: .nx/cache
+          path: UI/.nx/cache
           key: ${{ runner.os }}-nx-${{ hashFiles('**/project.json', '**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nx-
 
       - name: Build ${{ matrix.app }} app
         run: npx nx build ${{ matrix.app }} --configuration=production
+        working-directory: UI/
 
       - name: Run tests for ${{ matrix.app }} app
         run: npx nx test ${{ matrix.app }} --no-watch --no-progress
+        working-directory: UI/
 
       - name: Upload test results for ${{ matrix.app }} app
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ${{ matrix.app }}-test-results
-          path: 'dist/test-results/${{ matrix.app }}/**/*.xml'
+          path: 'UI/dist/test-results/${{ matrix.app }}/**/*.xml'
           if-no-files-found: warn
 
       - name: Archive build for ${{ matrix.app }} app
@@ -61,5 +64,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.app }}-build
-          path: dist/apps/${{ matrix.app }}/
+          path: UI/dist/apps/${{ matrix.app }}/
           retention-days: 7
