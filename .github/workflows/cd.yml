@@ -96,8 +96,10 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.detect-changes.outputs.usuarios-service == 'true'
     steps:
-      - name: Set lowercase image prefix
-        run: echo "LOWERCASE_PREFIX=$(echo ${{ env.IMAGE_PREFIX }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      - name: Set lowercase image prefix and version
+        run: |
+          echo "LOWERCASE_PREFIX=$(echo ${{ env.IMAGE_PREFIX }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "VERSION=$(date +'%Y-%m-%d-%H%M')" >> $GITHUB_ENV
 
       - name: Azure Login
         uses: azure/login@v1
