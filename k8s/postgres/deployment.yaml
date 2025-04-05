@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbusuarios
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbusuarios
+  template:
+    metadata:
+      labels:
+        app: dbusuarios
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: usuarios
+            - name: PGDATA
+              value: /data/db
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
