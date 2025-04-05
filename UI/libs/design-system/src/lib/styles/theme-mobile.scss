@@ -1,8 +1,10 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 @use './colores' as colores;
-@use './tipografias-mobile' as tipografias-mobile;
 
+@use './tipografias-mobile' as tipografias-mobile;
+@import './clases-colores.scss';
+@import './configuracion-mobile.scss';
 @include mat.core();
 @include mat.core-theme(colores.$light-theme);
 @include mat.button-theme(colores.$light-theme);
@@ -10,3 +12,6 @@
 @include mat.all-component-typographies(
   tipografias-mobile.$typography-mobile-global-config
 );
+
+@include mat.icon-button-density(-4);
+@include mat.form-field-density(-4);

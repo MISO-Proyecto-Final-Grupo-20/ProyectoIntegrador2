@@ -1,3 +1,4 @@
+import '@angular/localize/init';
 export default {
   displayName: 'web',
   preset: '../../jest.preset.js',

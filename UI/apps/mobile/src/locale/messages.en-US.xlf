@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="es-CO" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="983519587781663433" datatype="html">
+        <source>Bienvenido</source>
+        <target>Welcome</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="671442144102308031" datatype="html">
+        <source> Selecciona la categoría a la que perteneces </source>
+        <target>Select the category you belong to</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6629419484562012536" datatype="html">
+        <source> Vendedor <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
+        <target>Seller <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
+          <context context-type="linenumber">19,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6547329153703848894" datatype="html">
+        <source> Cliente <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
+        <target>Customer <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
+          <context context-type="linenumber">28,30</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -147,6 +147,7 @@ $light-theme: mat.m2-define-light-theme(
       warn: $light-warn,
       success: $light-success,
       warning: $light-warning,
+      grey: $grey,
     ),
   )
 );
@@ -164,3 +165,27 @@ $variant-colors: (
   'warning': $warning,
   'grey': $grey,
 );
+
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-outlined-button-outline-color: map-get($primary, 800) !important;
+}
+
+.mat-mdc-icon-button {
+  color: map-get($grey, 600) !important;
+}
+
+.success {
+  --mdc-snackbar-container-color: #def5e2;
+  --mdc-snackbar-supporting-text-color: #229d39;
+  --mat-snack-bar-button-color: #229d39;
+}
+
+.error {
+  --mdc-snackbar-container-color: #ffe9ee;
+  --mdc-snackbar-supporting-text-color: #c8002f;
+  --mat-snack-bar-button-color: #c8002f;
+}
+
+:root {
+  --mat-toolbar-container-background-color: #ffffff;
+}

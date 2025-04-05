@@ -2,33 +2,52 @@
 $typography-mobile-global-config: mat.m2-define-typography-config(
   $font-family: 'nunito',
   $headline-5: mat.m2-define-typography-level(
-      $font-weight: 500,
-      $font-size: 64px,
+      $font-weight: 700,
+      $font-size: 24px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $headline-6: mat.m2-define-typography-level(
-      $font-weight: 500,
-      $font-size: 56px,
+      $font-weight: 700,
+      $font-size: 20px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $subtitle-1: mat.m2-define-typography-level(
-      $font-size: 34px,
-      $font-weight: 400,
-      $line-height: 18px,
+      $font-size: 18px,
+      $font-weight: 700,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $subtitle-2: mat.m2-define-typography-level(
-      $font-weight: 500,
-      $font-size: 40px,
+      $font-size: 18px,
+      $font-weight: 700,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $body-1: mat.m2-define-typography-level(
       $font-weight: 400,
-      $font-size: 76px,
+      $font-size: 14px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $body-2: mat.m2-define-typography-level(
-      $font-weight: 400,
-      $font-size: 23px,
-      $line-height: 20px,
+      $font-weight: 300,
+      $font-size: 12px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $button: mat.m2-define-typography-level(
-      $font-weight: 500,
+      $font-weight: 700,
       $font-size: 14px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
 );
+
+:root {
+  --mat-toolbar-title-text-size: 14px;
+  --mat-toolbar-title-text-weight: 500;
+  --mat-toolbar-title-text-line-height: 150%;
+  --mat-toolbar-title-text-letter-spacing: 1px;
+}

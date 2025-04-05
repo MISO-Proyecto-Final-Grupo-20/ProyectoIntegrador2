@@ -1,0 +1,28 @@
+@import './colores.scss';
+.bg-grey-200 {
+  background-color: map-get($grey, 200);
+}
+
+.color-primary {
+  color: map-get($primary, 800);
+}
+
+.color-on-surface {
+  color: #1d1b20;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.color-white {
+  color: #ffffff;
+}
+
+.color-grey-800 {
+  color: map-get($grey, 800);
+}
+
+.color-grey-700 {
+  color: map-get($grey, 700);
+}

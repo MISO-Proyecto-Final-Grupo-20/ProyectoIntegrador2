@@ -1,3 +1,4 @@
+import '@angular/localize/init';
 export default {
   displayName: 'mobile',
   preset: '../../jest.preset.js',

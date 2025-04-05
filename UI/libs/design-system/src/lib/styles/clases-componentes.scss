@@ -1,0 +1,17 @@
+.sombra-header {
+  box-shadow: 0px 4px 4px 0px #0000000d;
+}
+
+.mat-toolbar {
+  z-index: 2;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  padding-top: env(safe-area-inset-top);
+  background-color: #ffffff;
+}
+
+.contenido-mobile {
+  padding-top: calc(56px + env(safe-area-inset-top));
+  height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+}

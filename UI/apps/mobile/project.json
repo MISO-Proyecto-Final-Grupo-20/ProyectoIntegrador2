@@ -5,6 +5,12 @@
   "prefix": "app",
   "sourceRoot": "apps/mobile/src",
   "tags": [],
+  "i18n": {
+    "sourceLocale": "es-CO",
+    "locales": {
+      "en-US": "apps/mobile/src/locale/messages.en-US.xlf"
+    }
+  },
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
@@ -13,7 +19,7 @@
         "outputPath": "dist/apps/mobile",
         "index": "apps/mobile/src/index.html",
         "browser": "apps/mobile/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": ["zone.js", "@angular/localize/init"],
         "tsConfig": "apps/mobile/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": ["apps/mobile/src/assets"],
@@ -24,11 +30,14 @@
         "scripts": []
       },
       "configurations": {
+        "en-US": {
+          "localize": ["en-US"]
+        },
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
+              "maximumWarning": "1mb",
               "maximumError": "1mb"
             },
             {
@@ -42,14 +51,7 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true,
-          "assets": [
-            {
-              "glob": "**.*",
-              "input": "apps/web/public/images",
-              "output": "/images/"
-            }
-          ]
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
@@ -69,7 +71,8 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "mobile:build"
+        "buildTarget": "mobile:build",
+        "outputPath": "apps/mobile/src/locale"
       }
     },
     "lint": {

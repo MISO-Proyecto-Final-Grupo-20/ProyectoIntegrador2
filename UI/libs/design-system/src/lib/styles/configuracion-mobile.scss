@@ -1,0 +1,6 @@
+.mat-mdc-snack-bar-container {
+  margin-top: calc(54px + env(safe-area-inset-top)) !important;
+  margin-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+  margin-left: calc(env(safe-area-inset-left) + 8px) !important;
+  margin-right: calc(env(safe-area-inset-right) + 8px) !important;
+}
