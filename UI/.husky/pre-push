@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run prettier && npx nx affected:lint --parallel && npx nx affected:test --parallel --browsers=ChromeHeadless --watch=false && npx nx affected:build --parallel
