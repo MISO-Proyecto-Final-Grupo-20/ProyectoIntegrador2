@@ -36,6 +36,8 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: UI/ 
+        env:
+          HUSKY: 0 # Disable Husky during installation
 
       - name: Cache Nx workspace
         uses: actions/cache@v4
