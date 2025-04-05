@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: usuarios
-          image: fcamilob/usuariospr2:v1
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/usuarios
           ports:
             - containerPort: 8080
           env:
