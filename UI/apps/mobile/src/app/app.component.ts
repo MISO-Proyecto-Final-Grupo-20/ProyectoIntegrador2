@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '@storeflow/design-system';
+import { Utilidades } from './utilidades';
 
 @Component({
   standalone: true,
@@ -14,4 +15,8 @@ import { SharedModule } from '@storeflow/design-system';
     <button mat-raised-button color="warn">Botón Advertencia</button>
     <router-outlet> </router-outlet>`,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    Utilidades.cambiarStatusBar('Light');
+  }
+}
