@@ -99,8 +99,10 @@ jobs:
       #     ELASTIC_APM_URI: http://localhost:8200
       #   run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
   
+      - name: Install coverlet tool
+        run: dotnet tool install --global coverlet.console
           
-      - name: Test projects
+      - name: Test projects with coverage
         env:
           # CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
           RABBITMQ_HOST: localhost
@@ -109,10 +111,14 @@ jobs:
         run: |
           for project in ${{ steps.find-csproj.outputs.projects }}; do
             if [[ "$project" == *Test* ]] || [[ "$project" == *Tests* ]]; then
-              echo "Testing $project"
+              echo "Testing $project with coverage"
               project_name=$(basename "$project" .csproj)
               mkdir -p TestResults
-              dotnet test "$project" --configuration Release --no-build --no-restore --logger "trx;LogFileName=TestResults/${project_name}.trx"
+              dotnet test "$project" --configuration Release --no-build --no-restore \
+                --logger "trx;LogFileName=TestResults/${project_name}.trx" \
+                /p:CollectCoverage=true \
+                /p:CoverletOutputFormat=cobertura \
+                /p:CoverletOutput=../../TestResults/${project_name}.coverage.xml
             fi
           done
 
@@ -121,6 +127,8 @@ jobs:
         run: |
           echo "Test results files:"
           find . -name "*.trx" | sort
+          echo "Coverage results files:"
+          find . -name "*.coverage.xml" | sort
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
@@ -130,3 +138,24 @@ jobs:
           path: '**/TestResults/*.trx'
           reporter: 'dotnet-trx'
           fail-on-error: false
+          
+      - name: Publish Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        if: always()
+        with:
+          filename: '**/TestResults/*.coverage.xml'
+          badge: true
+          fail_below_min: false
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: false
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
