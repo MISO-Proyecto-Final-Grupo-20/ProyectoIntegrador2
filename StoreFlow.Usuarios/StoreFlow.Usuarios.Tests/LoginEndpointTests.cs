@@ -6,44 +6,36 @@ using StoreFlow.Usuarios.API.Entidades;
 using System.Net.Http.Json;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Builder;
 
 namespace StoreFlow.Usuarios.Tests
 {
-    public class LoginEndpointTests
+    public class LoginEndpointTests : IAsyncLifetime
     {
+        private HttpClient _client = null!;
+        private WebApplication _app = null!;
+
+        public async Task InitializeAsync()
+        {
+            _app = TestApplicationFactory.Create();
+            await _app.StartAsync();
+            _client = _app.GetTestClient();
+            await CrearUsuarioAsync();
+        }
+        
         [Fact]
         public async Task Login_Exitoso_Retorna200Ok()
         {
             // ARRANGE
-            var app = TestApplicationFactory.Create();
-            await app.StartAsync();
-            var client = app.GetTestClient();
-            
-
-            using var scope = app.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
-
-            db.Usuarios.Add(new Usuario
-            {
-                CorreoElectronico = "test@correo.com",
-                Contrasena = "123456",
-                NombreCompleto = "Test User",
-                TipoUsuario = TiposUsuarios.Cliente
-            });
-
-            await db.SaveChangesAsync();
-            
-
-            var loginRequest = new UsuarioLoginRequest("test@correo.com", "123456");
+            var loginRequest = new UsuarioLoginRequest(new DatosIngreso("test@correo.com", "123456"), "cliente");
 
             // ACT
-            var response = await client.PostAsJsonAsync("/login", loginRequest);
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
 
             // ASSERT
             response.EnsureSuccessStatusCode();
-            var tokenString = await response.Content.ReadAsStringAsync();
-
-            tokenString = tokenString.Trim('"'); // Eliminar comillas dobles
+            var loginResponse = await response.Content.ReadFromJsonAsync<UsuarioLoginResponse>();
+            var tokenString = loginResponse?.Token.Trim('"'); 
 
             Assert.False(string.IsNullOrWhiteSpace(tokenString), "El token no debe ser vacío");
 
@@ -57,26 +49,71 @@ namespace StoreFlow.Usuarios.Tests
 
         }
 
+        
+
         [Fact]
-        public async Task Login_Invalido_Retorna401Unauthorized()
+        public async Task Login_con_usuario_inexistente_Retorna_401Unauthorized()
         {
             // ARRANGE
-            var app = TestApplicationFactory.Create();
-            await app.StartAsync();
-            var client = app.GetTestClient();
-
-            // No se inserta ningún usuario
-
-            var loginRequest = new UsuarioLoginRequest("falso@correo.com", "incorrecta");
+            var loginRequest = new UsuarioLoginRequest(new DatosIngreso("falso@correo.com", "incorrecta"), "cliente");
 
             // ACT
-            var response = await client.PostAsJsonAsync("/login", loginRequest);
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
 
             // ASSERT
             Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
 
 
-            await app.StopAsync();
+            // await app.StopAsync();
+        }
+        
+        [Fact]
+        public async Task Login_con_contrasena_incorrecta_Retorna_401Unauthorized()
+        {
+            // ARRANGE
+            var loginRequest = new UsuarioLoginRequest(new DatosIngreso("test@correo.com", "incorrecta"), "cliente");
+
+            // ACT
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
+
+            // ASSERT
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+
+        }
+        
+        [Fact]
+        public async Task Login_con_tipoUsuario_incorrecto_Retorna_401Unauthorized()
+        {
+            // ARRANGE
+            var loginRequest = new UsuarioLoginRequest(new DatosIngreso("test@correo.com", "123456"), "vendedor");
+
+            // ACT
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
+
+            // ASSERT
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+
+        }
+
+        public async  Task DisposeAsync()
+        {
+             await _app.StopAsync();
+        }
+        
+        private async Task CrearUsuarioAsync()
+        {
+            using var scope = _app.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+
+            db.Usuarios.Add(new Usuario
+            {
+                CorreoElectronico = "test@correo.com",
+                Contrasena = "123456",
+                NombreCompleto = "Test User",
+                TipoUsuario = TiposUsuarios.Cliente
+            });
+
+            await db.SaveChangesAsync();
         }
     }
 }

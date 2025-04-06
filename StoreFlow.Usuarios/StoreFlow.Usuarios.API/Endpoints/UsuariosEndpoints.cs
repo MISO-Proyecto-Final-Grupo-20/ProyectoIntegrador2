@@ -16,15 +16,18 @@ namespace StoreFlow.Usuarios.API.Endpoints
             {
                 var usuario = await db.Usuarios
                     .FirstOrDefaultAsync(u =>
-                        u.CorreoElectronico == loginDto.CorreoElectronico &&
-                        u.Contrasena == loginDto.Contrasena); 
+                        u.CorreoElectronico == loginDto.DatosIngreso.Correo &&
+                        u.Contrasena == loginDto.DatosIngreso.Contrasena); 
 
                 if (usuario is null)
+                    return Results.Unauthorized();
+                
+                if (usuario.TipoUsuario.ToString().ToLower() != loginDto.TipoCategoria.ToLower())
                     return Results.Unauthorized();
 
                 string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.TipoUsuario.ToString());
 
-                return Results.Ok(token);
+                return Results.Ok(new UsuarioLoginResponse(token));
             });
         }
     }
