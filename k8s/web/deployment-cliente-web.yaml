@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cliente-web
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cliente-web
+  template:
+    metadata:
+      labels:
+        app: cliente-web
+    spec:
+      containers:
+        - name: cliente-web
+          image: fcamilob/miapp-angular:v2
+          ports:
+            - containerPort: 80

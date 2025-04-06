@@ -12,3 +12,5 @@
 /StoreFlow.Usuarios/TestResults
 /StoreFlow.Usuarios/.vs
 UI/package-lock.json
+/Infraestructura/.terraform
+/Infraestructura/.terraform.lock.hcl

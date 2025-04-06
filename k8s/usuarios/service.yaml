@@ -3,8 +3,11 @@ kind: Service
 metadata:
   name: usuarios
   namespace: storeflow
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: aks-network-core
 spec:
   type: LoadBalancer
+  loadBalancerIP: 52.165.24.37
   selector:
     app: usuarios
   ports:

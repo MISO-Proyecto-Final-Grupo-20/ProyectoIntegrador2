@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cliente-web
+  namespace: storeflow
+spec:
+  type: LoadBalancer
+  selector:
+    app: cliente-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
