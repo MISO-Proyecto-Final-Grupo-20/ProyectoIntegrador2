@@ -99,9 +99,8 @@ jobs:
       #     ELASTIC_APM_URI: http://localhost:8200
       #   run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
   
-      - name: Install coverlet tool
-        run: dotnet tool install --global coverlet.console
-          
+      # Remove the coverlet tool installation as we'll use the built-in collector
+      
       - name: Test projects with coverage
         env:
           # CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
@@ -109,27 +108,25 @@ jobs:
           ELASTIC_URI: http://localhost:9200
           ELASTIC_APM_URI: http://localhost:8200
         run: |
+          # Create the TestResults directory at the repository root
+          mkdir -p TestResults
+          
           for project in ${{ steps.find-csproj.outputs.projects }}; do
             if [[ "$project" == *Test* ]] || [[ "$project" == *Tests* ]]; then
               echo "Testing $project with coverage"
-              project_dir=$(dirname "$project")
               project_name=$(basename "$project" .csproj)
-              mkdir -p TestResults
               
-              # Run tests with coverage
+              # Run tests with coverage using simpler approach
               dotnet test "$project" --configuration Release --no-build --no-restore \
-                --logger "trx;LogFileName=../../TestResults/${project_name}.trx" \
+                --logger "trx;LogFileName=$(pwd)/TestResults/${project_name}.trx" \
                 --collect:"XPlat Code Coverage" \
-                --results-directory ./TestResults
-              
-              # Move coverage file to a standardized location
-              if [ -d "./TestResults" ]; then
-                for coverageFile in $(find ./TestResults -name "coverage.cobertura.xml"); do
-                  cp "$coverageFile" "./TestResults/${project_name}.coverage.cobertura.xml"
-                done
-              fi
+                --results-directory "$(pwd)/TestResults"
             fi
           done
+          
+          # Debug: List all files in TestResults to understand the structure
+          echo "Files in TestResults directory:"
+          find TestResults -type f | sort
 
       - name: List test results
         if: always()
