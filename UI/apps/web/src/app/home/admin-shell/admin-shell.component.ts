@@ -8,12 +8,12 @@ import { MenuNavegacionComponent } from '../menu-navegacion/menu-navegacion.comp
   selector: 'app-admin-shell',
   standalone: true,
   imports: [HeaderComponent, MenuNavegacionComponent, RouterOutlet],
-  template: `<div class="column heigth-100">
-    <app-header [nombreUsuario]="nombreUsuario"></app-header>
+  template: `<div class="column height-100">
+    <app-header [nombreUsuario]="nombreUsuario"></app.header>
     <div class="contenido-web">
-      <div class="row heigth-100">
+      <div class="row height-100">
         <app-menu-navegacion
-          class="width-280 heigth-100 menu"
+          class="width-280 height-100 menu"
         ></app-menu-navegacion>
         <div class="flex-1"><router-outlet></router-outlet></div>
       </div>
