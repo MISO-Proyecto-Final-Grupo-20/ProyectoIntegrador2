@@ -7,13 +7,7 @@ import { Utilidades } from './utilidades';
   standalone: true,
   imports: [RouterModule, SharedModule],
   selector: 'app-root',
-  template: ` <h1>Hola Mundo</h1>
-    <h2>h2</h2>
-    <h3>h3</h3>
-    <button mat-raised-button color="primary">Botón Primario</button>
-    <button mat-raised-button color="accent">Botón Acento</button>
-    <button mat-raised-button color="warn">Botón Advertencia</button>
-    <router-outlet> </router-outlet>`,
+  template: ` <router-outlet> </router-outlet>`,
 })
 export class AppComponent {
   constructor() {

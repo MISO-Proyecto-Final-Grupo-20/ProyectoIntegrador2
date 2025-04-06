@@ -1,0 +1,20 @@
+<div class="row justify-content-between align-items-center nowrap">
+  <div class="row align-items-center gap-4 nowrap">
+    <mat-icon
+      class="icon-variant"
+      size="small"
+      style="min-width: fit-content"
+      >{{ obtenerIcono(data.tipo) }}</mat-icon
+    >
+    <p
+      style="overflow-wrap: anywhere"
+      class="mat-body-1 m-0 color-text-primary"
+    >
+      {{ data.descricion }}
+    </p>
+  </div>
+
+  <mat-icon class="cursor-pointer" (click)="snackBarRef.dismissWithAction()"
+    >close</mat-icon
+  >
+</div>

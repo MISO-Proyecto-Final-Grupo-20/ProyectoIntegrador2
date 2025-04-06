@@ -1,0 +1,33 @@
+<div class="column heigth-100">
+  <app-header></app-header>
+  <div class="flex-1 column gap-20 justify-content-center align-items-center">
+    <img width="167" height="134" src="./assets/images/cubo.svg" />
+    <div class="text-center">
+      <h2 class="color-primary" i18n="login.bienvenido">Bienvenido</h2>
+      <p class="color-on-surface" i18n="login.seleccioneCategoria">
+        Selecciona la categoría a la que perteneces
+      </p>
+    </div>
+    <div class="column gap-12">
+      <button
+        class="width-209 justify-content-between"
+        mat-raised-button
+        color="primary"
+        data-testid="boton-vendedor"
+        i18n="login.vendedor"
+      >
+        Vendedor <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
+      </button>
+      <button
+        class="width-209 bg-white justify-content-between"
+        mat-stroked-button
+        color="primary"
+        data-testid="boton-cliente"
+        i18n="login.cliente"
+        routerLink="cliente"
+      >
+        Cliente <mat-icon iconPositionEnd>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

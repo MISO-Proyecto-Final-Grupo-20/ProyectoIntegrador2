@@ -1,23 +1,29 @@
 {
   "profiles": {
-    "StoreFlow.Usuarios.API": {
+    "http": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONNECTION_STRING": "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=ventas",
+        "RABBITMQ_HOST": "amqp://guest:guest@localhost:5672",
+        "ELASTIC_URI": "http://elastic:pass123@localhost:9200",
+        "ELASTIC_APM_URI": "http://localhost:8400",
+        "ELASTIC_APM_SERVER_URL": "http://localhost:8400",
+        "PORCENTAJE_FALLOS": "50"
       },
-      "applicationUrl": "https://localhost:53022;http://localhost:53023"
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5054"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
-      "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "8081",
-        "ASPNETCORE_HTTP_PORTS": "8080"
+        "ASPNETCORE_HTTP_PORTS": "8080",
+        "CONNECTION_STRING": "Host=host.docker.internal;Port=5432;Username=postgres;Password=postgres;Database=ventas"
       },
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": false
     }
-  }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json"
 }

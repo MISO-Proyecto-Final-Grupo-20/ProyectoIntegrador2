@@ -11,7 +11,7 @@ public sealed class ProveedorToken
 
     public ProveedorToken()
     {
-        _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
+        _jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET")!;
         if (string.IsNullOrEmpty(_jwtSecret))
         {
             throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
