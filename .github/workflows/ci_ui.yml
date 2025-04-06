@@ -53,6 +53,7 @@ jobs:
 
       - name: Clear Nx cache
         run: npx nx reset
+        working-directory: UI/
         
       - name: Run tests for ${{ matrix.app }} app
         run: npx nx test ${{ matrix.app }} --no-watch --no-progress
