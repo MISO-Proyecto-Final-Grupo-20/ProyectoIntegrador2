@@ -52,7 +52,7 @@ jobs:
         working-directory: UI/
 
       - name: Run tests for ${{ matrix.app }} app
-        run: npx nx test ${{ matrix.app }} --no-watch --no-progress
+        run: npx nx test ${{ matrix.app }} --no-watch --no-progress --verbose
         working-directory: UI/
 
       - name: Upload test results for ${{ matrix.app }} app
