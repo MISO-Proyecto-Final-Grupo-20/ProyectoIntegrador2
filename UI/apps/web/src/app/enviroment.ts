@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://api.storeflow.com',
+  apiUrl: 'http://52.165.24.37/api',
 };
