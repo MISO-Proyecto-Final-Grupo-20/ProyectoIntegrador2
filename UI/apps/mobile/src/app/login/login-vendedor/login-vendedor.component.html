@@ -1,0 +1,11 @@
+<div class="column heigth-100">
+  <app-header rutaVolver="/"></app-header>
+  <div class="contenido-mobile column">
+    <app-login
+      data-testid="app-login"
+      class="flex-1 column"
+      (ingresar)="ingresar($event)"
+      [categoria]="categoria"
+    ></app-login>
+  </div>
+</div>

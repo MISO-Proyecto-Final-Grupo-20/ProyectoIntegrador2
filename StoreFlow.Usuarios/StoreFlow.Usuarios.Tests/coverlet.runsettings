@@ -6,6 +6,7 @@
 					<Exclude>
 						[*]*
 						[StoreFlow.Usuarios.API.Migrations*]*
+						[StoreFlow.Usuarios.API.Program]*
 					</Exclude>
 				</Configuration>
 			</DataCollector>

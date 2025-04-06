@@ -23,11 +23,13 @@ namespace StoreFlow.Usuarios.Tests
             await CrearUsuarioAsync();
         }
         
-        [Fact]
-        public async Task Login_Exitoso_Retorna200Ok()
+        [Theory]
+        [InlineData("test@correo.com", "123456", "cliente", "Cliente")]
+        [InlineData("vendedor@correo.com", "123456", "vendedor", "Vendedor")]
+        public async Task Login_Exitoso_Retorna200Ok(string correo, string contrasena, string rol, string rolEsperado)
         {
             // ARRANGE
-            var loginRequest = new UsuarioLoginRequest(new DatosIngreso("test@correo.com", "123456"), "cliente");
+            var loginRequest = new UsuarioLoginRequest(new DatosIngreso(correo, contrasena), rol);
 
             // ACT
             var response = await _client.PostAsJsonAsync("/login", loginRequest);
@@ -45,7 +47,7 @@ namespace StoreFlow.Usuarios.Tests
             var rolClaim = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
             Assert.False(string.IsNullOrEmpty(rolClaim),"El token debe tener el claim rol");
-            Assert.Equal("Cliente", rolClaim);
+            Assert.Equal(rolEsperado, rolClaim);
 
         }
 
@@ -62,9 +64,6 @@ namespace StoreFlow.Usuarios.Tests
 
             // ASSERT
             Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
-
-
-            // await app.StopAsync();
         }
         
         [Fact]
@@ -111,6 +110,14 @@ namespace StoreFlow.Usuarios.Tests
                 Contrasena = "123456",
                 NombreCompleto = "Test User",
                 TipoUsuario = TiposUsuarios.Cliente
+            });
+            
+            db.Usuarios.Add(new Usuario
+            {
+                CorreoElectronico = "vendedor@correo.com",
+                Contrasena = "123456",
+                NombreCompleto = "Vendedor User",
+                TipoUsuario = TiposUsuarios.Vendedor
             });
 
             await db.SaveChangesAsync();

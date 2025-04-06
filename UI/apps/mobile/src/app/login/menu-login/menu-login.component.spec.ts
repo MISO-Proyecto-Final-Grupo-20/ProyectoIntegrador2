@@ -34,4 +34,13 @@ describe('MenuLoginComponent', () => {
 
     expect(TestBed.inject(Router).url).toBe('/cliente');
   });
+
+  it('debe navegar a la ruta "vendedor" cuando se haga clic en el botón "boton-vendedor"', () => {
+    const vendedorButton = fixture.debugElement.query(
+      By.css('[data-testid="boton-vendedor"]')
+    );
+    vendedorButton.nativeElement.click();
+
+    expect(TestBed.inject(Router).url).toBe('/vendedor');
+  });
 });

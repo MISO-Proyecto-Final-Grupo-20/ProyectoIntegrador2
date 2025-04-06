@@ -1,12 +1,16 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { SharedModule } from '@storeflow/design-system';
+import { SharedModule, TipoCategoria } from '@storeflow/design-system';
 import { DatosIngreso } from '../../app.model';
+const CategoriaTitulo: Record<TipoCategoria, string> = {
+  [TipoCategoria.Cliente]: $localize`:@@tituloCliente:Cliente`,
+  [TipoCategoria.Vendedor]: $localize`:@@tituloVendedor:Vendedor`,
+};
 
 @Component({
   selector: 'app-login',
@@ -16,6 +20,7 @@ import { DatosIngreso } from '../../app.model';
 })
 export class LoginComponent {
   ingresar = output<DatosIngreso>();
+  categoria = input<TipoCategoria>();
   mostrar = signal(true);
   formulario = new FormGroup({
     correo: new FormControl('', Validators.required),
@@ -28,6 +33,10 @@ export class LoginComponent {
 
   get iconoInput() {
     return this.mostrar() ? 'visibility_off' : 'visibility';
+  }
+
+  get titulo() {
+    return CategoriaTitulo[this.categoria() as TipoCategoria];
   }
 
   mostrarContrasena(event: MouseEvent) {
