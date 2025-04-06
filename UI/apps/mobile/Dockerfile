@@ -10,7 +10,7 @@ COPY tsconfig.base.json ./
 COPY apps/mobile ./apps/mobile
 COPY libs ./libs
 
-RUN npm install --include=optional --legacy-peer-deps
+RUN npm install --include=optional --legacy-peer-deps --force
 
 RUN npx nx build mobile --configuration=production
 
