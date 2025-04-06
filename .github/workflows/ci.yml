@@ -91,8 +91,18 @@ jobs:
       - name: install dotnet tool ef
         run: dotnet tool install --global dotnet-ef
 
-      # Remove the coverlet tool installation as we'll use the built-in collector
-      
+      # - name: Run dotnet db ensure created
+      #   env:
+      #     CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
+      #     RABBITMQ_HOST: localhost
+      #     ELASTIC_URI: http://localhost:9200
+      #     ELASTIC_APM_URI: http://localhost:8200
+      #   run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
+  
+          
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
       - name: Test projects with coverage
         env:
           # CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
@@ -100,43 +110,60 @@ jobs:
           ELASTIC_URI: http://localhost:9200
           ELASTIC_APM_URI: http://localhost:8200
         run: |
-          # Create the TestResults directory at the repository root
-          mkdir -p TestResults
-          
           for project in ${{ steps.find-csproj.outputs.projects }}; do
             if [[ "$project" == *Test* ]] || [[ "$project" == *Tests* ]]; then
               echo "Testing $project with coverage"
               project_name=$(basename "$project" .csproj)
+              project_dir=$(dirname "$project")
+              mkdir -p TestResults
+              mkdir -p CoverageResults
+              
+              # Find the runsettings file in the project directory
+              runsettings_file=""
+              if [ -f "$project_dir/coverlet.runsettings" ]; then
+                runsettings_file="$project_dir/coverlet.runsettings"
+              fi
               
               # Run tests with coverage
-              dotnet test "$project" --configuration Release --no-build --no-restore \
-                --logger "trx;LogFileName=$(pwd)/TestResults/${project_name}.trx" \
-                --collect:"XPlat Code Coverage" \
-                --results-directory "$(pwd)/TestResults"
+              if [ -n "$runsettings_file" ]; then
+                echo "Using runsettings file: $runsettings_file"
+                dotnet test "$project" --configuration Release --no-build --no-restore \
+                  --logger "trx;LogFileName=TestResults/${project_name}.trx" \
+                  --settings "$runsettings_file" \
+                  --collect:"XPlat Code Coverage" \
+                  --results-directory TestResults
+              else
+                echo "No runsettings file found, using default coverage settings"
+                dotnet test "$project" --configuration Release --no-build --no-restore \
+                  --logger "trx;LogFileName=TestResults/${project_name}.trx" \
+                  --collect:"XPlat Code Coverage" \
+                  --results-directory TestResults
+              fi
             fi
           done
-          
-          # Find and move/rename coverage files for easier processing
-          echo "Processing coverage files..."
-          for coverageDir in $(find TestResults -type d -name '*' | grep -v "^TestResults$"); do
-            if [ -f "$coverageDir/coverage.cobertura.xml" ]; then
-              dirName=$(basename "$coverageDir")
-              cp "$coverageDir/coverage.cobertura.xml" "TestResults/$dirName.cobertura.xml"
-              echo "Copied coverage file to TestResults/$dirName.cobertura.xml"
-            fi
-          done
-          
-          # Debug: List all files in TestResults to understand the structure
-          echo "Files in TestResults directory:"
-          find TestResults -type f | sort
 
-      - name: List test results
+      - name: List test and coverage results
         if: always()
         run: |
           echo "Test results files:"
-          find . -name "*.trx" | sort
+          find TestResults -name "*.trx" | sort
           echo "Coverage results files:"
-          find . -name "*.cobertura.xml" | sort
+          find TestResults -name "*.cobertura.xml" | sort
+
+      - name: Generate coverage report
+        if: always()
+        run: |
+          # Find all coverage files
+          coverage_files=$(find TestResults -name "*.cobertura.xml" | tr '\n' ';')
+          if [ -n "$coverage_files" ]; then
+            echo "Generating coverage report from: $coverage_files"
+            reportgenerator \
+              -reports:"$coverage_files" \
+              -targetdir:"CoverageResults/Report" \
+              -reporttypes:"Html;Cobertura;JsonSummary"
+          else
+            echo "No coverage files found"
+          fi
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
@@ -147,34 +174,29 @@ jobs:
           reporter: 'dotnet-trx'
           fail-on-error: false
           
-      - name: Install ReportGenerator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool
-          
-      - name: Generate Coverage Report
+      - name: Publish Coverage Report
+        uses: actions/upload-artifact@v3
         if: always()
-        run: |
-          reportgenerator -reports:"TestResults/*.cobertura.xml" -targetdir:"TestResults/CoverageReport" -reporttypes:Html
-          
-      - name: Archive Code Coverage Results
-        if: always()
-        uses: actions/upload-artifact@v2
         with:
           name: code-coverage-report
-          path: TestResults/CoverageReport
+          path: CoverageResults/Report
           
-      - name: Publish Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: Coverage Report Summary
         if: always()
+        run: |
+          if [ -f "CoverageResults/Report/Summary.json" ]; then
+            echo "Coverage Summary:"
+            cat CoverageResults/Report/Summary.json | jq .
+          else
+            echo "No coverage summary found"
+          fi
+          
+      - name: Publish Coverage to PR
+        uses: 5monkeys/cobertura-action@master
+        if: github.event_name == 'pull_request' && always()
         with:
-          filename: "TestResults/*.cobertura.xml"
-          badge: true
-          format: markdown
-          output: both
-          thresholds: '60 80'
-
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
+          path: CoverageResults/Report/Cobertura.xml
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 60
+          show_line: true
+          show_branch: true
