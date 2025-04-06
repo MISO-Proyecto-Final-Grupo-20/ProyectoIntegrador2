@@ -9,7 +9,7 @@ import { MenuNavegacionComponent } from '../menu-navegacion/menu-navegacion.comp
   standalone: true,
   imports: [HeaderComponent, MenuNavegacionComponent, RouterOutlet],
   template: `<div class="column height-100">
-    <app-header [nombreUsuario]="nombreUsuario"></app.header>
+    <app-header [nombreUsuario]="nombreUsuario"></app-header>
     <div class="contenido-web">
       <div class="row height-100">
         <app-menu-navegacion
