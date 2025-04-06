@@ -2,6 +2,7 @@
 @use '@angular/material' as mat;
 @use './colores' as colores;
 @use './tipografias-web' as tipografias-web;
+@import './configuracion-web.scss';
 
 @include mat.core();
 @include mat.core-theme(colores.$light-theme);
@@ -10,3 +11,6 @@
 @include mat.all-component-typographies(
   tipografias-web.$typography-web-global-config
 );
+
+@include mat.icon-button-density(-4);
+@include mat.form-field-density(-4);

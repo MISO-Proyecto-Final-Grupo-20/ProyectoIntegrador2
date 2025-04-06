@@ -4,3 +4,8 @@
   margin-left: calc(env(safe-area-inset-left) + 8px) !important;
   margin-right: calc(env(safe-area-inset-right) + 8px) !important;
 }
+
+.contenido-mobile {
+  padding-top: calc(56px + env(safe-area-inset-top));
+  height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+}

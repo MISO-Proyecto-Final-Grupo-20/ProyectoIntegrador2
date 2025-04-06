@@ -7,6 +7,10 @@
   color: map-get($primary, 800);
 }
 
+.color-warn {
+  color: map-get($warn, 800);
+}
+
 .color-on-surface {
   color: #1d1b20;
 }

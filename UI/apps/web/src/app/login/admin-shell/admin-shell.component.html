@@ -1,0 +1,79 @@
+<div class="column heigth-100">
+  <app-header></app-header>
+  <div class="contenido-web column justify-content-center align-items-center">
+    <mat-card class="width-510 sombra-card">
+      <mat-card-content class="column gap-24">
+        <div class="column gap-16 align-items-center text-center">
+          <img width="130" height="105" src="assets/images/cubo.svg" />
+          <div>
+            <h2 class="color-primary" i18n="login.bienvenido">Bienvenido</h2>
+            <p class="color-on-surface" i18n="login.descripcion">
+              Ingresa tus datos para acceder a tu información.
+            </p>
+          </div>
+          <div
+            class="column gap-12 width-100"
+            data-testid="formulario-login"
+            [formGroup]="formulario"
+          >
+            <mat-form-field appearance="outline" class="bg-white">
+              <mat-label i18n="login.correo">Correo</mat-label>
+              <input
+                formControlName="correo"
+                type="email"
+                matInput
+                data-testid="input-login-correo"
+              />
+            </mat-form-field>
+            <div class="row gap-9 align-items-center">
+              <mat-form-field appearance="outline" class="bg-white flex-1">
+                <mat-label i18n="login.contrasena">Contraseña</mat-label>
+                <input
+                  formControlName="contrasena"
+                  [type]="tipoInput"
+                  matInput
+                  data-testid="input-login-contrasena"
+                />
+              </mat-form-field>
+              <mat-icon
+                style="color: #323232"
+                data-testid="boton-login-contrasena"
+                class="mat-icon-outlined cursor-pointer"
+                (click)="mostrarContrasena($event)"
+                >{{ iconoInput }}</mat-icon
+              >
+            </div>
+          </div>
+          <div class="row justify-content-end width-100">
+            <button
+              data-testid="boton-ingresar"
+              color="primary"
+              mat-raised-button
+              i18n="login.ingresar"
+              [disabled]="!formulario.valid"
+              (click)="ingresar()"
+            >
+              Ingresar
+            </button>
+          </div>
+          <div class="column justify-content-center">
+            <p
+              i18n="login.notienescuenta"
+              class="mat-body-1 color-grey-800 text-center"
+            >
+              ¿Aún no tienes cuenta?
+            </p>
+            <button
+              data-testid="boton-registrate-aqui"
+              i18n="login.registrate"
+              mat-button
+              color="warn"
+            >
+              Registrate aquí
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
