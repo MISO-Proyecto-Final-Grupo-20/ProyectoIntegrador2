@@ -112,13 +112,22 @@ jobs:
           for project in ${{ steps.find-csproj.outputs.projects }}; do
             if [[ "$project" == *Test* ]] || [[ "$project" == *Tests* ]]; then
               echo "Testing $project with coverage"
+              project_dir=$(dirname "$project")
               project_name=$(basename "$project" .csproj)
               mkdir -p TestResults
+              
+              # Run tests with coverage
               dotnet test "$project" --configuration Release --no-build --no-restore \
-                --logger "trx;LogFileName=TestResults/${project_name}.trx" \
-                /p:CollectCoverage=true \
-                /p:CoverletOutputFormat=cobertura \
-                /p:CoverletOutput=../../TestResults/${project_name}.coverage.xml
+                --logger "trx;LogFileName=../../TestResults/${project_name}.trx" \
+                --collect:"XPlat Code Coverage" \
+                --results-directory ./TestResults
+              
+              # Move coverage file to a standardized location
+              if [ -d "./TestResults" ]; then
+                for coverageFile in $(find ./TestResults -name "coverage.cobertura.xml"); do
+                  cp "$coverageFile" "./TestResults/${project_name}.coverage.cobertura.xml"
+                done
+              fi
             fi
           done
 
@@ -128,7 +137,7 @@ jobs:
           echo "Test results files:"
           find . -name "*.trx" | sort
           echo "Coverage results files:"
-          find . -name "*.coverage.xml" | sort
+          find . -name "coverage.cobertura.xml" | sort
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
@@ -139,17 +148,28 @@ jobs:
           reporter: 'dotnet-trx'
           fail-on-error: false
           
-      - name: Publish Code Coverage Report
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+          
+      - name: Generate Coverage Report
+        if: always()
+        run: |
+          reportgenerator -reports:"**/TestResults/*.coverage.cobertura.xml" -targetdir:"TestResults/CoverageReport" -reporttypes:Html
+          
+      - name: Archive Code Coverage Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: TestResults/CoverageReport
+          
+      - name: Publish Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
         if: always()
         with:
-          filename: '**/TestResults/*.coverage.xml'
+          filename: "**/TestResults/*.coverage.cobertura.xml"
           badge: true
-          fail_below_min: false
           format: markdown
-          hide_branch_rate: false
-          hide_complexity: false
-          indicators: true
           output: both
           thresholds: '60 80'
 
