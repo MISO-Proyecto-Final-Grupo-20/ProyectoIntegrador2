@@ -175,11 +175,15 @@ jobs:
           fail-on-error: false
           
       - name: Publish Coverage Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         if: always()
         with:
           name: code-coverage-report
           path: CoverageResults/Report
+          
+      - name: Install jq
+        if: always()
+        run: sudo apt-get install -y jq
           
       - name: Coverage Report Summary
         if: always()
@@ -192,7 +196,7 @@ jobs:
           fi
           
       - name: Publish Coverage to PR
-        uses: 5monkeys/cobertura-action@master
+        uses: 5monkeys/cobertura-action@v12
         if: github.event_name == 'pull_request' && always()
         with:
           path: CoverageResults/Report/Cobertura.xml
