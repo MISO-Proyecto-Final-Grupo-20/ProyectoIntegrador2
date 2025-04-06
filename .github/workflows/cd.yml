@@ -24,6 +24,7 @@ jobs:
     outputs:
       should_build_all: ${{ steps.set-build-all.outputs.should_build_all }}
       usuarios-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.usuarios-service }}
+      iente-web-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.cliente-web-service }}
     steps:
       - name: Set build all flag
         id: set-build-all

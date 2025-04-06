@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: cliente-web
-          image: fcamilob/miapp-angular:v2
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/cliente-web:latest
           ports:
             - containerPort: 80
