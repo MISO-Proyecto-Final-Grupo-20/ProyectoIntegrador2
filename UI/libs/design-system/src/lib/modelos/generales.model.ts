@@ -1,10 +1,10 @@
 export enum TipoCategoria {
   Cliente = 'cliente',
+  Vendedor = 'vendedor',
 }
 
 export interface Sesion {
-  nombre: string;
-  apellido: string;
+  nombreUsuario: string;
   email: string;
   categoria: TipoCategoria;
 }
