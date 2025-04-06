@@ -12,3 +12,5 @@
 /StoreFlow.Usuarios/TestResults
 /StoreFlow.Usuarios/.vs
 UI/package-lock.json
+**/.idea/
+*.user

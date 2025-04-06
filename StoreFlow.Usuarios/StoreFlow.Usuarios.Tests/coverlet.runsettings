@@ -5,6 +5,7 @@
 				<Configuration>
 					<Exclude>
 						[*]*
+						[StoreFlow.Usuarios.API.Migrations*]*
 					</Exclude>
 				</Configuration>
 			</DataCollector>
