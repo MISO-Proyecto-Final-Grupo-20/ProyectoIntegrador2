@@ -1,8 +1,9 @@
-import '@angular/localize/init';
 export default {
   displayName: 'mobile',
   preset: '../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts',
+    '@angular/localize/init'
+  ],
   coverageDirectory: '../../coverage/apps/mobile',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
