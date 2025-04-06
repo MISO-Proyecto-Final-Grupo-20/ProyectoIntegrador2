@@ -23,10 +23,6 @@ if (string.IsNullOrEmpty(jwtSecret))
     throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
 }
 
-
-
-
-
 builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -43,6 +39,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder =>
+    {
+        corsPolicyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 // Registrar el contexto de la base de datos
 
@@ -57,13 +62,13 @@ builder.Services.AddSingleton<ProveedorToken>();
 
 var app = builder.Build();
 
+app.UseCors();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-
 app.UseAuthentication();
 app.UseAuthorization();
 
