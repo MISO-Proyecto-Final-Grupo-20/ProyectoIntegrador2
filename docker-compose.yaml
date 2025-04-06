@@ -20,3 +20,12 @@ services:
       - '8090:8080' 
     depends_on: 
           - 'dbusuarios'
+  
+  mobileapp:
+    build:
+      context: ./UI
+      dockerfile: apps/mobile/Dockerfile
+    ports:
+      - '8100:80'
+    depends_on:
+      - 'usuarios'
