@@ -46,13 +46,11 @@ jobs:
         with:
           filters: |
             usuarios-service:
+                - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/**'
+                - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile'
             cliente-web-service:
-              - 'ClienteWeb/**'
-              - 'ClienteWeb/Dockerfile'
-
-              - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/**'
-              - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile'
-              - 'docker-compose.yaml'
+                - 'UI/**'
+                - 'UI/apps/web/Dockerfile'
 
   build-and-push:
     needs: detect-changes
@@ -87,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./UI
-          file: ./UI/apps/web/Dockerfile
+          file: ./ClienteWeb/apps/web/Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
