@@ -85,7 +85,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./UI
-          file: ./ClienteWeb/apps/web/Dockerfile
+          file: ./UI/apps/web/Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
