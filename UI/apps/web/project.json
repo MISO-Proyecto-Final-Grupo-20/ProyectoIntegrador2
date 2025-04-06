@@ -22,12 +22,7 @@
         "polyfills": ["zone.js", "@angular/localize/init"],
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/web/public"
-          }
-        ],
+        "assets": ["apps/web/src/assets"],
         "stylePreprocessorOptions": {
           "includePaths": ["libs/design-system/src/lib/styles"]
         },
@@ -42,7 +37,7 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
+              "maximumWarning": "1mb",
               "maximumError": "1mb"
             },
             {

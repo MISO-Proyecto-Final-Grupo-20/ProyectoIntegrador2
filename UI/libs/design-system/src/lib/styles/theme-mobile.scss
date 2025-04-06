@@ -3,7 +3,6 @@
 @use './colores' as colores;
 
 @use './tipografias-mobile' as tipografias-mobile;
-@import './clases-colores.scss';
 @import './configuracion-mobile.scss';
 @include mat.core();
 @include mat.core-theme(colores.$light-theme);

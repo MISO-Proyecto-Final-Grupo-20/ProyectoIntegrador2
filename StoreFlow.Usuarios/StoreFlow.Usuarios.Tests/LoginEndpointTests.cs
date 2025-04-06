@@ -50,6 +50,34 @@ namespace StoreFlow.Usuarios.Tests
             Assert.Equal(rolEsperado, rolClaim);
 
         }
+        
+        [Theory]
+        [InlineData("usuario@correo.com", "123456", "UsuarioCcp")]
+        public async Task Login_Exitoso_De_UsuarioCcp_Retorna200Ok(string correo, string contrasena, string rolEsperado)
+        {
+            // ARRANGE
+            var loginRequest = new DatosIngreso(correo, contrasena);
+
+            // ACT
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
+
+            // ASSERT
+            response.EnsureSuccessStatusCode();
+            var loginResponse = await response.Content.ReadFromJsonAsync<UsuarioLoginResponse>();
+            var tokenString = loginResponse?.Token.Trim('"'); 
+
+            Assert.False(string.IsNullOrWhiteSpace(tokenString), "El token no debe ser vacío");
+
+            var handler = new JsonWebTokenHandler();
+            var token =  handler.ReadJsonWebToken(tokenString);
+
+            var rolClaim = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            Assert.False(string.IsNullOrEmpty(rolClaim),"El token debe tener el claim rol");
+            Assert.Equal(rolEsperado, rolClaim);
+
+        }
+
 
         
 
@@ -118,6 +146,14 @@ namespace StoreFlow.Usuarios.Tests
                 Contrasena = "123456",
                 NombreCompleto = "Vendedor User",
                 TipoUsuario = TiposUsuarios.Vendedor
+            });
+            
+            db.Usuarios.Add(new Usuario
+            {
+                CorreoElectronico = "usuario@correo.com",
+                Contrasena = "123456",
+                NombreCompleto = "Usuario ccp",
+                TipoUsuario = TiposUsuarios.UsuarioCcp
             });
 
             await db.SaveChangesAsync();

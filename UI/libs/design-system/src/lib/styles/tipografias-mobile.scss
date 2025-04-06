@@ -44,10 +44,3 @@ $typography-mobile-global-config: mat.m2-define-typography-config(
       $letter-spacing: 1px,
     ),
 );
-
-:root {
-  --mat-toolbar-title-text-size: 14px;
-  --mat-toolbar-title-text-weight: 500;
-  --mat-toolbar-title-text-line-height: 150%;
-  --mat-toolbar-title-text-letter-spacing: 1px;
-}

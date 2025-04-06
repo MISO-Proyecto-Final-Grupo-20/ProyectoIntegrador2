@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, TipoCategoria } from '@storeflow/design-system';
-import { DatosIngreso } from '../../app.model';
+import {
+  AuthService,
+  DatosIngreso,
+  TipoCategoria,
+} from '@storeflow/design-system';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { LoginComponent } from '../../shared/login/login.component';
 import { LoginService } from '../login.service';

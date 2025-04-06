@@ -8,3 +8,8 @@ export interface Sesion {
   email: string;
   categoria: TipoCategoria;
 }
+
+export interface DatosIngreso {
+  correo: string;
+  contrasena: string;
+}

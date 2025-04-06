@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.DTOs;
@@ -11,9 +11,16 @@ namespace StoreFlow.Usuarios.API.Endpoints
         public static void MapUsuariosEndpoints(this IEndpointRouteBuilder app)
         {
             app.MapPost("/login", async (
-                [FromBody] UsuarioLoginRequest loginDto,
+                HttpContext httpContext,
+                // [FromBody] UsuarioLoginRequest loginDto,
                 UsuariosDbContext db, ProveedorToken proveedorToken) =>
             {
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new UsuarioLoginRequestConverter());
+
+                var loginDto = await JsonSerializer.DeserializeAsync<UsuarioLoginRequest>(httpContext.Request.Body, options);
+
+                
                 var usuario = await db.Usuarios
                     .FirstOrDefaultAsync(u =>
                         u.CorreoElectronico == loginDto.DatosIngreso.Correo &&

@@ -6,11 +6,6 @@ import { SharedModule } from '@storeflow/design-system';
   standalone: true,
   imports: [RouterModule, SharedModule],
   selector: 'app-root',
-  template: `<h1 i18n>Hola Mundo</h1>
-    <h2>h2</h2>
-    <h3>h3</h3>
-    <button mat-raised-button color="primary">Botón Primario</button>
-    <button mat-raised-button color="accent">Botón Acento</button>
-    <button mat-raised-button color="success">Botón Advertencia</button> `,
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent {}

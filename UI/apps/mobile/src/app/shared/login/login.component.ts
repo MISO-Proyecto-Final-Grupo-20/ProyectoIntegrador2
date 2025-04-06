@@ -5,8 +5,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { SharedModule, TipoCategoria } from '@storeflow/design-system';
-import { DatosIngreso } from '../../app.model';
+import {
+  DatosIngreso,
+  SharedModule,
+  TipoCategoria,
+} from '@storeflow/design-system';
+
 const CategoriaTitulo: Record<TipoCategoria, string> = {
   [TipoCategoria.Cliente]: $localize`:@@tituloCliente:Cliente`,
   [TipoCategoria.Vendedor]: $localize`:@@tituloVendedor:Vendedor`,

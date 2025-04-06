@@ -6,3 +6,10 @@
   align-items: center;
   justify-content: center;
 }
+
+:root {
+  --mat-toolbar-title-text-size: 14px;
+  --mat-toolbar-title-text-weight: 500;
+  --mat-toolbar-title-text-line-height: 150%;
+  --mat-toolbar-title-text-letter-spacing: 1px;
+}

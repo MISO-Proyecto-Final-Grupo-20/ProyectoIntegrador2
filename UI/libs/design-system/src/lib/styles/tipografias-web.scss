@@ -4,29 +4,43 @@ $typography-web-global-config: mat.m2-define-typography-config(
   $headline-5: mat.m2-define-typography-level(
       $font-weight: 700,
       $font-size: 32px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $headline-6: mat.m2-define-typography-level(
       $font-weight: 700,
       $font-size: 24px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $subtitle-1: mat.m2-define-typography-level(
       $font-size: 16px,
       $font-weight: 700,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $subtitle-2: mat.m2-define-typography-level(
       $font-weight: 700,
       $font-size: 16px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $body-1: mat.m2-define-typography-level(
-      $font-weight: 400,
+      $font-weight: 300,
       $font-size: 14px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $body-2: mat.m2-define-typography-level(
-      $font-weight: 400,
-      $font-size: 14px,
+      $font-weight: 300,
+      $font-size: 12px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
   $button: mat.m2-define-typography-level(
       $font-weight: 700,
       $font-size: 14px,
+      $line-height: 150%,
+      $letter-spacing: 1px,
     ),
 );
