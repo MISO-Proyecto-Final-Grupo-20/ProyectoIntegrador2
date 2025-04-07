@@ -158,19 +158,20 @@ jobs:
             fi
           fi
           
-      # Convert Cobertura to LCOV format
-      - name: Convert Cobertura to LCOV
-        run: |
-          npm install -g cobertura-lcov-converter
-          cobertura-lcov-converter -i coverage/combined/cobertura-coverage.xml -o coverage/combined/lcov.info
-          
-      # Use a different action for publishing coverage reports
-      - name: Publish coverage report to PR
-        uses: romeovs/lcov-reporter-action@v0.3.1
+      # Use a GitHub action that directly supports Cobertura XML
+      - name: Generate Coverage Report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.2.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./coverage/combined/lcov.info
-          title: "UI Code Coverage Report"
+          reports: 'coverage/combined/cobertura-coverage.xml'
+          targetdir: 'coveragereport'
+          reporttypes: 'HtmlInline;Cobertura'
+          title: 'UI Code Coverage Report'
+          
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coveragereport
           
       # Also publish coverage as a GitHub check
       - name: Publish Coverage as Check
