@@ -15,6 +15,7 @@ permissions:
   contents: read
   checks: write
   pull-requests: write
+  statuses: write
 
 jobs:
   build-and-test:
@@ -157,22 +158,32 @@ jobs:
             fi
           fi
           
-      - name: Check if coverage file exists
-        id: check_coverage
+      # Convert Cobertura to LCOV format
+      - name: Convert Cobertura to LCOV
         run: |
-          if [ -f "coverage/combined/cobertura-coverage.xml" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
+          npm install -g cobertura-lcov-converter
+          cobertura-lcov-converter -i coverage/combined/cobertura-coverage.xml -o coverage/combined/lcov.info
           
-      - name: Publish Coverage to PR
-        uses: 5monkeys/cobertura-action@v12
-        if: github.event_name == 'pull_request' && steps.check_coverage.outputs.exists == 'true'
+      # Use a different action for publishing coverage reports
+      - name: Publish coverage report to PR
+        uses: romeovs/lcov-reporter-action@v0.3.1
         with:
-          path: coverage/combined/cobertura-coverage.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 40
-          show_line: true
-          show_branch: true
-          fail_below_threshold: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/combined/lcov.info
+          title: "UI Code Coverage Report"
+          
+      # Also publish coverage as a GitHub check
+      - name: Publish Coverage as Check
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage/combined/cobertura-coverage.xml
+          badge: true
+          format: markdown
+          output: both
+          
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          header: UI Code Coverage
+          path: code-coverage-results.md
