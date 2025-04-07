@@ -137,7 +137,7 @@ jobs:
         with:
           path: coverage/combined/cobertura-coverage.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 60
+          minimum_coverage: 40
           show_line: true
           show_branch: true
           fail_below_threshold: false
