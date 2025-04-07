@@ -5,10 +5,20 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <CollectCoverage>true</CollectCoverage>
+        <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+        <Exclude>[StoreFlow.Usuarios.API.Migrations*]*,[StoreFlow.Usuarios.API.Program]*,[*]*.Designer.cs,[*]*.g.cs,[*]*.AssemblyInfo.cs,[*]*.Startup.cs,[*]*.csproj,[*]*.razor,[*]*.cshtml,[*]*.json,[*]*.http,[*]*.Tests*]*,[*]obj*]*,[*]Properties*]*</Exclude>
+        <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+        <ExcludeByFile>**/obj/**/*.cs,**/Properties/**/*.cs</ExcludeByFile>
+        <Include>[StoreFlow.Usuarios.API*]*</Include>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2" />
+        <PackageReference Include="coverlet.msbuild" Version="6.0.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
