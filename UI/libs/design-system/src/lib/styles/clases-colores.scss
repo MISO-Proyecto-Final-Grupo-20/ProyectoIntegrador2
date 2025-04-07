@@ -2,6 +2,9 @@
 .bg-grey-200 {
   background-color: map-get($grey, 200);
 }
+.color-grey-600 {
+  color: map-get($grey, 600);
+}
 
 .color-primary {
   color: map-get($primary, 800);
@@ -29,4 +32,8 @@
 
 .color-grey-700 {
   color: map-get($grey, 700);
+}
+
+.bg-grey-100 {
+  background-color: map-get($grey, 100) !important;
 }
