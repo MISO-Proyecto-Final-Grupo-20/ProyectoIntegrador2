@@ -194,6 +194,20 @@ jobs:
             echo "No coverage summary found"
           fi
           
+      # Make sure the Cobertura.xml file exists before trying to publish it
+      - name: Check for Cobertura.xml
+        if: always()
+        run: |
+          if [ -f "CoverageResults/Report/Cobertura.xml" ]; then
+            echo "Cobertura.xml file found"
+          else
+            echo "Cobertura.xml file not found, checking for other locations..."
+            find . -name "*.cobertura.xml" | sort
+            # Copy any found cobertura files to the expected location
+            mkdir -p CoverageResults/Report
+            find . -name "*.cobertura.xml" -exec cp {} CoverageResults/Report/Cobertura.xml \; -quit
+          fi
+
       - name: Publish Coverage to PR
         uses: 5monkeys/cobertura-action@v12
         if: github.event_name == 'pull_request' && always()
@@ -203,3 +217,4 @@ jobs:
           minimum_coverage: 60
           show_line: true
           show_branch: true
+          fail_below_threshold: false

@@ -7,15 +7,7 @@
         <IsPackable>false</IsPackable>
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>cobertura</CoverletOutputFormat>
-        <ExcludeByFile>
-          ../StoreFlow.Usuarios.API/Program.cs,
-          ../StoreFlow.Usuarios.API/Migrations/**/*.cs,
-          **/obj/**/*.cs,
-          **/Properties/**/*.cs,
-          **/*.Designer.cs,
-          **/*.g.cs,
-          **/*.AssemblyInfo.cs
-        </ExcludeByFile>
+        <ExcludeByFile>../StoreFlow.Usuarios.API/Program.cs,../StoreFlow.Usuarios.API/Migrations/**/*.cs,**/obj/**/*.cs,**/Properties/**/*.cs,**/*.Designer.cs,**/*.g.cs,**/*.AssemblyInfo.cs</ExcludeByFile>
         <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
         <IncludeDirectory>../StoreFlow.Usuarios.API</IncludeDirectory>
     </PropertyGroup>
