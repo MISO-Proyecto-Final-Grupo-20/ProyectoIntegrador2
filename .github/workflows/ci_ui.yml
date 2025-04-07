@@ -52,8 +52,18 @@ jobs:
         working-directory: UI/
         
       - name: Run tests for ${{ matrix.app }} app
+        if: matrix.app == 'mobile'
         run: npx nx test ${{ matrix.app }} --no-watch --no-progress
         working-directory: UI/
+        env:
+          JEST_JUNIT_OUTPUT_DIR: 'dist/test-results/${{ matrix.app }}'
+          
+      - name: Run tests with coverage for web app
+        if: matrix.app == 'web'
+        run: npx nx test ${{ matrix.app }} --no-watch --no-progress --coverage --coverageReporters=cobertura,lcov,text-summary
+        working-directory: UI/
+        env:
+          JEST_JUNIT_OUTPUT_DIR: 'dist/test-results/${{ matrix.app }}'
 
       - name: Upload test results for ${{ matrix.app }} app
         uses: actions/upload-artifact@v4
@@ -61,6 +71,14 @@ jobs:
         with:
           name: ${{ matrix.app }}-test-results
           path: 'UI/dist/test-results/${{ matrix.app }}/**/*.xml'
+          if-no-files-found: warn
+          
+      - name: Upload coverage results for web app
+        uses: actions/upload-artifact@v4
+        if: matrix.app == 'web' && always()
+        with:
+          name: web-coverage
+          path: 'UI/coverage/apps/web'
           if-no-files-found: warn
 
       - name: Archive build for ${{ matrix.app }} app
@@ -70,3 +88,56 @@ jobs:
           name: ${{ matrix.app }}-build
           path: UI/dist/apps/${{ matrix.app }}/
           retention-days: 7
+          
+  coverage-report:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: coverage-artifacts
+          pattern: '*-coverage'
+          merge-multiple: true
+          
+      - name: List coverage files
+        run: find coverage-artifacts -type f -name "*.xml" | sort
+          
+      - name: Install coverage tools
+        run: npm install -g nyc
+        
+      - name: Generate combined coverage report
+        run: |
+          mkdir -p coverage/combined
+          # Copy all cobertura files to a common directory
+          find coverage-artifacts -name "cobertura-coverage.xml" -exec cp {} coverage/combined/ \;
+          # Rename files to avoid conflicts
+          cd coverage/combined
+          i=0
+          for file in cobertura-coverage.xml*; do
+            if [ "$file" != "cobertura-coverage.xml" ]; then
+              mv "$file" "cobertura-coverage-$i.xml"
+              i=$((i+1))
+            fi
+          done
+          
+      - name: Publish Coverage to PR
+        uses: 5monkeys/cobertura-action@v12
+        if: github.event_name == 'pull_request'
+        with:
+          path: coverage/combined/cobertura-coverage.xml
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 60
+          show_line: true
+          show_branch: true
+          fail_below_threshold: false
