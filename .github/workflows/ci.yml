@@ -210,7 +210,7 @@ jobs:
 
       - name: Publish Coverage to PR
         uses: 5monkeys/cobertura-action@v12
-        if: github.event_name == 'pull_request' && always()
+        if: always()
         with:
           path: CoverageResults/Report/Cobertura.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}
