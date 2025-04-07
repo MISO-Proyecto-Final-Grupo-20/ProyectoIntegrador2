@@ -100,7 +100,10 @@ jobs:
       #   run: dotnet ef database update --project experimento-hu012-ha10/Ventas/Ventas.csproj --context ApplicationDbContext --connection "${{ secrets.CONNECTIONSTRINGS__VENTAS }}"
   
           
-      - name: Test projects
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Test projects with coverage
         env:
           # CONNECTION_STRING: ${{ secrets.CONNECTIONSTRINGS__VENTAS }}
           RABBITMQ_HOST: localhost
@@ -109,18 +112,63 @@ jobs:
         run: |
           for project in ${{ steps.find-csproj.outputs.projects }}; do
             if [[ "$project" == *Test* ]] || [[ "$project" == *Tests* ]]; then
-              echo "Testing $project"
+              echo "Testing $project with coverage"
               project_name=$(basename "$project" .csproj)
+              project_dir=$(dirname "$project")
               mkdir -p TestResults
-              dotnet test "$project" --configuration Release --no-build --no-restore --logger "trx;LogFileName=TestResults/${project_name}.trx"
+              mkdir -p CoverageResults
+              
+              # Find the runsettings file in the project directory
+              runsettings_file=""
+              if [ -f "$project_dir/coverlet.runsettings" ]; then
+                runsettings_file="$project_dir/coverlet.runsettings"
+              fi
+              
+              # Run tests with coverage
+              if [ -n "$runsettings_file" ]; then
+                echo "Using runsettings file: $runsettings_file"
+                dotnet test "$project" --configuration Release --no-build --no-restore \
+                  --logger "trx;LogFileName=TestResults/${project_name}.trx" \
+                  --settings "$runsettings_file" \
+                  --collect:"XPlat Code Coverage" \
+                  --results-directory TestResults
+              else
+                echo "No runsettings file found, using default coverage settings"
+                dotnet test "$project" --configuration Release --no-build --no-restore \
+                  --logger "trx;LogFileName=TestResults/${project_name}.trx" \
+                  --collect:"XPlat Code Coverage" \
+                  --results-directory TestResults \
+                  /p:CollectCoverage=true \
+                  /p:CoverletOutputFormat=cobertura \
+                  /p:ExcludeByFile="../StoreFlow.Usuarios.API/Program.cs%2c../StoreFlow.Usuarios.API/Migrations/20250403131236_CreacionUsuaio.cs%2c../StoreFlow.Usuarios.API/Migrations/20250403131236_CreacionUsuaio.Designer.cs%2c../StoreFlow.Usuarios.API/Migrations/20250406025023_DatosSemillaUsuarios.cs%2c../StoreFlow.Usuarios.API/Migrations/20250406025023_DatosSemillaUsuarios.Designer.cs%2c../StoreFlow.Usuarios.API/Migrations/UsuariosDbContextModelSnapshot.cs%2c**/obj/**/*.cs%2c**/Properties/**/*.cs%2c**/*.Designer.cs%2c**/*.g.cs%2c**/*.AssemblyInfo.cs" \
+                  /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute%2cExcludeFromCodeCoverage" \
+                  /p:IncludeDirectory="../StoreFlow.Usuarios.API"
+              fi
             fi
           done
 
-      - name: List test results
+      - name: List test and coverage results
         if: always()
         run: |
           echo "Test results files:"
-          find . -name "*.trx" | sort
+          find TestResults -name "*.trx" | sort
+          echo "Coverage results files:"
+          find TestResults -name "*.cobertura.xml" | sort
+
+      - name: Generate coverage report
+        if: always()
+        run: |
+          # Find all coverage files
+          coverage_files=$(find TestResults -name "*.cobertura.xml" | tr '\n' ';')
+          if [ -n "$coverage_files" ]; then
+            echo "Generating coverage report from: $coverage_files"
+            reportgenerator \
+              -reports:"$coverage_files" \
+              -targetdir:"CoverageResults/Report" \
+              -reporttypes:"Html;Cobertura;JsonSummary"
+          else
+            echo "No coverage files found"
+          fi
 
       - name: Publish Test Results
         uses: dorny/test-reporter@v1
@@ -130,3 +178,43 @@ jobs:
           path: '**/TestResults/*.trx'
           reporter: 'dotnet-trx'
           fail-on-error: false
+          
+          
+      - name: Install jq
+        if: always()
+        run: sudo apt-get install -y jq
+          
+      - name: Coverage Report Summary
+        if: always()
+        run: |
+          if [ -f "CoverageResults/Report/Summary.json" ]; then
+            echo "Coverage Summary:"
+            cat CoverageResults/Report/Summary.json | jq .
+          else
+            echo "No coverage summary found"
+          fi
+          
+      # Make sure the Cobertura.xml file exists before trying to publish it
+      - name: Check for Cobertura.xml
+        if: always()
+        run: |
+          if [ -f "CoverageResults/Report/Cobertura.xml" ]; then
+            echo "Cobertura.xml file found"
+          else
+            echo "Cobertura.xml file not found, checking for other locations..."
+            find . -name "*.cobertura.xml" | sort
+            # Copy any found cobertura files to the expected location
+            mkdir -p CoverageResults/Report
+            find . -name "*.cobertura.xml" -exec cp {} CoverageResults/Report/Cobertura.xml \; -quit
+          fi
+
+      - name: Publish Coverage to PR
+        uses: 5monkeys/cobertura-action@v12
+        if: github.event_name == 'pull_request' && always()
+        with:
+          path: CoverageResults/Report/Cobertura.xml
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          minimum_coverage: 60
+          show_line: true
+          show_branch: true
+          fail_below_threshold: false

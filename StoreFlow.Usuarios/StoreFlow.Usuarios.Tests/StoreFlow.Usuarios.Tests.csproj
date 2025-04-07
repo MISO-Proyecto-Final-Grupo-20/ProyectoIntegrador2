@@ -5,10 +5,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <CollectCoverage>true</CollectCoverage>
+        <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+        <ExcludeByFile>../StoreFlow.Usuarios.API/Program.cs,../StoreFlow.Usuarios.API/Migrations/**/*.cs,**/obj/**/*.cs,**/Properties/**/*.cs,**/*.Designer.cs,**/*.g.cs,**/*.AssemblyInfo.cs</ExcludeByFile>
+        <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+        <IncludeDirectory>../StoreFlow.Usuarios.API</IncludeDirectory>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2" />
+        <PackageReference Include="coverlet.msbuild" Version="6.0.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />

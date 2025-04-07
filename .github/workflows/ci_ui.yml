@@ -11,6 +11,12 @@ on:
       - 'UI/**'
   workflow_dispatch:  # Allows manual triggering
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -52,8 +58,18 @@ jobs:
         working-directory: UI/
         
       - name: Run tests for ${{ matrix.app }} app
+        if: matrix.app == 'mobile'
         run: npx nx test ${{ matrix.app }} --no-watch --no-progress
         working-directory: UI/
+        env:
+          JEST_JUNIT_OUTPUT_DIR: 'dist/test-results/${{ matrix.app }}'
+          
+      - name: Run tests with coverage for web app
+        if: matrix.app == 'web'
+        run: npx nx test ${{ matrix.app }} --no-watch --no-progress --coverage --coverageReporters=cobertura,lcov,text-summary
+        working-directory: UI/
+        env:
+          JEST_JUNIT_OUTPUT_DIR: 'dist/test-results/${{ matrix.app }}'
 
       - name: Upload test results for ${{ matrix.app }} app
         uses: actions/upload-artifact@v4
@@ -61,6 +77,14 @@ jobs:
         with:
           name: ${{ matrix.app }}-test-results
           path: 'UI/dist/test-results/${{ matrix.app }}/**/*.xml'
+          if-no-files-found: warn
+          
+      - name: Upload coverage results for web app
+        uses: actions/upload-artifact@v4
+        if: matrix.app == 'web' && always()
+        with:
+          name: web-coverage
+          path: 'UI/coverage/apps/web'
           if-no-files-found: warn
 
       - name: Archive build for ${{ matrix.app }} app
@@ -70,3 +94,97 @@ jobs:
           name: ${{ matrix.app }}-build
           path: UI/dist/apps/${{ matrix.app }}/
           retention-days: 7
+          
+  coverage-report:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: coverage-artifacts
+          pattern: '*-coverage'
+          merge-multiple: true
+          
+      - name: List coverage files
+        run: find coverage-artifacts -type f -name "*.xml" | sort
+          
+      - name: Install coverage tools
+        run: npm install -g nyc
+        
+      - name: Generate combined coverage report
+        run: |
+          mkdir -p coverage/combined
+          # Copy all cobertura files to a common directory
+          find coverage-artifacts -name "cobertura-coverage.xml" -exec cp {} coverage/combined/ \;
+          # Rename files to avoid conflicts
+          cd coverage/combined
+          i=0
+          for file in cobertura-coverage.xml*; do
+            if [ "$file" != "cobertura-coverage.xml" ]; then
+              mv "$file" "cobertura-coverage-$i.xml"
+              i=$((i+1))
+            fi
+          done
+          
+          # Debug: List files in coverage/combined
+          echo "Files in coverage/combined:"
+          ls -la
+          
+          # If no cobertura-coverage.xml exists, create one from the first available file
+          if [ ! -f "cobertura-coverage.xml" ] && [ -n "$(ls cobertura-coverage-*.xml 2>/dev/null)" ]; then
+            cp "$(ls cobertura-coverage-*.xml | head -1)" "cobertura-coverage.xml"
+          fi
+          
+          # Debug: Check if cobertura-coverage.xml exists
+          if [ -f "cobertura-coverage.xml" ]; then
+            echo "cobertura-coverage.xml exists"
+          else
+            echo "cobertura-coverage.xml does not exist"
+            # Try to find any XML files and use the first one
+            if [ -n "$(find .. -name "*.xml" | head -1)" ]; then
+              cp "$(find .. -name "*.xml" | head -1)" "cobertura-coverage.xml"
+              echo "Copied $(find .. -name "*.xml" | head -1) to cobertura-coverage.xml"
+            fi
+          fi
+          
+      # Use a GitHub action that directly supports Cobertura XML
+      - name: Generate Coverage Report
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.2.0
+        with:
+          reports: 'coverage/combined/cobertura-coverage.xml'
+          targetdir: 'coveragereport'
+          reporttypes: 'HtmlInline;Cobertura'
+          title: 'UI Code Coverage Report'
+          
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coveragereport
+          
+      # Also publish coverage as a GitHub check
+      - name: Publish Coverage as Check
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage/combined/cobertura-coverage.xml
+          badge: true
+          format: markdown
+          output: both
+          
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          header: UI Code Coverage
+          path: code-coverage-results.md

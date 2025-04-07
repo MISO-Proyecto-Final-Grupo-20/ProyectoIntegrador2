@@ -4,12 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StoreFlow.Usuarios.API.Datos;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace StoreFlow.Usuarios.API.Migrations
 {
     [DbContext(typeof(UsuariosDbContext))]
+    [ExcludeFromCodeCoverage]
     partial class UsuariosDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

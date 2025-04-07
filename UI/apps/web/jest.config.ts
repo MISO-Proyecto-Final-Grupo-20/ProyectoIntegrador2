@@ -1,4 +1,7 @@
+import baseConfig from '../../jest.config.base';
+
 export default {
+  ...baseConfig,
   displayName: 'web',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts', 
