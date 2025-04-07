@@ -140,8 +140,8 @@ jobs:
                   --results-directory TestResults \
                   /p:CollectCoverage=true \
                   /p:CoverletOutputFormat=cobertura \
-                  /p:ExcludeByFile="../StoreFlow.Usuarios.API/Program.cs%2c../StoreFlow.Usuarios.API/Migrations/**/*.cs%2c**/obj/**/*.cs%2c**/Properties/**/*.cs%2c**/*.Designer.cs%2c**/*.g.cs%2c**/*.AssemblyInfo.cs" \
-                  /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute" \
+                  /p:ExcludeByFile="../StoreFlow.Usuarios.API/Program.cs%2c../StoreFlow.Usuarios.API/Migrations/20250403131236_CreacionUsuaio.cs%2c../StoreFlow.Usuarios.API/Migrations/20250403131236_CreacionUsuaio.Designer.cs%2c../StoreFlow.Usuarios.API/Migrations/20250406025023_DatosSemillaUsuarios.cs%2c../StoreFlow.Usuarios.API/Migrations/20250406025023_DatosSemillaUsuarios.Designer.cs%2c../StoreFlow.Usuarios.API/Migrations/UsuariosDbContextModelSnapshot.cs%2c**/obj/**/*.cs%2c**/Properties/**/*.cs%2c**/*.Designer.cs%2c**/*.g.cs%2c**/*.AssemblyInfo.cs" \
+                  /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute%2cExcludeFromCodeCoverage" \
                   /p:IncludeDirectory="../StoreFlow.Usuarios.API"
               fi
             fi

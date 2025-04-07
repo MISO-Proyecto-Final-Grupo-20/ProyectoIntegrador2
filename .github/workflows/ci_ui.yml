@@ -11,6 +11,11 @@ on:
       - 'UI/**'
   workflow_dispatch:  # Allows manual triggering
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -131,9 +136,39 @@ jobs:
             fi
           done
           
+          # Debug: List files in coverage/combined
+          echo "Files in coverage/combined:"
+          ls -la
+          
+          # If no cobertura-coverage.xml exists, create one from the first available file
+          if [ ! -f "cobertura-coverage.xml" ] && [ -n "$(ls cobertura-coverage-*.xml 2>/dev/null)" ]; then
+            cp "$(ls cobertura-coverage-*.xml | head -1)" "cobertura-coverage.xml"
+          fi
+          
+          # Debug: Check if cobertura-coverage.xml exists
+          if [ -f "cobertura-coverage.xml" ]; then
+            echo "cobertura-coverage.xml exists"
+          else
+            echo "cobertura-coverage.xml does not exist"
+            # Try to find any XML files and use the first one
+            if [ -n "$(find .. -name "*.xml" | head -1)" ]; then
+              cp "$(find .. -name "*.xml" | head -1)" "cobertura-coverage.xml"
+              echo "Copied $(find .. -name "*.xml" | head -1) to cobertura-coverage.xml"
+            fi
+          fi
+          
+      - name: Check if coverage file exists
+        id: check_coverage
+        run: |
+          if [ -f "coverage/combined/cobertura-coverage.xml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Publish Coverage to PR
         uses: 5monkeys/cobertura-action@v12
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.check_coverage.outputs.exists == 'true'
         with:
           path: coverage/combined/cobertura-coverage.xml
           repo_token: ${{ secrets.GITHUB_TOKEN }}

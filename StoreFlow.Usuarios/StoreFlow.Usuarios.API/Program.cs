@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,6 +86,5 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-
+[ExcludeFromCodeCoverage]
 public partial class Program { }
-
