@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -7,10 +7,17 @@
         <IsPackable>false</IsPackable>
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>cobertura</CoverletOutputFormat>
-        <Exclude>[StoreFlow.Usuarios.API.Migrations*]*,[StoreFlow.Usuarios.API.Program]*,[*]*.Designer.cs,[*]*.g.cs,[*]*.AssemblyInfo.cs,[*]*.Startup.cs,[*]*.csproj,[*]*.razor,[*]*.cshtml,[*]*.json,[*]*.http,[*]*.Tests*]*,[*]obj*]*,[*]Properties*]*</Exclude>
+        <ExcludeByFile>
+          ../StoreFlow.Usuarios.API/Program.cs,
+          ../StoreFlow.Usuarios.API/Migrations/**/*.cs,
+          **/obj/**/*.cs,
+          **/Properties/**/*.cs,
+          **/*.Designer.cs,
+          **/*.g.cs,
+          **/*.AssemblyInfo.cs
+        </ExcludeByFile>
         <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
-        <ExcludeByFile>**/obj/**/*.cs,**/Properties/**/*.cs</ExcludeByFile>
-        <Include>[StoreFlow.Usuarios.API*]*</Include>
+        <IncludeDirectory>../StoreFlow.Usuarios.API</IncludeDirectory>
     </PropertyGroup>
 
     <ItemGroup>
