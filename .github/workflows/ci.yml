@@ -249,52 +249,28 @@ jobs:
           output: both
           thresholds: '60 80'
           
-      # Install puppeteer-headless-chrome for HTML to image conversion
-      - name: Install Puppeteer tools
+      # Alternative approach: Use action-upload-artifact and GitHub Pages
+      - name: Upload Coverage Report to GitHub Pages
         if: github.event_name == 'pull_request' && always()
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
-          npm init -y
-          npm install puppeteer-core
-          
-      # Generate screenshot of HTML coverage report
-      - name: Generate coverage report screenshot
-        if: github.event_name == 'pull_request' && always()
-        run: |
-          cat > screenshot.js << 'EOL'
-          const puppeteer = require('puppeteer-core');
-
-          (async () => {
-            const browser = await puppeteer.launch({
-              executablePath: '/usr/bin/chromium-browser',
-              args: ['--no-sandbox', '--disable-setuid-sandbox']
-            });
-            const page = await browser.newPage();
-            await page.setViewport({ width: 1280, height: 1600 });
-            await page.goto('file://${PWD}/CoverageResults/Report/index.html', { waitUntil: 'networkidle0' });
-            await page.screenshot({ path: 'coverage-report.png', fullPage: true });
-            await browser.close();
-          })();
-          EOL
-          node screenshot.js
-          
-      # Upload screenshot as an artifact
-      - name: Upload coverage screenshot
         uses: actions/upload-artifact@v4
-        if: github.event_name == 'pull_request' && always()
         with:
-          name: coverage-report-screenshot
-          path: coverage-report.png
+          name: coverage-report-${{ github.run_id }}
+          path: CoverageResults/Report
           retention-days: 14
-      
-      # Combine markdown report with image reference
+          
+      # Create an alternative version of the PR comment that includes a link to the artifact
       - name: Prepare enhanced PR comment
         if: github.event_name == 'pull_request' && always()
         run: |
           cat code-coverage-results.md > enhanced-coverage-report.md
           echo -e "\n\n## Detailed Coverage Report\n\n" >> enhanced-coverage-report.md
-          echo -e "![Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/coverage-report-screenshot)\n" >> enhanced-coverage-report.md
+          echo -e "**[View HTML Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/coverage-report-${{ github.run_id }})**\n" >> enhanced-coverage-report.md
+          
+          # Add a summary section from the report
+          if [ -f "CoverageResults/Report/Summary.md" ]; then
+            echo -e "\n### Coverage Summary\n\n" >> enhanced-coverage-report.md
+            cat "CoverageResults/Report/Summary.md" >> enhanced-coverage-report.md
+          fi
           
       # Add the enhanced coverage report as a PR comment
       - name: Add Coverage PR Comment
