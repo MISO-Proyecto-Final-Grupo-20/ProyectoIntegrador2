@@ -36,7 +36,7 @@ export class LoginClienteComponent {
     this.service.ingresar(datosIngreso, TipoCategoria.Cliente).subscribe({
       next: ({ token }) => {
         this.authService.registrarToken(token);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/home/clientes');
       },
     });
   }
