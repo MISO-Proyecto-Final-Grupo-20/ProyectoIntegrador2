@@ -165,7 +165,7 @@ jobs:
             reportgenerator \
               -reports:"$coverage_files" \
               -targetdir:"CoverageResults/Report" \
-              -reporttypes:"Html;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
+              -reporttypes:"Html;HtmlSummary;HtmlChart;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
               -classfilters:"+*" \
               -filefilters:"-*.Designer.cs;-*.g.cs;-*.AssemblyInfo.cs" \
               -verbosity:Info \
@@ -233,9 +233,9 @@ jobs:
             
             # Install required tools
             sudo apt-get update
-            sudo apt-get install -y libxml2-utils bc
+            sudo apt-get install -y libxml2-utils bc jq
             
-            # Create a simple markdown report
+            # Create a detailed markdown report
             echo "# Code Coverage Report" > CoverageResults/Report/HierarchicalReport.md
             echo "" >> CoverageResults/Report/HierarchicalReport.md
             echo "| Symbol | Coverage (%) | Uncovered/Total Stmts. |" >> CoverageResults/Report/HierarchicalReport.md
@@ -254,8 +254,52 @@ jobs:
               # Add total row
               echo "| 📊 Total | ${coverage_pct}% | ${uncovered}/${total_lines} |" >> CoverageResults/Report/HierarchicalReport.md
               
-              # Add assembly information from Summary.json
-              jq -r '.assemblies[] | "| ▼ 📁 \(.name) | \(.coverage | floor)% | \(.coveredLines)/\(.coverableLines) |"' CoverageResults/Report/Summary.json >> CoverageResults/Report/HierarchicalReport.md 2>/dev/null || true
+              # Process assemblies, classes, and methods
+              jq -c '.assemblies[]' CoverageResults/Report/Summary.json | while read -r assembly; do
+                assembly_name=$(echo $assembly | jq -r '.name')
+                assembly_coverage=$(echo $assembly | jq -r '.coverage')
+                assembly_covered=$(echo $assembly | jq -r '.coveredLines')
+                assembly_total=$(echo $assembly | jq -r '.coverableLines')
+                assembly_coverage_pct=$(echo "$assembly_coverage" | xargs printf "%.0f")
+                
+                # Add assembly row
+                echo "| ▼ 📁 $assembly_name | ${assembly_coverage_pct}% | $((assembly_total - assembly_covered))/$assembly_total |" >> CoverageResults/Report/HierarchicalReport.md
+                
+                # Process classes
+                echo $assembly | jq -c '.classes[]' 2>/dev/null | while read -r class; do
+                  class_name=$(echo $class | jq -r '.name')
+                  class_coverage=$(echo $class | jq -r '.coverage')
+                  class_covered=$(echo $class | jq -r '.coveredLines')
+                  class_total=$(echo $class | jq -r '.coverableLines')
+                  class_coverage_pct=$(echo "$class_coverage" | xargs printf "%.0f")
+                  
+                  # Extract short class name (remove namespace)
+                  short_class_name=$(echo $class_name | grep -o '[^.]*$')
+                  
+                  # Add class row
+                  echo "|   ▼ {} $short_class_name | ${class_coverage_pct}% | $((class_total - class_covered))/$class_total |" >> CoverageResults/Report/HierarchicalReport.md
+                  
+                  # Process methods
+                  echo $class | jq -c '.methods[]' 2>/dev/null | while read -r method; do
+                    method_name=$(echo $method | jq -r '.name')
+                    method_coverage=$(echo $method | jq -r '.coverage')
+                    method_covered=$(echo $method | jq -r '.coveredLines')
+                    method_total=$(echo $method | jq -r '.coverableLines')
+                    method_coverage_pct=$(echo "$method_coverage" | xargs printf "%.0f")
+                    
+                    # Skip constructors and simple properties
+                    if [[ "$method_name" == *".ctor"* || "$method_name" == *"get_"* || "$method_name" == *"set_"* ]]; then
+                      continue
+                    fi
+                    
+                    # Extract short method name (remove class name)
+                    short_method_name=$(echo $method_name | grep -o '[^.]*$')
+                    
+                    # Add method row
+                    echo "|     ▶ 🔹 $short_method_name | ${method_coverage_pct}% | $((method_total - method_covered))/$method_total |" >> CoverageResults/Report/HierarchicalReport.md
+                  done
+                done
+              done
             fi
             
             # Add footer
