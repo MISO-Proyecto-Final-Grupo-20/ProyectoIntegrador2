@@ -5,7 +5,7 @@ export class Utilidades {
   static obtenerSesion(): Sesion {
     //quitar
     return {
-      categoria: TipoCategoria.Cliente,
+      categoria: TipoCategoria.Vendedor,
       nombreUsuario: 'Camilo Barreto',
     } as Sesion;
     // return (window as any).sesion as Sesion;
