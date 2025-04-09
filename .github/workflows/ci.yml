@@ -165,7 +165,7 @@ jobs:
             reportgenerator \
               -reports:"$coverage_files" \
               -targetdir:"CoverageResults/Report" \
-              -reporttypes:"Html;HtmlSummary;HtmlChart;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
+              -reporttypes:"Html;HtmlSummary;HtmlChart;HtmlInline;HtmlInline_AzurePipelines;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
               -classfilters:"+*" \
               -filefilters:"-*.Designer.cs;-*.g.cs;-*.AssemblyInfo.cs" \
               -verbosity:Info \
@@ -315,16 +315,30 @@ jobs:
             echo "No Cobertura.xml file found for detailed report generation"
           fi
 
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: CoverageResults/Report
+          retention-days: 14
+
       - name: Create custom PR comment with detailed report
         if: github.event_name == 'pull_request' && always()
         run: |
+          echo "## StoreFlow.Usuarios Code Coverage Report" > coverage-comment.md
+          echo "" >> coverage-comment.md
+          echo "Minimum allowed coverage is 60%" >> coverage-comment.md
+          echo "" >> coverage-comment.md
+          
+          # Add link to download the HTML report
+          echo "### [📊 Download Full HTML Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> coverage-comment.md
+          echo "" >> coverage-comment.md
+          
+          # Add summary table from the hierarchical report if available
           if [ -f "CoverageResults/Report/HierarchicalReport.md" ]; then
-            cp CoverageResults/Report/HierarchicalReport.md coverage-comment.md
+            cat CoverageResults/Report/HierarchicalReport.md >> coverage-comment.md
           elif [ -f "CoverageResults/Report/Summary.md" ]; then
-            echo "## StoreFlow.Usuarios Code Coverage Report" > coverage-comment.md
-            echo "" >> coverage-comment.md
-            echo "Minimum allowed coverage is 60%" >> coverage-comment.md
-            echo "" >> coverage-comment.md
             cat CoverageResults/Report/Summary.md >> coverage-comment.md
           fi
 
@@ -345,4 +359,6 @@ jobs:
           show_line: true
           show_branch: true
           show_class_names: true
+          show_missing: true
+          only_changed_files: false
           fail_below_threshold: false
