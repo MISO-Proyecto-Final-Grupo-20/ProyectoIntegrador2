@@ -225,140 +225,43 @@ jobs:
             echo "No detailed coverage report found"
           fi
 
-      - name: Generate hierarchical coverage report
-        if: always()
-        run: |
-          if [ -f "CoverageResults/Report/Cobertura.xml" ]; then
-            echo "Generating hierarchical coverage report..."
-            
-            # Install required tools
-            sudo apt-get update
-            sudo apt-get install -y libxml2-utils bc jq
-            
-            # Create a detailed markdown report
-            echo "# Code Coverage Report" > CoverageResults/Report/HierarchicalReport.md
-            echo "" >> CoverageResults/Report/HierarchicalReport.md
-            echo "| Symbol | Coverage (%) | Uncovered/Total Stmts. |" >> CoverageResults/Report/HierarchicalReport.md
-            echo "| ------ | ------------ | ---------------------- |" >> CoverageResults/Report/HierarchicalReport.md
-            
-            # Extract summary information from Summary.json
-            if [ -f "CoverageResults/Report/Summary.json" ]; then
-              line_coverage=$(grep -o '"lineCoverage":[0-9.]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
-              covered_lines=$(grep -o '"coveredLines":[0-9]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
-              total_lines=$(grep -o '"coverableLines":[0-9]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
-              
-              # Calculate percentage and format
-              coverage_pct=$(echo "$line_coverage * 100" | bc | xargs printf "%.0f")
-              uncovered=$((total_lines - covered_lines))
-              
-              # Add total row
-              echo "| 📊 Total | ${coverage_pct}% | ${uncovered}/${total_lines} |" >> CoverageResults/Report/HierarchicalReport.md
-              
-              # Process assemblies, classes, and methods
-              jq -c '.assemblies[]' CoverageResults/Report/Summary.json | while read -r assembly; do
-                assembly_name=$(echo $assembly | jq -r '.name')
-                assembly_coverage=$(echo $assembly | jq -r '.coverage')
-                assembly_covered=$(echo $assembly | jq -r '.coveredLines')
-                assembly_total=$(echo $assembly | jq -r '.coverableLines')
-                assembly_coverage_pct=$(echo "$assembly_coverage" | xargs printf "%.0f")
-                
-                # Add assembly row
-                echo "| ▼ 📁 $assembly_name | ${assembly_coverage_pct}% | $((assembly_total - assembly_covered))/$assembly_total |" >> CoverageResults/Report/HierarchicalReport.md
-                
-                # Process classes
-                echo $assembly | jq -c '.classes[]' 2>/dev/null | while read -r class; do
-                  class_name=$(echo $class | jq -r '.name')
-                  class_coverage=$(echo $class | jq -r '.coverage')
-                  class_covered=$(echo $class | jq -r '.coveredLines')
-                  class_total=$(echo $class | jq -r '.coverableLines')
-                  class_coverage_pct=$(echo "$class_coverage" | xargs printf "%.0f")
-                  
-                  # Extract short class name (remove namespace)
-                  short_class_name=$(echo $class_name | grep -o '[^.]*$')
-                  
-                  # Add class row
-                  echo "|   ▼ {} $short_class_name | ${class_coverage_pct}% | $((class_total - class_covered))/$class_total |" >> CoverageResults/Report/HierarchicalReport.md
-                  
-                  # Process methods
-                  echo $class | jq -c '.methods[]' 2>/dev/null | while read -r method; do
-                    method_name=$(echo $method | jq -r '.name')
-                    method_coverage=$(echo $method | jq -r '.coverage')
-                    method_covered=$(echo $method | jq -r '.coveredLines')
-                    method_total=$(echo $method | jq -r '.coverableLines')
-                    method_coverage_pct=$(echo "$method_coverage" | xargs printf "%.0f")
-                    
-                    # Skip constructors and simple properties
-                    if [[ "$method_name" == *".ctor"* || "$method_name" == *"get_"* || "$method_name" == *"set_"* ]]; then
-                      continue
-                    fi
-                    
-                    # Extract short method name (remove class name)
-                    short_method_name=$(echo $method_name | grep -o '[^.]*$')
-                    
-                    # Add method row
-                    echo "|     ▶ 🔹 $short_method_name | ${method_coverage_pct}% | $((method_total - method_covered))/$method_total |" >> CoverageResults/Report/HierarchicalReport.md
-                  done
-                done
-              done
-            fi
-            
-            # Add footer
-            echo "" >> CoverageResults/Report/HierarchicalReport.md
-            echo "## Minimum allowed coverage is 60%" >> CoverageResults/Report/HierarchicalReport.md
-            echo "" >> CoverageResults/Report/HierarchicalReport.md
-            echo "Generated by [ReportGenerator](https://github.com/danielpalme/ReportGenerator)" >> CoverageResults/Report/HierarchicalReport.md
-            
-            # Display the report
-            echo "Detailed Hierarchical Coverage Report:"
-            cat CoverageResults/Report/HierarchicalReport.md
-          else
-            echo "No Cobertura.xml file found for detailed report generation"
-          fi
+      # Removed custom hierarchical report generation as it's not needed
 
-      - name: Upload coverage report
+      # Upload the full HTML report as an artifact
+      - name: Upload full coverage report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: coverage-report
+          name: coverage-report-full
           path: CoverageResults/Report
           retention-days: 14
 
-      - name: Create custom PR comment with detailed report
-        if: github.event_name == 'pull_request' && always()
-        run: |
-          echo "## StoreFlow.Usuarios Code Coverage Report" > coverage-comment.md
-          echo "" >> coverage-comment.md
-          echo "Minimum allowed coverage is 60%" >> coverage-comment.md
-          echo "" >> coverage-comment.md
-          
-          # Add link to download the HTML report
-          echo "### [📊 Download Full HTML Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> coverage-comment.md
-          echo "" >> coverage-comment.md
-          
-          # Add summary table from the hierarchical report if available
-          if [ -f "CoverageResults/Report/HierarchicalReport.md" ]; then
-            cat CoverageResults/Report/HierarchicalReport.md >> coverage-comment.md
-          elif [ -f "CoverageResults/Report/Summary.md" ]; then
-            cat CoverageResults/Report/Summary.md >> coverage-comment.md
-          fi
+      # Generate a detailed code coverage report using CodeCoverageSummary
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: CoverageResults/Report/Cobertura.xml
+          badge: true
+          format: markdown
+          hide_complexity: false
+          hide_branch_rate: false
+          indicators: true
+          output: both
+          thresholds: '60 80'
 
+      # Add the coverage report as a PR comment
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request' && always() && hashFiles('coverage-comment.md') != ''
+        if: github.event_name == 'pull_request' && always()
         with:
           header: Code Coverage Report
-          path: coverage-comment.md
-
-      - name: Publish Coverage to PR
-        uses: 5monkeys/cobertura-action@v12
+          path: code-coverage-results.md
+          
+      # Also upload just the index.html file for quick viewing
+      - name: Upload HTML Coverage Report Index
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          path: CoverageResults/Report/Cobertura.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 60
-          show_line: true
-          show_branch: true
-          show_class_names: true
-          show_missing: true
-          only_changed_files: false
-          fail_below_threshold: false
+          name: coverage-report-index
+          path: CoverageResults/Report/index.html
+          retention-days: 14
