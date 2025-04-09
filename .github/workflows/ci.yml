@@ -165,12 +165,11 @@ jobs:
             reportgenerator \
               -reports:"$coverage_files" \
               -targetdir:"CoverageResults/Report" \
-              -reporttypes:"Html;Cobertura;JsonSummary;TextSummary;MarkdownSummary;DetailedBadge" \
+              -reporttypes:"Html;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
               -classfilters:"+*" \
               -filefilters:"-*.Designer.cs;-*.g.cs;-*.AssemblyInfo.cs" \
               -verbosity:Info \
-              -title:"StoreFlow.Usuarios Code Coverage" \
-              -tag:$(date +"%Y%m%d_%H%M%S")
+              -title:"StoreFlow.Usuarios Code Coverage"
           else
             echo "No coverage files found"
           fi
@@ -232,102 +231,42 @@ jobs:
           if [ -f "CoverageResults/Report/Cobertura.xml" ]; then
             echo "Generating hierarchical coverage report..."
             
-            # Create a script to parse the Cobertura XML and generate a hierarchical report
-            cat > parse_coverage.sh << 'EOF'
-            #!/bin/bash
+            # Install required tools
+            sudo apt-get update
+            sudo apt-get install -y libxml2-utils bc
             
-            echo "# Code Coverage Report"
-            echo ""
-            echo "| Symbol | Coverage (%) | Uncovered/Total Stmts. |"
-            echo "| ------ | ------------ | ---------------------- |"
+            # Create a simple markdown report
+            echo "# Code Coverage Report" > CoverageResults/Report/HierarchicalReport.md
+            echo "" >> CoverageResults/Report/HierarchicalReport.md
+            echo "| Symbol | Coverage (%) | Uncovered/Total Stmts. |" >> CoverageResults/Report/HierarchicalReport.md
+            echo "| ------ | ------------ | ---------------------- |" >> CoverageResults/Report/HierarchicalReport.md
             
-            # Extract overall coverage from Summary.json
+            # Extract summary information from Summary.json
             if [ -f "CoverageResults/Report/Summary.json" ]; then
-              total_coverage=$(grep -o '"lineCoverage":[0-9.]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
+              line_coverage=$(grep -o '"lineCoverage":[0-9.]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
               covered_lines=$(grep -o '"coveredLines":[0-9]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
               total_lines=$(grep -o '"coverableLines":[0-9]*' CoverageResults/Report/Summary.json | cut -d':' -f2)
               
-              # Format the total coverage line
-              total_coverage_formatted=$(printf "%.0f" $(echo "$total_coverage * 100" | bc))
-              echo "| 📊 Total | ${total_coverage_formatted}% | $((total_lines - covered_lines))/$total_lines |"
+              # Calculate percentage and format
+              coverage_pct=$(echo "$line_coverage * 100" | bc | xargs printf "%.0f")
+              uncovered=$((total_lines - covered_lines))
+              
+              # Add total row
+              echo "| 📊 Total | ${coverage_pct}% | ${uncovered}/${total_lines} |" >> CoverageResults/Report/HierarchicalReport.md
+              
+              # Add assembly information from Summary.json
+              jq -r '.assemblies[] | "| ▼ 📁 \(.name) | \(.coverage | floor)% | \(.coveredLines)/\(.coverableLines) |"' CoverageResults/Report/Summary.json >> CoverageResults/Report/HierarchicalReport.md 2>/dev/null || true
             fi
             
-            # Extract assembly and class information
-            xmllint --xpath "//packages/package" CoverageResults/Report/Cobertura.xml 2>/dev/null | 
-            grep -o 'name="[^"]*"' | 
-            cut -d'"' -f2 | 
-            while read -r assembly; do
-              # Get assembly coverage
-              assembly_line_rate=$(xmllint --xpath "//packages/package[@name='$assembly']/@line-rate" CoverageResults/Report/Cobertura.xml 2>/dev/null | cut -d'"' -f2)
-              assembly_coverage_formatted=$(printf "%.0f" $(echo "$assembly_line_rate * 100" | bc))
-              
-              # Count lines for this assembly
-              assembly_lines_covered=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class/lines/line[@hits>0])" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-              assembly_lines_total=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class/lines/line)" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-              
-              # Format the assembly line
-              echo "| ▼ 📁 $assembly | ${assembly_coverage_formatted}% | $((assembly_lines_total - assembly_lines_covered))/$assembly_lines_total |"
-              
-              # Extract classes for this assembly
-              xmllint --xpath "//packages/package[@name='$assembly']/classes/class" CoverageResults/Report/Cobertura.xml 2>/dev/null |
-              grep -o 'name="[^"]*"' |
-              cut -d'"' -f2 |
-              while read -r class_full_name; do
-                # Extract short class name
-                class_name=$(echo "$class_full_name" | grep -o '[^.]*$')
-                
-                # Get class coverage
-                class_line_rate=$(xmllint --xpath "//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/@line-rate" CoverageResults/Report/Cobertura.xml 2>/dev/null | cut -d'"' -f2)
-                class_coverage_formatted=$(printf "%.0f" $(echo "$class_line_rate * 100" | bc))
-                
-                # Count lines for this class
-                class_lines_covered=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/lines/line[@hits>0])" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-                class_lines_total=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/lines/line)" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-                
-                # Format the class line
-                echo "|   ▼ {} $class_name | ${class_coverage_formatted}% | $((class_lines_total - class_lines_covered))/$class_lines_total |"
-                
-                # Extract methods for this class
-                xmllint --xpath "//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/methods/method" CoverageResults/Report/Cobertura.xml 2>/dev/null |
-                grep -o 'name="[^"]*"' |
-                cut -d'"' -f2 |
-                while read -r method_name; do
-                  # Skip constructors and simple properties for brevity
-                  if [[ "$method_name" == ".ctor" || "$method_name" == "get_"* || "$method_name" == "set_"* ]]; then
-                    continue
-                  fi
-                  
-                  # Get method coverage
-                  method_line_rate=$(xmllint --xpath "//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/methods/method[@name='$method_name']/@line-rate" CoverageResults/Report/Cobertura.xml 2>/dev/null | cut -d'"' -f2)
-                  method_coverage_formatted=$(printf "%.0f" $(echo "$method_line_rate * 100" | bc))
-                  
-                  # Count lines for this method
-                  method_lines_covered=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/methods/method[@name='$method_name']/lines/line[@hits>0])" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-                  method_lines_total=$(xmllint --xpath "count(//packages/package[@name='$assembly']/classes/class[@name='$class_full_name']/methods/method[@name='$method_name']/lines/line)" CoverageResults/Report/Cobertura.xml 2>/dev/null)
-                  
-                  # Format the method line
-                  echo "|     ▶ 🔹 $method_name | ${method_coverage_formatted}% | $((method_lines_total - method_lines_covered))/$method_lines_total |"
-                done
-              done
-            done
-            
-            echo ""
-            echo "## Minimum allowed coverage is 60%"
-            echo ""
-            echo "Generated by [ReportGenerator](https://github.com/danielpalme/ReportGenerator)"
-            EOF
-            
-            # Make the script executable
-            chmod +x parse_coverage.sh
-            
-            # Run the script and save the output
-            ./parse_coverage.sh > CoverageResults/Report/HierarchicalReport.md
+            # Add footer
+            echo "" >> CoverageResults/Report/HierarchicalReport.md
+            echo "## Minimum allowed coverage is 60%" >> CoverageResults/Report/HierarchicalReport.md
+            echo "" >> CoverageResults/Report/HierarchicalReport.md
+            echo "Generated by [ReportGenerator](https://github.com/danielpalme/ReportGenerator)" >> CoverageResults/Report/HierarchicalReport.md
             
             # Display the report
-            if [ -f "CoverageResults/Report/HierarchicalReport.md" ]; then
-              echo "Detailed Hierarchical Coverage Report:"
-              cat CoverageResults/Report/HierarchicalReport.md
-            fi
+            echo "Detailed Hierarchical Coverage Report:"
+            cat CoverageResults/Report/HierarchicalReport.md
           else
             echo "No Cobertura.xml file found for detailed report generation"
           fi
