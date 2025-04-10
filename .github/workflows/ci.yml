@@ -165,7 +165,11 @@ jobs:
             reportgenerator \
               -reports:"$coverage_files" \
               -targetdir:"CoverageResults/Report" \
-              -reporttypes:"Html;Cobertura;JsonSummary"
+              -reporttypes:"Html;HtmlSummary;HtmlChart;HtmlInline;HtmlInline_AzurePipelines;Cobertura;JsonSummary;TextSummary;MarkdownSummary" \
+              -classfilters:"+*" \
+              -filefilters:"-*.Designer.cs;-*.g.cs;-*.AssemblyInfo.cs" \
+              -verbosity:Info \
+              -title:"StoreFlow.Usuarios Code Coverage"
           else
             echo "No coverage files found"
           fi
@@ -208,13 +212,79 @@ jobs:
             find . -name "*.cobertura.xml" -exec cp {} CoverageResults/Report/Cobertura.xml \; -quit
           fi
 
-      - name: Publish Coverage to PR
-        uses: 5monkeys/cobertura-action@v12
+      - name: Display detailed coverage report
+        if: always()
+        run: |
+          if [ -f "CoverageResults/Report/Summary.md" ]; then
+            echo "Detailed Coverage Report (Markdown):"
+            cat CoverageResults/Report/Summary.md
+          elif [ -f "CoverageResults/Report/Summary.txt" ]; then
+            echo "Detailed Coverage Report (Text):"
+            cat CoverageResults/Report/Summary.txt
+          else
+            echo "No detailed coverage report found"
+          fi
+
+      # Removed custom hierarchical report generation as it's not needed
+
+      # Upload the full HTML report as an artifact
+      - name: Upload full coverage report
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          path: CoverageResults/Report/Cobertura.xml
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          minimum_coverage: 60
-          show_line: true
-          show_branch: true
-          fail_below_threshold: false
+          name: coverage-report-full
+          path: CoverageResults/Report
+          retention-days: 14
+
+      # Generate a detailed code coverage report using CodeCoverageSummary
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: CoverageResults/Report/Cobertura.xml
+          badge: true
+          format: markdown
+          hide_complexity: false
+          hide_branch_rate: false
+          indicators: true
+          output: both
+          thresholds: '60 80'
+          
+      # Alternative approach: Use action-upload-artifact and GitHub Pages
+      - name: Upload Coverage Report to GitHub Pages
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ github.run_id }}
+          path: CoverageResults/Report
+          retention-days: 14
+          
+      # Create an alternative version of the PR comment that includes a link to the artifact
+      - name: Prepare enhanced PR comment
+        if: github.event_name == 'pull_request' && always()
+        run: |
+          cat code-coverage-results.md > enhanced-coverage-report.md
+          echo -e "\n\n## Detailed Coverage Report\n\n" >> enhanced-coverage-report.md
+          echo -e "**[View HTML Coverage Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/coverage-report-${{ github.run_id }})**\n" >> enhanced-coverage-report.md
+          
+          # Add a summary section from the report
+          if [ -f "CoverageResults/Report/Summary.md" ]; then
+            echo -e "\n### Coverage Summary\n\n" >> enhanced-coverage-report.md
+            cat "CoverageResults/Report/Summary.md" >> enhanced-coverage-report.md
+          fi
+          
+      # Add the enhanced coverage report as a PR comment
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request' && always()
+        with:
+          header: Code Coverage Report
+          path: enhanced-coverage-report.md
+          
+      # Also upload just the index.html file for quick viewing
+      - name: Upload HTML Coverage Report Index
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-index
+          path: CoverageResults/Report/index.html
+          retention-days: 14
