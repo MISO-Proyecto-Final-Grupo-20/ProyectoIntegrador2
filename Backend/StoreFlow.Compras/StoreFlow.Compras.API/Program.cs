@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
+using StoreFlow.Compras.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,9 @@ builder.Services.AddDbContext<ComprasDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
+
+
+builder.Services.AddScoped<IFabricantesService, FabricantesService>();
 
 // Add services to the container.
 

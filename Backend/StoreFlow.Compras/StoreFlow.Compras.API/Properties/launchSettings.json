@@ -8,8 +8,8 @@
       "applicationUrl": "http://localhost:5038",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "CONNECTION_STRING_COMPRAS": "xxx",
-        "JWT_SECRET": "xxx"
+        "CONNECTION_STRING_COMPRAS": "Host=localhost;Port=5434;Username=postgres;Password=postgres;Database=compras",
+        "JWT_SECRET": "q9zM3u9Y5xUq4OEt5nq3P9+0uOaIxQeH+dE68Z8+WBA="
       }
     }
   }
