@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -76,3 +77,5 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 
+[ExcludeFromCodeCoverage]
+public partial class Program { }
