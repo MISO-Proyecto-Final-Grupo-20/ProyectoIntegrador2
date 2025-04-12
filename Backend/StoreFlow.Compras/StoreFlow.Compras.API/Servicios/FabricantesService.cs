@@ -1,6 +1,8 @@
-﻿using StoreFlow.Compras.API.Datos;
+﻿using StoreFlow.Compras.API.Comunes;
+using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.DTOs;
 using StoreFlow.Compras.API.Entidades;
+using StoreFlow.Compras.API.Errores.Fabricantes;
 
 namespace StoreFlow.Compras.API.Servicios
 {
@@ -13,8 +15,16 @@ namespace StoreFlow.Compras.API.Servicios
             _comprasDbContext = comprasDbContext;
         }
 
-        public async Task<CrearFabricanteResponse> CrearFabricanteAsync(CrearFabricanteRequest crearFabricanteRequest)
+        public async Task<Resultado<CrearFabricanteResponse>> CrearFabricanteAsync(
+            CrearFabricanteRequest crearFabricanteRequest)
         {
+            if (ExisteUnFabricanteConElCorreo(crearFabricanteRequest.CorreoElectronico))
+            {
+                var error = new FabricanteYaExiste(crearFabricanteRequest.CorreoElectronico);
+                return Resultado<CrearFabricanteResponse>.Falla(error);
+            }
+
+
             var fabricante = new Fabricante()
             {
                 RazonSocial = crearFabricanteRequest.Nombre,
@@ -27,7 +37,12 @@ namespace StoreFlow.Compras.API.Servicios
             var fabricanteCreado =
                 new CrearFabricanteResponse(fabricante.Id, fabricante.RazonSocial, fabricante.CorreoElectronico);
 
-            return fabricanteCreado;
+            return Resultado<CrearFabricanteResponse>.Exito(fabricanteCreado);
+        }
+
+        private bool ExisteUnFabricanteConElCorreo(string correoElectronico)
+        {
+            return _comprasDbContext.Fabricantes.Any(f => f.CorreoElectronico == correoElectronico);
         }
     }
 }

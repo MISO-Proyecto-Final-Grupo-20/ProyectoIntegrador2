@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StoreFlow.Compras.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CrearTablaFabricantes : Migration
+    public partial class CrearFabricantes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,12 @@ namespace StoreFlow.Compras.API.Migrations
                 {
                     table.PrimaryKey("PK_Fabricantes", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fabricantes_CorreoElectronico",
+                table: "Fabricantes",
+                column: "CorreoElectronico",
+                unique: true);
         }
 
         /// <inheritdoc />

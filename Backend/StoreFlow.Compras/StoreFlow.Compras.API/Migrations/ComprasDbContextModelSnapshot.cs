@@ -41,6 +41,9 @@ namespace StoreFlow.Compras.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CorreoElectronico")
+                        .IsUnique();
+
                     b.ToTable("Fabricantes");
                 });
 #pragma warning restore 612, 618

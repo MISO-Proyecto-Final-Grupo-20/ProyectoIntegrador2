@@ -1,8 +1,9 @@
-﻿using StoreFlow.Compras.API.DTOs;
+﻿using StoreFlow.Compras.API.Comunes;
+using StoreFlow.Compras.API.DTOs;
 
 namespace StoreFlow.Compras.API.Servicios;
 
 public interface IFabricantesService
 {
-    Task<CrearFabricanteResponse> CrearFabricanteAsync(CrearFabricanteRequest crearFabricanteRequest);
+    Task<Resultado<CrearFabricanteResponse>> CrearFabricanteAsync(CrearFabricanteRequest crearFabricanteRequest);
 }

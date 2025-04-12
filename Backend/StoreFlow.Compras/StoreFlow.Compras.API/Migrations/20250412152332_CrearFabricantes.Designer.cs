@@ -11,8 +11,8 @@ using StoreFlow.Compras.API.Datos;
 namespace StoreFlow.Compras.API.Migrations
 {
     [DbContext(typeof(ComprasDbContext))]
-    [Migration("20250412134042_CrearTablaFabricantes")]
-    partial class CrearTablaFabricantes
+    [Migration("20250412152332_CrearFabricantes")]
+    partial class CrearFabricantes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace StoreFlow.Compras.API.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorreoElectronico")
+                        .IsUnique();
 
                     b.ToTable("Fabricantes");
                 });
