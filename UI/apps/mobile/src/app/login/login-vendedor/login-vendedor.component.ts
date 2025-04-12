@@ -1,10 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  AlertaService,
   AuthService,
   DatosIngreso,
+  TipoAlerta,
   TipoCategoria,
 } from '@storeflow/design-system';
+
+import { MensajesAlertas } from '../../app.constantes';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { LoginComponent } from '../../shared/login/login.component';
 import { LoginService } from '../login.service';
@@ -31,11 +35,20 @@ export class LoginVendedorComponent {
   service = inject(LoginService);
   router = inject(Router);
   authService = inject(AuthService);
+  alertaService = inject(AlertaService);
   ingresar(datosIngreso: DatosIngreso) {
     this.service.ingresar(datosIngreso, TipoCategoria.Vendedor).subscribe({
       next: ({ token }) => {
         this.authService.registrarToken(token);
         this.router.navigateByUrl('/home/vendedores');
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.alertaService.abrirAlerta({
+            tipo: TipoAlerta.Danger,
+            descricion: MensajesAlertas.credencialesIncorrectas,
+          });
+        }
       },
     });
   }

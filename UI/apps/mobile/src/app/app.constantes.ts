@@ -49,3 +49,7 @@ export const configuracionMenuVendedores: ConfiguracionMenu[] = [
     ruta: 'vendedores/rutasAsignadas',
   },
 ];
+
+export const MensajesAlertas = {
+  credencialesIncorrectas: $localize`:@@mensajeCredencialesIncorrectas:No se pudo autenticar. Verifica tu correo o contraseña.`,
+};

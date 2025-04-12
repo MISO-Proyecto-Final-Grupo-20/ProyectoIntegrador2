@@ -7,11 +7,15 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
+  AlertaService,
   AuthService,
   DatosIngreso,
   SharedModule,
+  TipoAlerta,
 } from '@storeflow/design-system';
+
 import { HeaderComponent } from '../../shared/header/header.component';
+import { MensajesAlertas } from '../login.constantes';
 import { LoginService } from '../login.service';
 
 @Component({
@@ -27,6 +31,7 @@ export class AdminShellComponent {
   service = inject(LoginService);
   router = inject(Router);
   authService = inject(AuthService);
+  alertaService = inject(AlertaService);
   formulario = new FormGroup({
     correo: new FormControl('', Validators.required),
     contrasena: new FormControl('', Validators.required),
@@ -51,6 +56,14 @@ export class AdminShellComponent {
       next: ({ token }) => {
         this.authService.registrarToken(token);
         this.router.navigateByUrl('/home');
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.alertaService.abrirAlerta({
+            tipo: TipoAlerta.Danger,
+            descricion: MensajesAlertas.credencialesIncorrectas,
+          });
+        }
       },
     });
   }

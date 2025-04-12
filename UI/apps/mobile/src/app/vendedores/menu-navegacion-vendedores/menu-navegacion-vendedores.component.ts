@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { configuracionMenuVendedores } from '../../app.constantes';
 import { MenuNavegacionComponent } from '../../shared/menu-navegacion/menu-navegacion.component';

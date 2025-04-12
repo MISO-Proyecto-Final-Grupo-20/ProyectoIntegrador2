@@ -6,7 +6,12 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TipoCategoria } from '@storeflow/design-system';
+import {
+  AlertaService,
+  TipoAlerta,
+  TipoCategoria,
+} from '@storeflow/design-system';
+import { MensajesAlertas } from '../../app.constantes';
 import { LoginService } from '../login.service';
 import { LoginUrls } from '../login.urls';
 import { LoginClienteComponent } from './login-cliente.component';
@@ -16,8 +21,12 @@ describe('LoginClienteComponent', () => {
   let fixture: ComponentFixture<LoginClienteComponent>;
   let httpMock: HttpTestingController;
   let router: Partial<Router>;
+  let alertaService: Partial<AlertaService>;
   const solicitud = { correo: 'hola@gmail.co', contrasena: '123456' };
   beforeEach(async () => {
+    alertaService = {
+      abrirAlerta: jest.fn(),
+    };
     router = {
       navigateByUrl: jest.fn(),
     };
@@ -30,6 +39,10 @@ describe('LoginClienteComponent', () => {
         provideHttpClientTesting(),
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useValue: {} },
+        {
+          provide: AlertaService,
+          useValue: alertaService,
+        },
       ],
     }).compileComponents();
 
@@ -63,5 +76,19 @@ describe('LoginClienteComponent', () => {
     });
 
     expect(router.navigateByUrl).toHaveBeenCalledWith('/home/clientes');
+  });
+
+  it('debe abrir la alerta con mensaje de error de credenciale, cuando el metodo "ingresar" sea status 401', () => {
+    component.ingresar(solicitud);
+    const peticion = httpMock.expectOne(LoginUrls.ingresar);
+    peticion.flush(
+      { message: 'Unauthorized' },
+      { status: 401, statusText: 'Unauthorized' }
+    );
+
+    expect(alertaService.abrirAlerta).toHaveBeenCalledWith({
+      tipo: TipoAlerta.Danger,
+      descricion: MensajesAlertas.credencialesIncorrectas,
+    });
   });
 });
