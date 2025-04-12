@@ -4,7 +4,7 @@ POST {{StoreFlow.Compras.API_HostAddress}}/fabricantes/
 Content-Type: application/json
 {
     "nombre": "empresa",
-    "correo": "empresa"
+    "correoelectronico": "empresa@empresa.com"
 }
 
 ###
