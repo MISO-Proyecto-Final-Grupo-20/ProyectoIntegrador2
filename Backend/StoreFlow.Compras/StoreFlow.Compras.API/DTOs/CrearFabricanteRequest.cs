@@ -10,5 +10,5 @@ namespace StoreFlow.Compras.API.DTOs
         [EmailAddress(ErrorMessage = "El correo no tiene un formato válido")]
         [MaxLength(100, ErrorMessage = "El correo no puede tener más de 100 caracteres")]
         string CorreoElectronico
-        );
+    );
 }
