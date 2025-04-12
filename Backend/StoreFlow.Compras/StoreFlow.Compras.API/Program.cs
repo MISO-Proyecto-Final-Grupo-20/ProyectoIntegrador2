@@ -1,6 +1,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +46,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddDbContext<ComprasDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 // Add services to the container.
 
@@ -57,11 +63,11 @@ app.UseAuthorization();
 
 app.MapComprasEndpoints();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
-//    db.Database.Migrate();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ComprasDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
 
