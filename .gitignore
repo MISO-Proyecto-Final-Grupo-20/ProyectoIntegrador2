@@ -16,3 +16,8 @@ UI/package-lock.json
 /Infraestructura/.terraform.lock.hcl
 **/.idea/
 *.user
+/.vs/ProyectoIntegrador2/CopilotIndices/17.13.444.19527
+/.vs/ProyectoIntegrador2/FileContentIndex
+/.vs/ProyectoIntegrador2/v17
+/Backend/StoreFlow.Compras/.vs
+/.vs
