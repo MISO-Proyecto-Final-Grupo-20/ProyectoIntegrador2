@@ -1,19 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter, Router } from '@angular/router';
+import { TipoCategoria } from '@storeflow/design-system';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let router: Partial<Router>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoginComponent, BrowserAnimationsModule],
+      providers: [provideRouter([])],
     }).compileComponents();
-
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('categoria', TipoCategoria.Cliente);
+    jest.spyOn(router, 'navigateByUrl');
     fixture.detectChanges();
   });
 
@@ -21,7 +27,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debe desahbilitar el boton de ingresar cuando el formulario es invalido', () => {
+  it('debe desahabilitar el boton de ingresar cuando el formulario es invalido', () => {
     const boton = fixture.debugElement.query(
       By.css('button[data-testid="boton-ingresar"]')
     );
