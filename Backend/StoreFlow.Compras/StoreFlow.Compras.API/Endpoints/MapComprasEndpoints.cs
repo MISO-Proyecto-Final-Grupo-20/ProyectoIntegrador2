@@ -20,6 +20,6 @@ public static class ComprasEndpoints
                 return ErrorHttpConversor.Convertir(resultado.Error!);
 
             return Results.Created($"/fabricantes/{resultado.Valor!.Id}", resultado.Valor);
-        });
+        }).RequireAuthorization("SoloUsuariosCcp");
     }
 }

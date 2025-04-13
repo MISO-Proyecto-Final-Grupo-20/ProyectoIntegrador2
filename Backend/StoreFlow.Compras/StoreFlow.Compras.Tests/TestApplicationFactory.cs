@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
 using StoreFlow.Compras.API.Servicios;
+using StoreFlow.Compras.Tests.Utilidades;
 
 namespace StoreFlow.Compras.Tests
 {
@@ -18,6 +23,27 @@ namespace StoreFlow.Compras.Tests
                 EnvironmentName = "Testing"
             });
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        RoleClaimType = ClaimTypes.Role,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
+                    };
+                });
+
+            builder.Services.AddAuthorization(opciones =>
+            {
+                opciones.AddPolicy("SoloUsuariosCcp", policy =>
+                    policy.RequireRole("UsuarioCcp"));
+            });
+
             builder.WebHost.UseTestServer();
 
             builder.Services.AddDbContext<ComprasDbContext>(options =>
@@ -25,7 +51,6 @@ namespace StoreFlow.Compras.Tests
 
             builder.Services.AddScoped<IFabricantesService, FabricantesService>();
 
-            Environment.SetEnvironmentVariable("JWT_SECRET", "EstaEsUnaClaveSuperSecretaDe32Caracteres!");
 
 
             var app = builder.Build();
