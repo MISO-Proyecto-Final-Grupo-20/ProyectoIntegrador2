@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: compras
+  namespace: storeflow
+spec:
+  type: ClusterIP
+  selector:
+    app: compras
+  ports:
+    - port: 80
+      targetPort: 8080

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compras
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compras
+  template:
+    metadata:
+      labels:
+        app: compras
+    spec:
+      containers:
+        - name: compras
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/compras
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CONNECTION_STRING_COMPRAS
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: CONNECTION_STRING_COMPRAS
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: JWT_SECRET

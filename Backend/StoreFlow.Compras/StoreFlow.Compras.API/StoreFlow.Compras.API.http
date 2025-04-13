@@ -1,0 +1,10 @@
+@StoreFlow.Compras.API_HostAddress = http://localhost:5038
+
+POST {{StoreFlow.Compras.API_HostAddress}}/fabricantes/
+Content-Type: application/json
+{
+    "nombre": "empresa",
+    "correoelectronico": "empresa@empresa.com"
+}
+
+###

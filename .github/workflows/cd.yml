@@ -19,42 +19,7 @@ env:
   AKS_CLUSTER_NAME: terraform-aks-dev-cluster
 
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      should_build_all: ${{ steps.set-build-all.outputs.should_build_all }}
-      usuarios-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.usuarios-service }}
-      cliente-web-service: ${{ steps.set-build-all.outputs.should_build_all == 'true' || steps.filter.outputs.cliente-web-service }}
-    steps:
-      - name: Set build all flag
-        id: set-build-all
-        shell: bash
-        run: |
-          BUILD_ALL="${{ github.event.inputs.build_all }}"
-          if [ "$BUILD_ALL" = "true" ]; then
-            echo "should_build_all=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_build_all=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            usuarios-service:
-                - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/**'
-                - 'StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile'
-            cliente-web-service:
-                - 'UI/**'
-                - 'UI/apps/web/Dockerfile'
-
   build-and-push:
-    needs: detect-changes
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -82,7 +47,6 @@ jobs:
           echo "VERSION=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build and push Cliente Web
-        if: needs.detect-changes.outputs.should_build_all == 'true' || needs.detect-changes.outputs.cliente-web-service == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./UI
@@ -95,7 +59,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/cliente-web:latest
 
       - name: Build and push Usuarios Service
-        if: needs.detect-changes.outputs.usuarios-service == 'true'
         uses: docker/build-push-action@v4
         with:
           context: ./StoreFlow.Usuarios
@@ -107,10 +70,21 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:latest
 
+      - name: Build and push Compras Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Backend/StoreFlow.Compras
+          file: ./Backend/StoreFlow.Compras/StoreFlow.Compras.API/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:latest
+
   deploy-to-aks:
-    needs: [detect-changes, build-and-push]
+    needs: build-and-push
     runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.usuarios-service == 'true'
     steps:
       - name: Set lowercase image prefix and version
         run: |
@@ -137,17 +111,22 @@ jobs:
           az aks get-credentials --resource-group ${{ env.AKS_RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER_NAME }} --admin --overwrite-existing
 
       - name: Update cliente-web image in AKS
-        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.cliente-web-service == 'true'
+        if: env.AKS_EXISTS == 'true'
         run: |
           kubectl set image deployment/cliente-web cliente-web=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/cliente-web:${{ env.VERSION }} -n storeflow
 
       - name: Update usuarios image in AKS
-        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.usuarios-service == 'true'
+        if: env.AKS_EXISTS == 'true'
         run: |
           kubectl set image deployment/usuarios usuarios=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }} -n storeflow
 
+      - name: Update compras image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/compras compras=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }} -n storeflow
+
   cleanup:
-    needs: [detect-changes, build-and-push]
+    needs: build-and-push
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -157,7 +136,6 @@ jobs:
           echo "REPO_NAME=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Delete old Cliente Web images
-        if: needs.detect-changes.outputs.cliente-web-service == 'true'
         continue-on-error: true
         uses: actions/delete-package-versions@v4
         with:
@@ -168,11 +146,20 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete old Usuarios images
-        if: needs.detect-changes.outputs.usuarios-service == 'true'
         continue-on-error: true
         uses: actions/delete-package-versions@v4
         with:
           package-name: '${{ env.REPO_NAME }}/usuarios'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old Compras images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/compras'
           package-type: 'container'
           min-versions-to-keep: 3
           delete-only-untagged-versions: false
