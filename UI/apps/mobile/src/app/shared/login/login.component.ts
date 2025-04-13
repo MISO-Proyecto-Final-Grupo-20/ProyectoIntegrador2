@@ -5,21 +5,29 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import {
   DatosIngreso,
   SharedModule,
   TipoCategoria,
 } from '@storeflow/design-system';
 
-const CategoriaTitulo: Record<TipoCategoria, string> = {
-  [TipoCategoria.Cliente]: $localize`:@@tituloCliente:Cliente`,
-  [TipoCategoria.Vendedor]: $localize`:@@tituloVendedor:Vendedor`,
+interface ConfiguracionCategoria {
+  titulo: string;
+  ruta?: string;
+}
+const ConfiguracionCategoria: Record<TipoCategoria, ConfiguracionCategoria> = {
+  [TipoCategoria.Cliente]: {
+    titulo: $localize`:@@tituloCliente:Cliente`,
+    ruta: '/login/registroCliente',
+  },
+  [TipoCategoria.Vendedor]: { titulo: $localize`:@@tituloVendedor:Vendedor` },
 };
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [SharedModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -39,8 +47,8 @@ export class LoginComponent {
     return this.mostrar() ? 'visibility_off' : 'visibility';
   }
 
-  get titulo() {
-    return CategoriaTitulo[this.categoria() as TipoCategoria];
+  get configuracion() {
+    return ConfiguracionCategoria[this.categoria() as TipoCategoria];
   }
 
   mostrarContrasena(event: MouseEvent) {

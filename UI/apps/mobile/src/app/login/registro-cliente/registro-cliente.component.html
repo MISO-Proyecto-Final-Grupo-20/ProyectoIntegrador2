@@ -1,0 +1,87 @@
+<div class="column heigth-100">
+  <app-header rutaVolver="/login/cliente"></app-header>
+  <div class="contenido-mobile column">
+    <div class="p-16" [formGroup]="formulario">
+      <mat-card class="sin-sombra-card">
+        <div class="row gap-8 align-items-center p-16">
+          <img src="/assets/images/notas.svg" width="34" height="31" />
+          <h3 i18n="login.registroCliente.cliente">Registro de cliente</h3>
+        </div>
+        <div class="column gap-16 p-12">
+          <div class="column gap-8">
+            <mat-form-field appearance="outline" class="flex-1">
+              <input
+                matInput
+                data-testid="input-registro-cliente-nombre"
+                i18n-placeholder="login.registroCliente.nombre"
+                placeholder="Nombre"
+                formControlName="nombre"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+              <input
+                matInput
+                data-testid="input-registro-cliente-correo"
+                i18n-placeholder="login.registroCliente.correo"
+                placeholder="Correo electronico"
+                formControlName="correo"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+              <input
+                matInput
+                data-testid="input-registro-cliente-direccion"
+                i18n-placeholder="login.registroCliente.direccion"
+                placeholder="Dirección"
+                formControlName="direccion"
+              />
+            </mat-form-field>
+          </div>
+          <div>
+            <div class="row gap-9 align-items-center">
+              <mat-form-field appearance="outline" class="flex-1">
+                <input
+                  matInput
+                  [type]="tipoInput"
+                  data-testid="input-registro-cliente-contrasena"
+                  i18n-placeholder="login.registroCliente.contrasena"
+                  placeholder="Contraseña"
+                  formControlName="contrasena"
+                />
+              </mat-form-field>
+              <mat-icon
+                style="color: #323232"
+                data-testid="boton-registro-cliente-contrasena"
+                class="mat-icon-outlined cursor-pointer"
+                (click)="mostrarContrasena($event)"
+                >{{ iconoInput }}</mat-icon
+              >
+            </div>
+            @if (contrasenaInvalidad) {
+              <mat-error
+                name="contrasenaIncorrecta"
+                i18n="login.registroCliente.contrasenaInvalida"
+                >La contraseña no es válida. Debe tener al menos 8 caracteres,
+                incluir una letra mayúscula, un número y un carácter
+                especial.</mat-error
+              >
+            }
+          </div>
+
+          <div class="row justify-content-end flex-1">
+            <button
+              data-testid="boton-guardar-cliente"
+              [disabled]="formulario.invalid"
+              mat-raised-button
+              color="primary"
+              i18n="guardar"
+              (click)="guardarCliente()"
+            >
+              Guardar
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
