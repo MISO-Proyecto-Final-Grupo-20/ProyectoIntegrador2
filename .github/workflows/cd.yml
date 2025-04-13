@@ -19,8 +19,7 @@ env:
   AKS_CLUSTER_NAME: terraform-aks-dev-cluster
 
 jobs:
-build-and-push:
-    
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -59,6 +58,17 @@ build-and-push:
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/cliente-web:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/cliente-web:latest
 
+      - name: Build and push Usuarios Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./StoreFlow.Usuarios
+          file: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:latest
 
       - name: Build and push Compras Service
         uses: docker/build-push-action@v4
@@ -71,18 +81,6 @@ build-and-push:
           tags: |
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:latest
-
-      - name: Build and push Usuarios Service
-        uses: docker/build-push-action@v4
-        with:
-          context: ./StoreFlow.Usuarios
-          file: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
-          platforms: linux/amd64
-          push: true
-          provenance: false
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }}
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:latest
 
   deploy-to-aks:
     needs: build-and-push
@@ -113,20 +111,19 @@ build-and-push:
           az aks get-credentials --resource-group ${{ env.AKS_RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER_NAME }} --admin --overwrite-existing
 
       - name: Update cliente-web image in AKS
-        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.cliente-web-service == 'true'
+        if: env.AKS_EXISTS == 'true'
         run: |
           kubectl set image deployment/cliente-web cliente-web=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/cliente-web:${{ env.VERSION }} -n storeflow
 
-
-      - name: Update compras image in AKS
-        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.compras-service == 'true'
-        run: |
-          kubectl set image deployment/compras compras=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }} -n storeflow
-
       - name: Update usuarios image in AKS
-        if: env.AKS_EXISTS == 'true' && needs.detect-changes.outputs.usuarios-service == 'true'
+        if: env.AKS_EXISTS == 'true'
         run: |
           kubectl set image deployment/usuarios usuarios=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/usuarios:${{ env.VERSION }} -n storeflow
+
+      - name: Update compras image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/compras compras=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }} -n storeflow
 
   cleanup:
     needs: build-and-push
@@ -148,22 +145,21 @@ build-and-push:
           delete-only-untagged-versions: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Delete old Usuarios images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/usuarios'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete old Compras images
         continue-on-error: true
         uses: actions/delete-package-versions@v4
         with:
           package-name: '${{ env.REPO_NAME }}/compras'
-          package-type: 'container'
-          min-versions-to-keep: 3
-          delete-only-untagged-versions: false
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete old Usuarios images
-        continue-on-error: true
-        uses: actions/delete-package-versions@v4
-        with:
-          package-name: '${{ env.REPO_NAME }}/usuarios'
           package-type: 'container'
           min-versions-to-keep: 3
           delete-only-untagged-versions: false
