@@ -26,6 +26,34 @@ services:
     depends_on:
       dbusuarios:
         condition: service_healthy
+
+  dbcompras:
+    image: postgres
+    container_name: dbcompras
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: compras
+    ports:
+        - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  compras:
+    build: 
+      context: Backend/StoreFlow.Compras
+      dockerfile: StoreFlow.Compras.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8091:8080' 
+    depends_on:
+      dbcompras:
+        condition: service_healthy      
     
   mobileapp:
     build:
