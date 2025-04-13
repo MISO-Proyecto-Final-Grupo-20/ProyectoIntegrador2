@@ -8,6 +8,8 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 
+import { AlertaService, TipoAlerta } from '@storeflow/design-system';
+import { MensajesAlertas } from '../login.constantes';
 import { LoginService } from '../login.service';
 import { LoginUrls } from '../login.urls';
 import { AdminShellComponent } from './admin-shell.component';
@@ -16,9 +18,13 @@ describe('AdminShellComponent', () => {
   let component: AdminShellComponent;
   let fixture: ComponentFixture<AdminShellComponent>;
   let httpMock: HttpTestingController;
+  let alertaService: Partial<AlertaService>;
   const solicitud = { correo: 'hola@gmail.co', contrasena: '123456' };
 
   beforeEach(async () => {
+    alertaService = {
+      abrirAlerta: jest.fn(),
+    };
     await TestBed.configureTestingModule({
       imports: [AdminShellComponent, BrowserAnimationsModule],
       providers: [
@@ -27,6 +33,10 @@ describe('AdminShellComponent', () => {
         HttpTestingController,
         provideHttpClient(),
         provideHttpClientTesting(),
+        {
+          provide: AlertaService,
+          useValue: alertaService,
+        },
       ],
     }).compileComponents();
     httpMock = TestBed.inject(HttpTestingController);
@@ -69,5 +79,25 @@ describe('AdminShellComponent', () => {
       By.css('button[data-testid="boton-ingresar"]')
     );
     expect(boton.nativeElement.disabled).toBeFalsy();
+  });
+
+  it('debe abrir la alerta con mensaje de error de credenciale, se le de click al boton "boton-ingresar" sea status 401', () => {
+    component.formulario.patchValue(solicitud);
+    fixture.detectChanges();
+    const boton = fixture.debugElement.query(
+      By.css('button[data-testid="boton-ingresar"]')
+    );
+
+    boton.nativeElement.click();
+    const peticion = httpMock.expectOne(LoginUrls.ingresar);
+    peticion.flush(
+      { message: 'Unauthorized' },
+      { status: 401, statusText: 'Unauthorized' }
+    );
+
+    expect(alertaService.abrirAlerta).toHaveBeenCalledWith({
+      tipo: TipoAlerta.Danger,
+      descricion: MensajesAlertas.credencialesIncorrectas,
+    });
   });
 });

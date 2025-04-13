@@ -9,7 +9,7 @@ import { MenuNavegacionComponent } from '../menu-navegacion/menu-navegacion.comp
   standalone: true,
   imports: [HeaderComponent, MenuNavegacionComponent, RouterOutlet],
   template: `<div class="column heigth-100">
-    <app-header [nombreUsuario]="nombreUsuario"></app-header>
+    <app-header [nombreUsuario]="sesion.nombreUsuario"></app-header>
     <div class="contenido-web">
       <div class="row heigth-100">
         <app-menu-navegacion
@@ -22,8 +22,6 @@ import { MenuNavegacionComponent } from '../menu-navegacion/menu-navegacion.comp
   styleUrl: './admin-shell.component.scss',
 })
 export class AdminShellComponent {
-  // quitar
-  nombreUsuario = 'Camilo Barreto';
   authService = inject(AuthService);
   constructor() {
     this.authService.obtenerDatosSesion();

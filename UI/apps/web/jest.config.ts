@@ -1,11 +1,7 @@
-import baseConfig from '../../jest.config.base';
-
 export default {
-  ...baseConfig,
   displayName: 'web',
   preset: '../../jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts', 
-    '@angular/localize/init'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts', '@angular/localize/init'],
   coverageDirectory: '../../coverage/apps/web',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

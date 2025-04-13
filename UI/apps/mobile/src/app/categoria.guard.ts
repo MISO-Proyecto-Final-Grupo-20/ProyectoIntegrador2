@@ -1,19 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { TipoCategoria, Utilidades } from '@storeflow/design-system';
 @Injectable({ providedIn: 'root' })
 export class CategoriaGuard implements CanActivate {
   router = inject(Router);
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
+  canActivate(route: ActivatedRouteSnapshot): boolean {
     const sesion = Utilidades.obtenerSesion();
     const categoria = sesion?.categoria;
     const ruta = route.routeConfig?.path;
