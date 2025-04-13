@@ -18,7 +18,6 @@ namespace StoreFlow.Compras.Tests.Endpoints
             _app = TestApplicationFactory.Create();
             await _app.StartAsync();
             _client = _app.GetTestClient();
-            //await CrearUsuarioAsync();
         }
 
         [Fact]
