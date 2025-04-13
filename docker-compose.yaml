@@ -63,3 +63,21 @@ services:
       - '8100:80'
     depends_on:
       - 'usuarios'
+
+  web:
+    build:
+      context: ./UI
+      dockerfile: apps/web/Dockerfile
+      args:
+        ENVIRONMENT: development
+    ports:
+      - "3000:80"
+
+  gateway:
+    build:
+      context: ./Gateway
+    ports:
+      - "80:80"
+    depends_on:
+      - usuarios
+      - compras
