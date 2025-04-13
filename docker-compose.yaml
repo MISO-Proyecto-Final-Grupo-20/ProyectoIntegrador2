@@ -17,7 +17,7 @@ services:
 
   usuarios:
     build: 
-      context: StoreFlow.Usuarios
+      context: Backend/StoreFlow.Usuarios
       dockerfile: StoreFlow.Usuarios.API/Dockerfile 
     env_file:
       - .env
