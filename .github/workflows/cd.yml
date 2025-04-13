@@ -61,8 +61,8 @@ jobs:
       - name: Build and push Usuarios Service
         uses: docker/build-push-action@v4
         with:
-          context: ./StoreFlow.Usuarios
-          file: ./StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
+          context: ./Backend/StoreFlow.Usuarios
+          file: ./Backend/StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
