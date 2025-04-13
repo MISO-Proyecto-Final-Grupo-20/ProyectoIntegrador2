@@ -46,7 +46,7 @@ services:
   compras:
     build: 
       context: Backend/StoreFlow.Compras
-      dockerfile: \StoreFlow.Compras.API/Dockerfile 
+      dockerfile: StoreFlow.Compras.API/Dockerfile 
     env_file:
       - .env
     ports:
