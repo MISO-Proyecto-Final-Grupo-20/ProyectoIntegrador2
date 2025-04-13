@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: compras
+  name: gateway
   namespace: storeflow
 spec:
   type: ClusterIP
   selector:
-    app: compras
+    app: gateway
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 80
+      targetPort: 80

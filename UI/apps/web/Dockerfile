@@ -12,7 +12,8 @@ COPY libs ./libs
 
 RUN npm install --include=optional
 
-RUN npx nx build web --configuration=production
+ARG ENVIRONMENT=production
+RUN npx nx build web --configuration=$ENVIRONMENT
 
 FROM nginx:alpine
 
