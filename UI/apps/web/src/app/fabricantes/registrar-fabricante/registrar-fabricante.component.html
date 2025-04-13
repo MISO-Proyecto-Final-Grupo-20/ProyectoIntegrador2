@@ -1,0 +1,41 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/notas.svg" width="34" height="31" />
+    <h3 i18n="fabricante.registrarFabricante">Registrar fabricante</h3>
+  </div>
+  <div class="p-12 column gap-16" [formGroup]="formulario">
+    <div class="row gap-8">
+      <mat-form-field appearance="outline" class="flex-1">
+        <input
+          matInput
+          data-testid="input-registrar-fabricante-nombre"
+          i18n-placeholder="fabricante.registrarFabricante.nombre"
+          placeholder="Ingrese el nombre"
+          formControlName="nombre"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex-1">
+        <input
+          matInput
+          data-testid="input-registrar-fabricante-correo"
+          i18n-placeholder="fabricante.registrarFabricante.correo"
+          placeholder="Ingrese el correo"
+          formControlName="correo"
+        />
+      </mat-form-field>
+    </div>
+    <div class="row justify-content-end flex-1">
+      <button
+        data-testid="boton-guardar-fabricante"
+        [disabled]="formulario.invalid"
+        mat-raised-button
+        color="primary"
+        i18n="fabricante.guardar"
+        (click)="guardarFabricante()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</mat-card>
