@@ -42,7 +42,7 @@ namespace StoreFlow.Compras.Tests.Endpoints
             await _client.PostAsJsonAsync("/fabricantes", request); // Primera vez
             var response = await _client.PostAsJsonAsync("/fabricantes", request); // Duplicado
 
-            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]

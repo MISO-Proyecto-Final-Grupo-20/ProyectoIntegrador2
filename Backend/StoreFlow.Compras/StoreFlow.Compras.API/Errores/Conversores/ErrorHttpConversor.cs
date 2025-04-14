@@ -6,7 +6,7 @@ public static class ErrorHttpConversor
     {
         return error.Categoria switch
         {
-            "CONFLICTO_NEGOCIO" => Results.Conflict(new { mensaje = error.Mensaje }),
+            "CONFLICTO_NEGOCIO" => Results.BadRequest(new { mensaje = error.Mensaje }),
             _ => Results.BadRequest(new { mensaje = error.Mensaje })
         };
     }
