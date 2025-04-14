@@ -30,6 +30,7 @@ namespace StoreFlow.Usuarios.Tests
             var app = builder.Build();
 
             app.MapUsuariosEndpoints(); // Aquí se registra solo lo necesario
+            app.MapCrearClienteEndpoints();
 
             return app;
         }

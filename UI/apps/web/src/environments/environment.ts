@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://storeflow-dev/api',
+  apiUrl: 'http://localhost:8099/api',
 };

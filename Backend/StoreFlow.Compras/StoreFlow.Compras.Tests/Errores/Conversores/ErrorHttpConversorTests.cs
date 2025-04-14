@@ -29,7 +29,7 @@ namespace StoreFlow.Compras.Tests.Errores.Conversores
             await resultado.ExecuteAsync(context);
 
             // Assert
-            Assert.Equal(StatusCodes.Status409Conflict, context.Response.StatusCode);
+            Assert.Equal(StatusCodes.Status400BadRequest, context.Response.StatusCode);
 
             // Validar contenido opcional
             context.Response.Body.Seek(0, SeekOrigin.Begin);

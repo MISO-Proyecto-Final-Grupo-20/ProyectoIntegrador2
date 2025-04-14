@@ -27,6 +27,22 @@
 
     <ItemGroup>
       <Folder Include="Datos\" />
+      <Folder Include="Excepciones\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="UsuariosResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>UsuariosResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="UsuariosResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>UsuariosResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

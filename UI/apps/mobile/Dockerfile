@@ -12,7 +12,8 @@ COPY libs ./libs
 
 RUN npm install --include=optional --legacy-peer-deps --force
 
-RUN npx nx build mobile --configuration=production
+ARG ENVIRONMENT=production
+RUN npx nx build mobile --configuration=$ENVIRONMENT
 
 FROM nginx:alpine
 

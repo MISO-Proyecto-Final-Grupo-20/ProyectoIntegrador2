@@ -32,7 +32,7 @@ export const StoreFlowInterceptor = (
 function obtenerMensaje(httpError: HttpErrorResponse): string {
   if (httpError.status !== 500 && httpError.status !== 0) {
     let error =
-      httpError.error?.message ?? httpError.error ?? httpError.message;
+      httpError.error?.mensaje ?? httpError.error ?? httpError.message;
 
     if (error instanceof ArrayBuffer) {
       const decoder = new TextDecoder('utf-8');

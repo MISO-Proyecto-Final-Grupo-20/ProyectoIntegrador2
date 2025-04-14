@@ -19,4 +19,7 @@ public class Usuario
 
     [Required]
     public string NombreCompleto { get; set; } = null!;
+    
+    [MaxLength(100)]
+    public string? Direccion { get; set; } = null!;
 }

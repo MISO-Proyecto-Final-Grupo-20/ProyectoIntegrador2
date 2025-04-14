@@ -18,9 +18,9 @@ namespace StoreFlow.Compras.API.Servicios
         public async Task<Resultado<CrearFabricanteResponse>> CrearFabricanteAsync(
             CrearFabricanteRequest crearFabricanteRequest)
         {
-            if (ExisteUnFabricanteConElCorreo(crearFabricanteRequest.CorreoElectronico))
+            if (ExisteUnFabricanteConElCorreo(crearFabricanteRequest.Correo))
             {
-                var error = new FabricanteYaExiste(crearFabricanteRequest.CorreoElectronico);
+                var error = new FabricanteYaExiste(crearFabricanteRequest.Correo);
                 return Resultado<CrearFabricanteResponse>.Falla(error);
             }
 
@@ -28,7 +28,7 @@ namespace StoreFlow.Compras.API.Servicios
             var fabricante = new Fabricante()
             {
                 RazonSocial = crearFabricanteRequest.Nombre,
-                CorreoElectronico = crearFabricanteRequest.CorreoElectronico
+                CorreoElectronico = crearFabricanteRequest.Correo
             };
 
             await _comprasDbContext.Fabricantes.AddAsync(fabricante);

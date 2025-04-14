@@ -59,8 +59,10 @@ services:
     build:
       context: ./UI
       dockerfile: apps/mobile/Dockerfile
+      args:
+        ENVIRONMENT: development
     ports:
-      - '8100:80'
+      - '3100:80'
     depends_on:
       - 'usuarios'
 
@@ -77,7 +79,7 @@ services:
     build:
       context: ./Gateway
     ports:
-      - "80:80"
+      - "8099:80"
     depends_on:
       - usuarios
       - compras

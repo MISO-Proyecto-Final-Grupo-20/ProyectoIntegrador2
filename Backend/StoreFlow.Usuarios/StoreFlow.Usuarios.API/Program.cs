@@ -76,6 +76,7 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapUsuariosEndpoints();
+app.MapCrearClienteEndpoints();
 
 //Aplicar migraciones
 using (var scope = app.Services.CreateScope())
