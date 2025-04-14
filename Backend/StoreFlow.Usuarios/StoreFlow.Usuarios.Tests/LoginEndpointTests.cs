@@ -123,7 +123,7 @@ namespace StoreFlow.Usuarios.Tests
             var request =
                 new CrearClienteRequest("nombre usuario", "nuevo_usuario@correo.com", "direccion", "12345678");
 
-            var response = await _client.PostAsJsonAsync("/login/cliente", request);
+            var response = await _client.PostAsJsonAsync("/cliente", request);
 
             Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
         }
@@ -140,7 +140,7 @@ namespace StoreFlow.Usuarios.Tests
         {
             var request = new CrearClienteRequest(nombre, correo, direccion, contrasena);
 
-            var response = await _client.PostAsJsonAsync("/login/cliente", request);
+            var response = await _client.PostAsJsonAsync("/cliente", request);
             var responseMessage = await response.Content.ReadAsStringAsync();
             
             Assert.Equal(mensajeEsperado, responseMessage.Trim('"'));
@@ -152,9 +152,9 @@ namespace StoreFlow.Usuarios.Tests
         {
             var request =
                 new CrearClienteRequest("nombre usuario", "nuevo_usuario@correo.com", "direccion", "12345678");
-            _ = await _client.PostAsJsonAsync("/login/cliente", request);
+            _ = await _client.PostAsJsonAsync("/cliente", request);
 
-            var response = await _client.PostAsJsonAsync("/login/cliente", request);
+            var response = await _client.PostAsJsonAsync("/cliente", request);
 
             var responseMessage = await response.Content.ReadAsStringAsync();
             

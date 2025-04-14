@@ -59,6 +59,8 @@ services:
     build:
       context: ./UI
       dockerfile: apps/mobile/Dockerfile
+      args:
+        ENVIRONMENT: development
     ports:
       - '3100:80'
     depends_on:
