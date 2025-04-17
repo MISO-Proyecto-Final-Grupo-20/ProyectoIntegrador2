@@ -9,7 +9,7 @@ export class FabricantesService {
   http = inject(HttpClient);
 
   guardarFabricante(fabricante: Fabricante): Observable<void> {
-    const token = localStorage.getItem('authToken'); // Suponiendo que el token se almacena en localStorage
+    const token = localStorage.getItem('authToken');
     const headers = { Authorization: `${token}` };
 
     return this.http.post<void>(
@@ -17,7 +17,6 @@ export class FabricantesService {
       fabricante,
       { headers }
     );
-    // quitar cuando se implemente el servicio real
-    // return of(void 0);
+
   }
 }
