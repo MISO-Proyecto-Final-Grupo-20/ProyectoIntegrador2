@@ -34,7 +34,7 @@ export class MenuNavegacionComponent {
   opcionSeleccionada: MenuNavegacion = listadoMenuNavegacion[0];
 
   obtenerSiEstaSeleccionado(opcion: MenuNavegacion) {
-    return this.opcionSeleccionada === opcion;
+    return this.router.url === `/home${opcion.url}`;
   }
 
   seleccionarOpcion(opcion: MenuNavegacion) {
