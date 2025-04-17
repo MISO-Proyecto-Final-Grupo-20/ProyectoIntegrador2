@@ -1,0 +1,51 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/dinero-color.svg" width="34" height="31" />
+    <h3 i18n="vendedor.registrarVendedor.titulo">Registrar vendedor</h3>
+  </div>
+  <div class="p-12 column gap-16" [formGroup]="formulario">
+    <div class="column gap-8">
+      <div class="row gap-16">
+        <mat-form-field appearance="outline" class="flex-1">
+          <input
+            matInput
+            data-testid="input-registrar-vendedor-nombre"
+            i18n-placeholder="nombre"
+            placeholder="Nombre"
+            formControlName="nombre"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex-1">
+          <input
+            matInput
+            data-testid="input-registrar-vendedor-correo"
+            i18n-placeholder="correo"
+            placeholder="Correo"
+            formControlName="correo"
+          />
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="flex-1">
+        <input
+          matInput
+          data-testid="input-registrar-vendedor-contrasena"
+          i18n-placeholder="contrasena"
+          placeholder="Contraseña"
+          formControlName="contrasena"
+        />
+      </mat-form-field>
+    </div>
+    <div class="row justify-content-end">
+      <button
+        [disabled]="formulario.invalid"
+        i18n="guardar"
+        mat-raised-button
+        color="primary"
+        data-testid="boton-guardar-vendedor"
+        (click)="guardarVendedor()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</mat-card>
