@@ -1,0 +1,66 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/carrito-compras.svg" width="34" height="31" />
+    <h3 i18n="producto.registrarProducto.titulo">Registrar producto</h3>
+  </div>
+  <div class="p-12 column gap-16" [formGroup]="formulario">
+    <div class="column gap-8">
+      <div class="row gap-16">
+        <mat-form-field appearance="outline" class="flex-1">
+          <input
+            matInput
+            data-testid="input-registrar-producto-nombre"
+            i18n-placeholder="producto.registrarProducto.nombre"
+            placeholder="Nombre"
+            formControlName="nombre"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex-1">
+          <mat-select
+            i18n-placeholder="producto.registrarProducto.fabricanteAsociado"
+            placeholder="Fabricante asociado"
+            data-testid="select-fabricante-asociado"
+            formControlName="fabricanteAsociado"
+          >
+            @for (fabricante of listadoFabricantes(); track fabricante.id) {
+              <mat-option [value]="fabricante.id">
+                {{ fabricante.nombre }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="flex-1">
+        <input
+          matInput
+          data-testid="input-registrar-producto-codigo"
+          i18n-placeholder="producto.registrarProducto.codigo"
+          placeholder="Código del producto"
+          formControlName="codigo"
+          type="number"
+        />
+      </mat-form-field>
+    </div>
+    <div class="row justify-content-between">
+      <button
+        i18n="producto.registrarProducto.registrarMasivo"
+        mat-stroked-button
+        color="primary"
+        data-testid="boton-registrar-producto-masivo"
+      >
+        Registrar masivo
+      </button>
+
+      <button
+        [disabled]="formulario.invalid"
+        i18n="producto.registrarProducto.guardar"
+        mat-raised-button
+        color="primary"
+        data-testid="boton-guardar-producto"
+        (click)="guardarProducto()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</mat-card>
