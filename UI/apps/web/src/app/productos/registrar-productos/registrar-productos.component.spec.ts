@@ -23,6 +23,8 @@ describe('RegistrarProductosComponent', () => {
     nombre: 'Producto 1',
     fabricanteAsociado: 1,
     codigo: 1213,
+    precio: 100,
+    imagen: 'https://example.com/image.png',
   };
 
   beforeEach(async () => {
@@ -104,6 +106,8 @@ describe('RegistrarProductosComponent', () => {
       nombre: null,
       codigo: null,
       fabricanteAsociado: null,
+      precio: null,
+      imagen: null,
     });
   });
 });

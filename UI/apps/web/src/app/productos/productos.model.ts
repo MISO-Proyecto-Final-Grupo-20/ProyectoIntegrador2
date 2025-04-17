@@ -6,5 +6,7 @@ export interface ListadoFabricantes {
 export interface Producto {
   nombre: string;
   fabricanteAsociado?: number;
-  codigo?: number;
+  codigo: number;
+  precio: number;
+  imagen: string;
 }

@@ -7,18 +7,18 @@
     <div class="column gap-8">
       <div class="row gap-16">
         <mat-form-field appearance="outline" class="flex-1">
+          <mat-label i18n="producto.registrarProducto.nombre">Nombre</mat-label>
           <input
             matInput
             data-testid="input-registrar-producto-nombre"
-            i18n-placeholder="producto.registrarProducto.nombre"
-            placeholder="Nombre"
             formControlName="nombre"
           />
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex-1">
+          <mat-label i18n="producto.registrarProducto.fabricanteAsociado"
+            >Fabricante asociado</mat-label
+          >
           <mat-select
-            i18n-placeholder="producto.registrarProducto.fabricanteAsociado"
-            placeholder="Fabricante asociado"
             data-testid="select-fabricante-asociado"
             formControlName="fabricanteAsociado"
           >
@@ -30,14 +30,41 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="row gap-16">
+        <mat-form-field appearance="outline" class="flex-1">
+          <mat-label i18n="producto.registrarProducto.codigo"
+            >Código del producto</mat-label
+          >
+          <input
+            matInput
+            data-testid="input-registrar-producto-codigo"
+            formControlName="codigo"
+            type="number"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="flex-1">
+          <mat-label i18n="producto.registrarProducto.precio"
+            >Precio del producto</mat-label
+          >
+          <input
+            matInput
+            data-testid="input-registrar-producto-precio"
+            formControlName="precio"
+            class="text-right"
+            type="number"
+          />
+          <span matTextPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
       <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="producto.registrarProducto.imagen"
+          >Ruta imagen del producto</mat-label
+        >
         <input
           matInput
-          data-testid="input-registrar-producto-codigo"
-          i18n-placeholder="producto.registrarProducto.codigo"
-          placeholder="Código del producto"
-          formControlName="codigo"
-          type="number"
+          data-testid="input-registrar-producto-imagen"
+          formControlName="imagen"
+          type="text"
         />
       </mat-form-field>
     </div>
