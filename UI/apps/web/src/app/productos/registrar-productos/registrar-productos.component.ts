@@ -37,6 +37,8 @@ export class RegistrarProductosComponent {
       Validators.required,
       Validators.maxLength(50),
     ]),
+    precio: new FormControl<number | null>(null, [Validators.required]),
+    imagen: new FormControl<string>('', [Validators.required]),
   });
 
   constructor() {
