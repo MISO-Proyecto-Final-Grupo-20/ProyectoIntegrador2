@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.DTOs;
@@ -6,8 +7,11 @@ using StoreFlow.Usuarios.API.Entidades;
 using System.Net.Http.Json;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.HttpResults;
+using StoreFlow.Usuarios.Tests.Utilidades;
 
 namespace StoreFlow.Usuarios.Tests
 {
@@ -121,7 +125,7 @@ namespace StoreFlow.Usuarios.Tests
         public async Task CrearCliente_con_informacion_completa_RetornaCreated()
         {
             var request =
-                new CrearClienteRequest("nombre usuario", "nuevo_usuario@correo.com", "direccion", "12345678");
+                new CrearClienteRequest("nombre usuario", "nuevocliente@correo.com", "direccion", "12345678");
 
             var response = await _client.PostAsJsonAsync("/cliente", request);
 
@@ -136,7 +140,7 @@ namespace StoreFlow.Usuarios.Tests
         [InlineData("nombre", "nuevo_usuario", "direccion", "123456789", "El correo no tiene un formato válido")]
         [InlineData("nuevo_usuarioaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "nuevo_usuario@correo.com", "direccion", "123456789", "El nombre no puede exceder los 100 caracteres")]
         [InlineData("nombre", "nuevo_usuario@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.comcom", "direccion", "123456789", "El correo no puede tener más de 100 caracteres")]
-        public async Task CrearCliente_con_informacin_incompleta_RetornaBadRequest(string? nombre, string? correo, string? direccion, string? contrasena, string mensajeEsperado)
+        public async Task CrearCliente_con_informacion_incompleta_RetornaBadRequest(string? nombre, string? correo, string? direccion, string? contrasena, string mensajeEsperado)
         {
             var request = new CrearClienteRequest(nombre, correo, direccion, contrasena);
 
@@ -162,6 +166,73 @@ namespace StoreFlow.Usuarios.Tests
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         }
         
+        [Fact]
+        public async Task CrearVendedor_con_informacion_completa_RetornaCreated()
+        {
+            var request =
+                new CrearVendedorRequest("nombre usuario", "nuevo_usuario@correo.com", "12345678");
+
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            
+            var response = await _client.PostAsJsonAsync("/vendedor", request);
+
+            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task CrearVendedor_con_informacion_completa_sinToken_RetornaUnauthorized()
+        {
+            var request =
+                new CrearVendedorRequest("nombre usuario", "nuevo_usuario@correo.com", "12345678");
+            
+            var response = await _client.PostAsJsonAsync("/vendedor", request);
+
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+        
+        [Theory]
+        [InlineData("", "nuevo_usuario@correo.com",  "12345678", "El nombre es obligatorio")]
+        [InlineData("nombre", "",  "12345678", "El correo es obligatorio")]
+        [InlineData("nombre", "nuevo_usuario@correo.com", null, "La contraseña es obligatoria")]
+        [InlineData("nombre", "nuevo_usuario@correo.com",  "123", "La contraseña debe tener al menos 8 caracteres")]
+        [InlineData("nombre", "nuevo_usuario",  "123456789", "El correo no tiene un formato válido")]
+        [InlineData("nuevo_usuarioaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "nuevo_usuario@correo.com",  "123456789", "El nombre no puede exceder los 100 caracteres")]
+        [InlineData("nombre", "nuevo_usuario@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.comcom",  "123456789", "El correo no puede tener más de 100 caracteres")]
+        public async Task CrearVendedor_con_informacion_incompleta_RetornaBadRequest(string? nombre, string? correo, string?  contrasena, string mensajeEsperado)
+        {
+            var request = new CrearVendedorRequest(nombre, correo, contrasena);
+            
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+
+            var response = await _client.PostAsJsonAsync("/vendedor", request);
+            var responseMessage = await response.Content.ReadAsStringAsync();
+            
+            Assert.Equal(mensajeEsperado, responseMessage.Trim('"'));
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task CrearVendedor_con_correo_Repetido_retorna_badRequest()
+        {
+            var request =
+                new CrearVendedorRequest("nombre usuario", "nuevo_usuario@correo.com", "12345678");
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            
+            _ = await _client.PostAsJsonAsync("/vendedor", request);
+
+            var response = await _client.PostAsJsonAsync("/vendedor", request);
+
+            var responseMessage = await response.Content.ReadAsStringAsync();
+            
+            Assert.Equal("El correo nuevo_usuario@correo.com ya está registrado.", responseMessage.Trim('"'));
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
 
         public async Task DisposeAsync()
         {
