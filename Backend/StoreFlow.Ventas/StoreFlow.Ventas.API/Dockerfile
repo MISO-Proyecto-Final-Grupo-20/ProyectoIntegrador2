@@ -9,10 +9,10 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["StoreFlow.Ventas/StoreFlow.Ventas.API/StoreFlow.Ventas.API.csproj", "StoreFlow.Ventas/StoreFlow.Ventas.API/"]
-RUN dotnet restore "StoreFlow.Ventas/StoreFlow.Ventas.API/StoreFlow.Ventas.API.csproj"
+COPY ["StoreFlow.Ventas.API/StoreFlow.Ventas.API.csproj", "StoreFlow.Ventas.API/"]
+RUN dotnet restore "./StoreFlow.Ventas.API/StoreFlow.Ventas.API.csproj"
 COPY . .
-WORKDIR "/src/StoreFlow.Ventas/StoreFlow.Ventas.API"
+WORKDIR "/src/StoreFlow.Ventas.API"
 RUN dotnet build "./StoreFlow.Ventas.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
