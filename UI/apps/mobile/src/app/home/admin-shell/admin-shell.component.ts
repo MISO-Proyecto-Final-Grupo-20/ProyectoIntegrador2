@@ -7,14 +7,14 @@ import { HeaderComponent } from '../../shared/header/header.component';
   selector: 'app-admin-shell',
   standalone: true,
   imports: [HeaderComponent, RouterOutlet],
-  template: `<div class="column height-100">
+  template: `<div class="column heigth-100">
     <app-header
       [rutaVolver]="rutaVolver"
       [mostrarAvatar]="true"
       [categoriaUsuario]="sesion.categoria"
       [nombreUsuario]="sesion.nombreUsuario"
     ></app-header>
-    <div class="contenido-mobile column">
+    <div class="contenido-mobile ">
       <router-outlet></router-outlet>
     </div>
   </div> `,

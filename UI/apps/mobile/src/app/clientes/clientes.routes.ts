@@ -3,27 +3,48 @@ import { ConsultarPedidoComponent } from './consultar-pedido/consultar-pedido.co
 import { CrearPedidoComponent } from './crear-pedido/crear-pedido.component';
 import { EntregasProgramadasComponent } from './entregas-programadas/entregas-programadas.component';
 import { MenuNavegacionClientesComponent } from './menu-navegacion-clientes/menu-navegacion-clientes.component';
+import { ModalAgregarProductoService } from './modal-agregar-producto/modal-agregar-producto.service';
+import { PedidosPendientesComponent } from './pedidos-pendientes/pedidos-pendientes.component';
+import { ProductosComponent } from './productos/productos.component';
+import { ClientesService } from './services/clientes.service';
+import { ClientesStore } from './state';
 
 export const ClientesRoutes: Route[] = [
   {
     path: '',
-    component: MenuNavegacionClientesComponent,
-  },
-  {
-    path: 'crearPedido',
-    component: CrearPedidoComponent,
-  },
-  {
-    path: 'consultarPedido',
-    component: ConsultarPedidoComponent,
-  },
-  {
-    path: 'entregasProgramadas',
-    component: EntregasProgramadasComponent,
-  },
-  {
-    path: '**',
-    redirectTo: '',
-    pathMatch: 'full',
+    children: [
+      {
+        path: '',
+        component: MenuNavegacionClientesComponent,
+      },
+      {
+        path: 'crearPedido',
+        component: CrearPedidoComponent,
+        children: [
+          {
+            path: '',
+            component: ProductosComponent,
+          },
+          {
+            path: 'pedidosPendientes',
+            component: PedidosPendientesComponent,
+          },
+        ],
+      },
+      {
+        path: 'consultarPedido',
+        component: ConsultarPedidoComponent,
+      },
+      {
+        path: 'entregasProgramadas',
+        component: EntregasProgramadasComponent,
+      },
+      {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full',
+      },
+    ],
+    providers: [ClientesStore, ClientesService, ModalAgregarProductoService],
   },
 ];

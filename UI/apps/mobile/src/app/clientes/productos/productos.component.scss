@@ -1,0 +1,32 @@
+.width-240 {
+  width: 240px;
+}
+
+mat-list-item {
+  border-bottom: 1px solid #ededed;
+}
+
+.max-tamanio-30 {
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.tamanio-30 {
+  width: 30px;
+  height: 30px;
+}
+
+.boton-ver-carrito {
+  border-radius: 36px !important;
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+.overflow {
+  overflow: auto;
+  max-height: calc(100vh - 336px);
+}
+.pb-46 {
+  padding-bottom: 46px;
+}

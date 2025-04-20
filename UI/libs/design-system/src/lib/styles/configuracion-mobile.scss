@@ -9,3 +9,16 @@
   padding-top: calc(56px + env(safe-area-inset-top));
   height: calc(100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
 }
+
+:root {
+  --mdc-list-list-item-one-line-container-height: 65px;
+}
+
+.tab-100 {
+  .mat-mdc-tab-body-wrapper {
+    flex: 1;
+  }
+  .mat-mdc-tab-link {
+    flex: 1;
+  }
+}

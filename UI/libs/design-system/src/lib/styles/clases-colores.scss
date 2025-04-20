@@ -10,6 +10,10 @@
   color: map-get($primary, 800);
 }
 
+.color-accent {
+  color: map-get($accent, 800);
+}
+
 .color-warn {
   color: map-get($warn, 800);
 }
@@ -32,6 +36,10 @@
 
 .color-grey-700 {
   color: map-get($grey, 700);
+}
+
+.color-grey-500 {
+  color: map-get($grey, 500);
 }
 
 .bg-grey-100 {
