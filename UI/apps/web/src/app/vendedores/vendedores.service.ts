@@ -9,7 +9,9 @@ export class VendedoresService {
   http = inject(HttpClient);
 
   registrarVendedor(vendedor: RegistrarVendedor): Observable<void> {
+    const token = localStorage.getItem('authToken');
+    const headers = { Authorization: `${token}` };
+
     return this.http.post<void>(VendedoresUrls.registrarVendedor, vendedor);
-    // return of(void 0);
   }
 }

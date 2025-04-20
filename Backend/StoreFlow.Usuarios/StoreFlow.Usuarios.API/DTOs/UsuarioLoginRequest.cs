@@ -22,7 +22,7 @@ public class UsuarioLoginRequestConverter : JsonConverter<UsuarioLoginRequest>
         if (root.TryGetProperty("correo", out JsonElement correoElement) &&
             root.TryGetProperty("contrasena", out JsonElement contrasenaElement))
         {
-            var datosIngreso = new DatosIngreso(correoElement.GetString(), contrasenaElement.GetString());
+            var datosIngreso = new DatosIngreso(correoElement.GetString()!, contrasenaElement.GetString()!);
             var tipoCategoria = TiposUsuarios.UsuarioCcp.ToString();
             return new UsuarioLoginRequest(datosIngreso, tipoCategoria);
         }
@@ -32,7 +32,7 @@ public class UsuarioLoginRequestConverter : JsonConverter<UsuarioLoginRequest>
         {
             var datosIngreso =
                 JsonSerializer.Deserialize<DatosIngreso>(datosIngresoElement.GetRawText(), JsonSerializerOptions.Web);
-            return new UsuarioLoginRequest(datosIngreso, tipoCategoriaElement.GetString());
+            return new UsuarioLoginRequest(datosIngreso!, tipoCategoriaElement.GetString()!);
         }
 
         throw new JsonException("Invalid JSON structure for UsuarioLoginRequest.");
