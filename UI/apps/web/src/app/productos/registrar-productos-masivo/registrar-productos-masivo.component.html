@@ -1,0 +1,93 @@
+<section class="heigth-100 column">
+  <div class="row justify-content-end px-16 pt-12">
+    <mat-icon class="color-grey-800 cursor-pointer" mat-dialog-close
+      >close</mat-icon
+    >
+  </div>
+  <div class="p-16 column gap-17 flex-1">
+    <div
+      [class.border-card]="!estadoCargaEsCompletado"
+      class="px-16 column gap-16 border-card flex-1 align-items-center justify-content-center"
+    >
+      <img
+        src="/assets/images/cargar-masivo.svg"
+        width="76.31"
+        height="90.45"
+      />
+
+      @switch (estadoCarga) {
+        @case (estadoCargaEnum.inicial) {
+          <div class="text-center" data-testid="adjuntar-archivo">
+            <h3
+              class="color-grey-800"
+              i18n="producto.masivo.arrastraAdjuntaTuArchivo"
+            >
+              Arrastra o adjunta tu archivo
+            </h3>
+            <p
+              class="color-grey-700 mat-body-1"
+              i18n="producto.masivo.tamanioArchivo"
+            >
+              CVS • Máx. 00MB
+            </p>
+          </div>
+          <button color="primary" mat-stroked-button>
+            <label
+              i18n="producto.masivo.adjuntarArchivo"
+              class="subir-archivo"
+              for="subirArchivo"
+            >
+              Adjuntar archivo
+              <input
+                type="file"
+                (change)="adjuntarArchivo($event)"
+                accept=".xlsx,.xls"
+                data-testid="producto-cargar-masivo"
+                name="subirArchivo"
+                id="subirArchivo"
+              />
+            </label>
+          </button>
+        }
+        @case (estadoCargaEnum.cargando) {
+          <div class="column gap-10 p-10" data-testid="cargando-masivo">
+            <div class="row gap-12 align-items-center">
+              <mat-icon class="mat-icon-outlined color-primary"
+                >insert_drive_file</mat-icon
+              >
+              <div>
+                <h3 class="color-grey-700">
+                  {{ datosArchivo().name }}
+                </h3>
+                <p class="mat-body-1 color-grey-700">
+                  {{ tamanioArchivo }} • Cargando
+                </p>
+              </div>
+            </div>
+            <mat-progress-bar
+              class="width-414"
+              mode="indeterminate"
+            ></mat-progress-bar>
+          </div>
+        }
+        @case (estadoCargaEnum.completado) {
+          <app-resultado-carga-masiva
+            [resultadoCarga]="resultadoCarga()"
+          ></app-resultado-carga-masiva>
+        }
+      }
+    </div>
+    <div class="row justify-content-end">
+      <button
+        [disabled]="!tieneProductosCargados"
+        color="primary"
+        data-testid="boton-guardar-productos-masivo"
+        mat-raised-button
+        i18n="guardar"
+        (click)="guardarProductosMasivos()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</section>

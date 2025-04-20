@@ -1,3 +1,3 @@
 export const MensajesProductos = {
-  registroProductoExitoso: 'Producto guardado',
+  registroProductoExitoso: $localize`:@@registroProductoExitoso:Producto guardado`,
 };

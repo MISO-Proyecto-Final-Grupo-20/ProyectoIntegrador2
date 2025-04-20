@@ -1,0 +1,52 @@
+<section class="column gap-16">
+  <div class="text-center column align-items-center">
+    <h3 i18n="producto.masivo.cargaExitosa" class="color-grey-800">
+      Carga exitosa
+    </h3>
+    <div class="row gap-10 align-items-center">
+      <mat-icon class="color-success">check_circle</mat-icon>
+      <p class="mat-body-1 color-grey-700">
+        {{ mensajeCantidadProductosCargados }}
+      </p>
+    </div>
+    <div class="row gap-10 align-items-center">
+      <mat-icon class="color-warn">dangerous</mat-icon>
+      <p
+        class="mat-body-1 color-primary cursor-pointer"
+        data-testid="boton-ver-errores"
+        (click)="abrirModalErrores()"
+      >
+        {{ mensajeCantidadErrores }}
+      </p>
+    </div>
+  </div>
+  <div class="column gap-4 width-1012">
+    <p
+      class="mat-body-1 color-grey-800"
+      i18n="producto.masivo.productosCargados"
+    >
+      Productos cargados
+    </p>
+    <mat-list>
+      @for (producto of productos; track $index) {
+        <mat-list-item>
+          <div class="row">
+            <div class="py-12 flex-1">
+              <p class="mat-body-1 color-grey-700">{{ producto.nombre }}</p>
+            </div>
+            <div class="py-12 flex-1">
+              <p class="mat-body-1 color-grey-700">
+                {{ producto.fabricanteAsociado.nombre }}
+              </p>
+            </div>
+            <div class="py-12 flex-1">
+              <p class="mat-body-1 color-grey-700">
+                {{ producto.codigo }}
+              </p>
+            </div>
+          </div>
+        </mat-list-item>
+      }
+    </mat-list>
+  </div>
+</section>
