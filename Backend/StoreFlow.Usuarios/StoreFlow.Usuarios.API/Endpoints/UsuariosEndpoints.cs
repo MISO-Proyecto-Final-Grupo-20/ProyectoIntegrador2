@@ -22,13 +22,13 @@ public static class UsuariosEndpoints
                 
             var usuario = await db.Usuarios
                 .FirstOrDefaultAsync(u =>
-                    u.CorreoElectronico == loginDto.DatosIngreso.Correo &&
+                    u.CorreoElectronico == loginDto!.DatosIngreso.Correo &&
                     u.Contrasena == loginDto.DatosIngreso.Contrasena); 
 
             if (usuario is null)
                 return Results.Unauthorized();
                 
-            if (usuario.TipoUsuario.ToString().ToLower() != loginDto.TipoCategoria.ToLower())
+            if (!string.Equals(usuario.TipoUsuario.ToString(), loginDto!.TipoCategoria, StringComparison.CurrentCultureIgnoreCase))
                 return Results.Unauthorized();
 
             string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.TipoUsuario.ToString());

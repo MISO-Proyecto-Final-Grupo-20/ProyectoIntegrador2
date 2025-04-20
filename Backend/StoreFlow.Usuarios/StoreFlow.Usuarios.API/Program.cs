@@ -5,6 +5,7 @@ using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,15 +17,12 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("La variable de entorno 'CONNECTION_STRING' no está definida.");
 }
 
-Console.WriteLine($"Cadena de conexión: {connectionString}");
-
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
 if (string.IsNullOrEmpty(jwtSecret))
 {
     throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
 }
 
-builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -36,9 +34,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            RoleClaimType = ClaimTypes.Role,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
+
+builder.Services.AddAuthorization(opciones =>
+{
+    opciones.AddPolicy("SoloUsuariosCcp", policy =>
+        policy.RequireRole("UsuarioCcp"));
+});
+
 
 builder.Services.AddCors(options =>
 {
@@ -77,6 +83,7 @@ app.UseHttpsRedirection();
 
 app.MapUsuariosEndpoints();
 app.MapCrearClienteEndpoints();
+app.MapCrearVendedorEndpoints();
 
 //Aplicar migraciones
 using (var scope = app.Services.CreateScope())
