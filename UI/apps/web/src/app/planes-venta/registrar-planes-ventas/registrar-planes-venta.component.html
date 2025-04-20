@@ -1,0 +1,68 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/planes-venta.svg" width="34" height="31" />
+    <h3 i18n="planesVentas.registrar.titulo">Planes de ventas</h3>
+  </div>
+  <div class="p-12 column gap-16" [formGroup]="formulario">
+    <div class="row gap-8">
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="planesVentas.registrar.periodoTiempo"
+          >Periodo de tiempo</mat-label
+        >
+        <mat-select
+          data-testid="select-planes-ventas-periodo-tiempo"
+          formControlName="periodoTiempo"
+        >
+          @for (periodo of periodosTiempo(); track periodo.id) {
+            <mat-option [value]="periodo.id">
+              {{ periodo.descripcion }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="planesVentas.registrar.valorVentas"
+          >Valor de ventas</mat-label
+        >
+        <input
+          matInput
+          data-testid="input-registrar-planes-ventas-valor-ventas"
+          formControlName="valorVentas"
+          type="number"
+        />
+      </mat-form-field>
+    </div>
+    <div class="px-7 column gap-4">
+      <p
+        class="mat-body-1 color-grey-600"
+        i18n="planesVentas.registrar.seleccionaVendedor"
+      >
+        Selecciona un vendedor
+      </p>
+      <div class="d-grid grid-template-columns-3" formGroupName="vendedores">
+        @for (vendedor of vendedores(); track $index) {
+          <mat-checkbox
+            color="primary"
+            data-testid="checkbox-registrar-planes-ventas-vendedor"
+            [formControlName]="vendedor.id"
+            ><p class="texto-checkbox">
+              {{ vendedor.nombre }}
+            </p></mat-checkbox
+          >
+        }
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="desactivarBoton"
+        data-testid="boton-registrar-plan-ventas"
+        (click)="registrarPlanVentas()"
+        i18n="guardar"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</mat-card>
