@@ -1,4 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PlanesVentaContainerComponent } from './planes-venta-container.component';
 
 describe('PlanesVentaContainerComponent', () => {
@@ -7,7 +9,8 @@ describe('PlanesVentaContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PlanesVentaContainerComponent],
+      imports: [PlanesVentaContainerComponent, BrowserAnimationsModule],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PlanesVentaContainerComponent);
