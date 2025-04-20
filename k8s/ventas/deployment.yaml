@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ventas
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ventas
+  template:
+    metadata:
+      labels:
+        app: ventas
+    spec:
+      containers:
+        - name: ventas
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/ventas
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CONNECTION_STRING_VENTAS
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: CONNECTION_STRING_VENTAS
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: JWT_SECRET
