@@ -53,4 +53,6 @@ export const configuracionMenuVendedores: ConfiguracionMenu[] = [
 export const MensajesAlertas = {
   credencialesIncorrectas: $localize`:@@mensajeCredencialesIncorrectas:No se pudo autenticar. Verifica tu correo o contraseña.`,
   clienteRegistradoExitoso: $localize`:@@mensajeClienteRegistrado:Cliente registrado`,
+  noHaySuficienteInventario: $localize`:@@mensajeNoHaySuficienteInventario:No hay sufiente inventario`,
+  pedidoCreado: $localize`:@@mensajePedidoCreado:Pedido creado`,
 };
