@@ -11,17 +11,19 @@ import {
   TipoAlerta,
 } from '@storeflow/design-system';
 import { MensajesProductos } from '../productos.contantes';
-import { ListadoFabricantes, Producto } from '../productos.model';
+import { ListadoFabricantes, RegistrarProducto } from '../productos.model';
 import { ProductosService } from '../productos.service';
+import { RegistrarProductosMasivoService } from '../registrar-productos-masivo/registrar-productos-masivo.service';
 
 @Component({
   selector: 'app-registrar-productos',
   standalone: true,
   imports: [SharedModule, ReactiveFormsModule],
-  providers: [ProductosService],
+  providers: [ProductosService, RegistrarProductosMasivoService],
   templateUrl: './registrar-productos.component.html',
 })
 export class RegistrarProductosComponent {
+  modalRegistrarMasivo = inject(RegistrarProductosMasivoService);
   service = inject(ProductosService);
   alertaService = inject(AlertaService);
   listadoFabricantes = signal<ListadoFabricantes[]>([]);
@@ -33,7 +35,7 @@ export class RegistrarProductosComponent {
     fabricanteAsociado: new FormControl<number | null>(null, [
       Validators.required,
     ]),
-    codigo: new FormControl<number | null>(null, [
+    codigo: new FormControl<string | null>(null, [
       Validators.required,
       Validators.maxLength(50),
     ]),
@@ -54,7 +56,7 @@ export class RegistrarProductosComponent {
   }
 
   guardarProducto() {
-    const datosFormulario = this.formulario.value as Producto;
+    const datosFormulario = this.formulario.value as RegistrarProducto;
     this.service.guardarProducto(datosFormulario).subscribe({
       next: () => {
         this.formulario.reset();
@@ -64,5 +66,9 @@ export class RegistrarProductosComponent {
         });
       },
     });
+  }
+
+  abrirModalRegistrarMasivo() {
+    this.modalRegistrarMasivo.abrirModal();
   }
 }

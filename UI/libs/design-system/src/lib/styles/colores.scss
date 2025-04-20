@@ -167,6 +167,7 @@ $variant-colors: (
 );
 
 .mat-mdc-outlined-button.mat-primary {
+  --mat-outlined-button-state-layer-color: #ffffff !important;
   --mdc-outlined-button-outline-color: map-get($primary, 800) !important;
 }
 
