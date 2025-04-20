@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +8,8 @@ using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
 using StoreFlow.Compras.API.Servicios;
 using StoreFlow.Compras.Tests.Utilidades;
+using System.Security.Claims;
+using System.Text;
 
 namespace StoreFlow.Compras.Tests
 {
@@ -34,7 +34,8 @@ namespace StoreFlow.Compras.Tests
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         RoleClaimType = ClaimTypes.Role,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
                     };
                 });
 
@@ -50,7 +51,7 @@ namespace StoreFlow.Compras.Tests
                 options.UseInMemoryDatabase("UsuariosTestDb"));
 
             builder.Services.AddScoped<IFabricantesService, FabricantesService>();
-
+            builder.Services.AddScoped<IProductosService, ProductosService>();
 
 
             var app = builder.Build();
