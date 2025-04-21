@@ -60,5 +60,58 @@ namespace StoreFlow.Compras.Tests.Servicios
             Assert.IsType<FabricanteYaExiste>(resultado.Error);
         }
 
+        [Fact]
+        public async Task ObtenerListadoAsync_DebeRetornarFabricantesOrdenadosPorNombre()
+        {
+            // Arrange
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            using var contexto = CrearContexto(dbName);
+
+            contexto.Fabricantes.AddRange(
+                new Fabricante { RazonSocial = "Zebra", CorreoElectronico = "zebra@empresa.com" },
+                new Fabricante { RazonSocial = "Alfa", CorreoElectronico = "alfa@empresa.com" },
+                new Fabricante { RazonSocial = "Beta", CorreoElectronico = "beta@empresa.com" }
+            );
+            await contexto.SaveChangesAsync();
+
+            var servicio = new FabricantesService(contexto);
+
+            // Act
+            var resultado = await servicio.ObtenerListadoAsync();
+
+            // Assert
+            Assert.Equal(3, resultado.Count);
+            Assert.Collection(resultado,
+                f => Assert.Equal("Alfa", f.Nombre),
+                f => Assert.Equal("Beta", f.Nombre),
+                f => Assert.Equal("Zebra", f.Nombre)
+            );
+        }
+
+        [Fact]
+        public async Task ObtenerListadoAsync_DebeRetornarListaVacia_CuandoNoHayFabricantes()
+        {
+            // Arrange
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            using var contexto = CrearContexto(dbName);
+            var servicio = new FabricantesService(contexto);
+
+            // Act
+            var resultado = await servicio.ObtenerListadoAsync();
+
+            // Assert
+            Assert.NotNull(resultado);
+            Assert.Empty(resultado);
+        }
+
+
+        private static ComprasDbContext CrearContexto(string dbName)
+        {
+            var options = new DbContextOptionsBuilder<ComprasDbContext>()
+                .UseInMemoryDatabase(databaseName: dbName)
+                .Options;
+
+            return new ComprasDbContext(options);
+        }
     }
 }

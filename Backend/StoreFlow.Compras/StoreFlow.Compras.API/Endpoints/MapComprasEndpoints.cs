@@ -23,6 +23,12 @@ public static class ComprasEndpoints
                 return Results.Created($"/fabricantes/{resultado.Valor!.Id}", resultado.Valor);
             }).RequireAuthorization("SoloUsuariosCcp");
 
+        app.MapGet("/fabricantes", async (IFabricantesService servicioFabricantes) =>
+        {
+            var resultado = await servicioFabricantes.ObtenerListadoAsync();
+            return Results.Ok(resultado);
+        }).RequireAuthorization("SoloUsuariosCcp");
+
 
         app.MapPost("/productos", async (
             CrearProductoRequest request,

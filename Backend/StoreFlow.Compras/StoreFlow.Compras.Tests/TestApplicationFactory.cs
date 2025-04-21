@@ -15,7 +15,7 @@ namespace StoreFlow.Compras.Tests
 {
     public static class TestApplicationFactory
     {
-        public static WebApplication Create()
+        public static WebApplication Create(string? databaseName = null)
         {
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
@@ -45,10 +45,12 @@ namespace StoreFlow.Compras.Tests
                     policy.RequireRole("UsuarioCcp"));
             });
 
+            var nombreDb = databaseName ?? "TestDb";
+
             builder.WebHost.UseTestServer();
 
             builder.Services.AddDbContext<ComprasDbContext>(options =>
-                options.UseInMemoryDatabase("UsuariosTestDb"));
+                options.UseInMemoryDatabase(nombreDb));
 
             builder.Services.AddScoped<IFabricantesService, FabricantesService>();
             builder.Services.AddScoped<IProductosService, ProductosService>();
