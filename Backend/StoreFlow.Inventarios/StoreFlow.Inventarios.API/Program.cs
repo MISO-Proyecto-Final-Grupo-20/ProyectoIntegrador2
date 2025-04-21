@@ -8,16 +8,16 @@ using StoreFlow.Inventarios.API.Datos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING_COMPRAS");
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING_INVENTARIOS");
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("La variable de entorno 'CONNECTION_STRING_COMPRAS' no est� definida.");
+    throw new InvalidOperationException("La variable de entorno 'CONNECTION_STRING_INVENTARIOS' no está definida.");
 }
 
 var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
 if (string.IsNullOrEmpty(jwtSecret))
 {
-    throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no est� definida.");
+    throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
 }
 
 

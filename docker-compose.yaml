@@ -108,7 +108,7 @@ services:
     ports:
       - '8093:8080' 
     depends_on:
-      dbventas:
+      dbinventarios:
         condition: service_healthy
     
   mobileapp:
