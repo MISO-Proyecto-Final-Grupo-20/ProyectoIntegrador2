@@ -1,4 +1,5 @@
-﻿using StoreFlow.Compras.API.Comunes;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compras.API.Comunes;
 using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.DTOs;
 using StoreFlow.Compras.API.Entidades;
@@ -38,6 +39,14 @@ namespace StoreFlow.Compras.API.Servicios
                 new CrearFabricanteResponse(fabricante.Id, fabricante.RazonSocial, fabricante.CorreoElectronico);
 
             return Resultado<CrearFabricanteResponse>.Exito(fabricanteCreado);
+        }
+
+        public async Task<IReadOnlyList<FabricanteDto>> ObtenerListadoAsync()
+        {
+            return await _comprasDbContext.Fabricantes
+                .OrderBy(f => f.RazonSocial)
+                .Select(f => new FabricanteDto(f.Id, f.RazonSocial))
+                .ToListAsync();
         }
 
         private bool ExisteUnFabricanteConElCorreo(string correoElectronico)

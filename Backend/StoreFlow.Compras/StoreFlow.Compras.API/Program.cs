@@ -1,12 +1,12 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
 using StoreFlow.Compras.API.Servicios;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,6 @@ if (string.IsNullOrEmpty(jwtSecret))
 {
     throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
 }
-
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -56,13 +55,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddDbContext<ComprasDbContext>(options =>
-{
-    options.UseNpgsql(connectionString);
-});
+builder.Services.AddDbContext<ComprasDbContext>(options => { options.UseNpgsql(connectionString); });
 
 
 builder.Services.AddScoped<IFabricantesService, FabricantesService>();
+builder.Services.AddScoped<IProductosService, ProductosService>();
 
 // Add services to the container.
 
@@ -86,4 +83,6 @@ app.Run();
 
 
 [ExcludeFromCodeCoverage]
-public partial class Program { }
+public partial class Program
+{
+}

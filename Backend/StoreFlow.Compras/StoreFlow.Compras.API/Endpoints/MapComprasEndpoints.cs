@@ -9,17 +9,40 @@ public static class ComprasEndpoints
 {
     public static void MapComprasEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/fabricantes", async (CrearFabricanteRequest crearFabricanteDto, IFabricantesService servicioFabricantes) =>
+        app.MapPost("/fabricantes",
+            async (CrearFabricanteRequest crearFabricanteDto, IFabricantesService servicioFabricantes) =>
+            {
+                if (!MiniValidator.TryValidate(crearFabricanteDto, out var errors))
+                    return Results.ValidationProblem(errors);
+
+                var resultado = await servicioFabricantes.CrearFabricanteAsync(crearFabricanteDto);
+
+                if (!resultado.EsExitoso)
+                    return ErrorHttpConversor.Convertir(resultado.Error!);
+
+                return Results.Created($"/fabricantes/{resultado.Valor!.Id}", resultado.Valor);
+            }).RequireAuthorization("SoloUsuariosCcp");
+
+        app.MapGet("/fabricantes", async (IFabricantesService servicioFabricantes) =>
         {
-            if (!MiniValidator.TryValidate(crearFabricanteDto, out var errors))
+            var resultado = await servicioFabricantes.ObtenerListadoAsync();
+            return Results.Ok(resultado);
+        }).RequireAuthorization("SoloUsuariosCcp");
+
+
+        app.MapPost("/productos", async (
+            CrearProductoRequest request,
+            IProductosService productosService) =>
+        {
+            if (!MiniValidator.TryValidate(request, out var errors))
                 return Results.ValidationProblem(errors);
 
-            var resultado = await servicioFabricantes.CrearFabricanteAsync(crearFabricanteDto);
+            var resultado = await productosService.CrearProductoAsync(request);
 
-            if(!resultado.EsExitoso)
+            if (!resultado.EsExitoso)
                 return ErrorHttpConversor.Convertir(resultado.Error!);
 
-            return Results.Created($"/fabricantes/{resultado.Valor!.Id}", resultado.Valor);
+            return Results.Created($"/productos/{resultado.Valor!.Id}", resultado.Valor);
         }).RequireAuthorization("SoloUsuariosCcp");
     }
 }
