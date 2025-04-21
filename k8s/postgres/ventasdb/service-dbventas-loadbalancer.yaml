@@ -11,5 +11,5 @@ spec:
   selector:
     app: dbventas
   ports:
-    - port: 5433
-      targetPort: 5433
+    - port: 5432
+      targetPort: 5432
