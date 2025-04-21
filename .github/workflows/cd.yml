@@ -82,6 +82,18 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:latest
 
+      - name: Build and push Ventas Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Backend/StoreFlow.Ventas
+          file: ./Backend/StoreFlow.Ventas/StoreFlow.Ventas.API/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:latest
+
       - name: Build and push Gateway
         uses: docker/build-push-action@v4
         with:
@@ -136,6 +148,11 @@ jobs:
         if: env.AKS_EXISTS == 'true'
         run: |
           kubectl set image deployment/compras compras=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/compras:${{ env.VERSION }} -n storeflow
+      
+      - name: Update ventas image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/ventas ventas=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:${{ env.VERSION }} -n storeflow
 
       - name: Update gateway image in AKS
         if: env.AKS_EXISTS == 'true'
@@ -177,6 +194,16 @@ jobs:
         uses: actions/delete-package-versions@v4
         with:
           package-name: '${{ env.REPO_NAME }}/compras'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old Ventas images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/ventas'
           package-type: 'container'
           min-versions-to-keep: 3
           delete-only-untagged-versions: false

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbventas-publico
+  namespace: storeflow
+  labels:
+    app: dbventas
+    entorno: pruebas
+spec:
+  type: LoadBalancer
+  selector:
+    app: dbventas
+  ports:
+    - port: 5432
+      targetPort: 5432
