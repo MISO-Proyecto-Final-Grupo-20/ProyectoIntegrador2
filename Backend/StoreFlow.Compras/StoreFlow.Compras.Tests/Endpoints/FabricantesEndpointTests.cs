@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.DTOs;
+using StoreFlow.Compras.API.Entidades;
+using StoreFlow.Compras.Tests.Utilidades;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using StoreFlow.Compras.Tests.Utilidades;
 
 namespace StoreFlow.Compras.Tests.Endpoints
 {
@@ -131,6 +134,99 @@ namespace StoreFlow.Compras.Tests.Endpoints
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
+
+
+        [Fact]
+        public async Task GetFabricantes_DebeRetornar200YListado_CuandoTokenEsValidoYHayFabricantes()
+        {
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            var app = TestApplicationFactory.Create(dbName);
+            await app.StartAsync();
+            var client = app.GetTestClient();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ComprasDbContext>();
+                db.Fabricantes.AddRange(
+                    new Fabricante { RazonSocial = "Sony", CorreoElectronico = "sony@empresa.com" },
+                    new Fabricante { RazonSocial = "HP", CorreoElectronico = "hp@empresa.com" }
+                );
+                await db.SaveChangesAsync();
+            }
+
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            var response = await client.GetAsync("/fabricantes");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var resultado = await response.Content.ReadFromJsonAsync<List<FabricanteDto>>();
+            Assert.NotNull(resultado);
+            Assert.Equal(2, resultado.Count);
+            Assert.Contains(resultado, f => f.Nombre == "Sony");
+            Assert.Contains(resultado, f => f.Nombre == "HP");
+
+            await app.StopAsync();
+        }
+
+        [Fact]
+        public async Task GetFabricantes_DebeRetornar200YListaVacia_CuandoNoHayFabricantes()
+        {
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            var app = TestApplicationFactory.Create(dbName);
+            await app.StartAsync();
+            var client = app.GetTestClient();
+
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            var response = await client.GetAsync("/fabricantes");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var resultado = await response.Content.ReadFromJsonAsync<List<FabricanteDto>>();
+            Assert.NotNull(resultado);
+            Assert.Empty(resultado);
+
+            await app.StopAsync();
+        }
+
+        [Fact]
+        public async Task GetFabricantes_DebeRetornarUnauthorized_CuandoNoHayToken()
+        {
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            var app = TestApplicationFactory.Create(dbName);
+            await app.StartAsync();
+            var client = app.GetTestClient();
+
+            client.DefaultRequestHeaders.Authorization = null;
+
+            var response = await client.GetAsync("/fabricantes");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+            await app.StopAsync();
+        }
+
+        [Fact]
+        public async Task GetFabricantes_DebeRetornarForbidden_CuandoElRolEsIncorrecto()
+        {
+            var dbName = $"db-test-{Guid.NewGuid()}";
+            var app = TestApplicationFactory.Create(dbName);
+            await app.StartAsync();
+            var client = app.GetTestClient();
+
+            var jwt = GeneradorTokenPruebas.GenerarTokenVendedor(); // rol incorrecto
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            var response = await client.GetAsync("/fabricantes");
+
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+            await app.StopAsync();
+        }
+
 
         public async Task DisposeAsync()
         {

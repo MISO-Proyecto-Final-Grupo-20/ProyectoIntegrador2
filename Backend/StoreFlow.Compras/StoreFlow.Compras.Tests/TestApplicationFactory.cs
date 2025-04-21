@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +8,14 @@ using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.Endpoints;
 using StoreFlow.Compras.API.Servicios;
 using StoreFlow.Compras.Tests.Utilidades;
+using System.Security.Claims;
+using System.Text;
 
 namespace StoreFlow.Compras.Tests
 {
     public static class TestApplicationFactory
     {
-        public static WebApplication Create()
+        public static WebApplication Create(string? databaseName = null)
         {
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
@@ -34,7 +34,8 @@ namespace StoreFlow.Compras.Tests
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         RoleClaimType = ClaimTypes.Role,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
                     };
                 });
 
@@ -44,13 +45,15 @@ namespace StoreFlow.Compras.Tests
                     policy.RequireRole("UsuarioCcp"));
             });
 
+            var nombreDb = databaseName ?? "TestDb";
+
             builder.WebHost.UseTestServer();
 
             builder.Services.AddDbContext<ComprasDbContext>(options =>
-                options.UseInMemoryDatabase("UsuariosTestDb"));
+                options.UseInMemoryDatabase(nombreDb));
 
             builder.Services.AddScoped<IFabricantesService, FabricantesService>();
-
+            builder.Services.AddScoped<IProductosService, ProductosService>();
 
 
             var app = builder.Build();

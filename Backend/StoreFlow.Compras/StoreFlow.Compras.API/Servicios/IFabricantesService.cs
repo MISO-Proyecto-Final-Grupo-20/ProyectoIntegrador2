@@ -6,4 +6,5 @@ namespace StoreFlow.Compras.API.Servicios;
 public interface IFabricantesService
 {
     Task<Resultado<CrearFabricanteResponse>> CrearFabricanteAsync(CrearFabricanteRequest crearFabricanteRequest);
+    Task<IReadOnlyList<FabricanteDto>> ObtenerListadoAsync();
 }
