@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbinventarios
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbinventarios
+  template:
+    metadata:
+      labels:
+        app: dbinventarios
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: inventarios
+            - name: PGDATA
+              value: /data/db
+          volumeMounts:
+            - name: postgres-inventarios-storage
+              mountPath: /data
+      volumes:
+        - name: postgres-inventarios-storage
+          persistentVolumeClaim:
+            claimName: postgres-inventarios-pvc

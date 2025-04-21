@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbinventarios
+  namespace: storeflow
+spec:
+  type: ClusterIP
+  selector:
+    app: dbinventarios
+  ports:
+    - port: 5432
+      targetPort: 5432

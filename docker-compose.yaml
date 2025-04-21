@@ -82,6 +82,34 @@ services:
     depends_on:
       dbventas:
         condition: service_healthy
+
+  dbinventarios:
+    image: postgres
+    container_name: dbinventarios
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventarios
+    ports:
+        - "5436:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  inventarios:
+    build: 
+      context: Backend/StoreFlow.Inventarios
+      dockerfile: StoreFlow.Inventarios.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8093:8080' 
+    depends_on:
+      dbventas:
+        condition: service_healthy
     
   mobileapp:
     build:
@@ -112,3 +140,4 @@ services:
       - usuarios
       - compras
       - ventas
+      - inventarios

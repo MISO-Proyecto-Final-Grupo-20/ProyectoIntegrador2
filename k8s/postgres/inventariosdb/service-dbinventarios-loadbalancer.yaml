@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbinventarios-publico
+  namespace: storeflow
+  labels:
+    app: dbinventarios
+    entorno: pruebas
+spec:
+  type: LoadBalancer
+  selector:
+    app: dbinventarios
+  ports:
+    - port: 5432
+      targetPort: 5432
