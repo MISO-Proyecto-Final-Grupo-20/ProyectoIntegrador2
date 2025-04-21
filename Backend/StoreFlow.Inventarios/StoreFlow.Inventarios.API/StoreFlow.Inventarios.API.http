@@ -1,0 +1,6 @@
+@StoreFlow.Inventarios.API_HostAddress = http://localhost:5200
+
+GET {{StoreFlow.Inventarios.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

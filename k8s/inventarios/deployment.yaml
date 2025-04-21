@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventarios
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventarios
+  template:
+    metadata:
+      labels:
+        app: inventarios
+    spec:
+      containers:
+        - name: inventarios
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/inventarios
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CONNECTION_STRING_INVENTARIOS
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: CONNECTION_STRING_INVENTARIOS
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: JWT_SECRET
