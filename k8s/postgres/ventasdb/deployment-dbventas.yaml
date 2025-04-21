@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbventas
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbventas
+  template:
+    metadata:
+      labels:
+        app: dbventas
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_DB
+              value: ventas
+            - name: PGDATA
+              value: /data/db
+          volumeMounts:
+            - name: postgres-ventas-storage
+              mountPath: /data
+      volumes:
+        - name: postgres-ventas-storage
+          persistentVolumeClaim:
+            claimName: postgres-ventas-pvc

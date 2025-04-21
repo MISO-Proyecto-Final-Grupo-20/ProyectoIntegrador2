@@ -53,7 +53,35 @@ services:
       - '8091:8080' 
     depends_on:
       dbcompras:
-        condition: service_healthy      
+        condition: service_healthy
+
+  dbventas:
+    image: postgres
+    container_name: dbventas
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ventas
+    ports:
+        - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5      
+  
+  ventas:
+    build: 
+      context: Backend/StoreFlow.Ventas
+      dockerfile: StoreFlow.Ventas.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8092:8080' 
+    depends_on:
+      dbventas:
+        condition: service_healthy
     
   mobileapp:
     build:
@@ -83,3 +111,4 @@ services:
     depends_on:
       - usuarios
       - compras
+      - ventas
