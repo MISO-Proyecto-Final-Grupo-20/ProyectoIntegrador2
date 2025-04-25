@@ -1,44 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new InvalidOperationException("La variable de entorno 'CONNECTION_STRING' no está definida.");
-}
-
-var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
-if (string.IsNullOrEmpty(jwtSecret))
-{
-    throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
-}
+var connectionString = EnvironmentUtilidades.ObtenerVariableEntornoRequerida("CONNECTION_STRING");
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            RoleClaimType = ClaimTypes.Role,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
-        };
-    });
-
+builder.Services.ConfigurarAutenticacion();
 builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
@@ -76,6 +49,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -95,4 +69,6 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 [ExcludeFromCodeCoverage]
-public partial class Program { }
+public partial class Program
+{
+}
