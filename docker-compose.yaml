@@ -101,8 +101,8 @@ services:
   
   inventarios:
     build: 
-      context: Backend/StoreFlow.Inventarios
-      dockerfile: StoreFlow.Inventarios.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Inventarios/StoreFlow.Inventarios.API/Dockerfile 
     env_file:
       - .env
     ports:
