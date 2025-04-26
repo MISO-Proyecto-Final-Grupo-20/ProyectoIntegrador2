@@ -18,6 +18,7 @@ builder.Services.AddAuthorization(opciones =>
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
 });
+
 builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
 builder.Host.ConfigurarObservabilidad("Usuarios");
 
