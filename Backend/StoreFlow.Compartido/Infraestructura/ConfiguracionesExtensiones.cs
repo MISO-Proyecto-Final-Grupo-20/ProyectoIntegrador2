@@ -77,7 +77,7 @@ public static class ConfiguracionesExtensiones
         });
     }
 
-    private static void ConfigurarOpenTelemetry(this IServiceCollection services, string serviceName,
+    public static void ConfigurarOpenTelemetry(this IServiceCollection services, string serviceName,
         string openTelemetryEndpoint)
     {
         var resourceBuilder = ResourceBuilder.CreateDefault()
