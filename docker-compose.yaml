@@ -73,8 +73,8 @@ services:
   
   ventas:
     build: 
-      context: Backend/StoreFlow.Ventas
-      dockerfile: StoreFlow.Ventas.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Ventas/StoreFlow.Ventas.API/Dockerfile 
     env_file:
       - .env
     ports:
@@ -109,6 +109,34 @@ services:
       - '8093:8080' 
     depends_on:
       dbinventarios:
+        condition: service_healthy
+
+  dblogistica:
+    image: postgres
+    container_name: dblogistica
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: logistica
+    ports:
+        - "5437:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  logisitca:
+    build: 
+      context: Backend
+      dockerfile: StoreFlow.Logistica/StoreFlow.Logistica.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8094:8080' 
+    depends_on:
+      dblogistica:
         condition: service_healthy
     
   mobileapp:
@@ -149,7 +177,7 @@ services:
       - "18888:18888"
       - "4317:18889"
     environment:
-      - ASPIRE_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
     restart: unless-stopped
 
   rabbitmq:

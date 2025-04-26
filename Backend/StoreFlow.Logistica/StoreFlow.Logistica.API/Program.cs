@@ -1,32 +1,43 @@
+using StoreFlow.Compartidos.Core.Infraestructura;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = EnvironmentUtilidades.ObtenerVariableEntornoRequerida("CONNECTION_STRING_LOGISTICA");
+
+builder.Services.ConfigurarAutenticacion();
+builder.Services.AddAuthorization(opciones =>
+{
+    opciones.AddPolicy("SoloUsuariosCcp", policy =>
+        policy.RequireRole("UsuarioCcp"));
+});
+
+builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
+builder.Host.ConfigurarObservabilidad("Logistica");
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder =>
+    {
+        corsPolicyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 // Add services to the container.
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+[ExcludeFromCodeCoverage]
+public partial class Program
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
