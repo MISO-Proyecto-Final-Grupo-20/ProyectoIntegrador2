@@ -4,6 +4,7 @@ using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddAuthorization(opciones =>
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
 });
+builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
+builder.Host.ConfigurarObservabilidad("Usuarios");
 
 
 builder.Services.AddCors(options =>
@@ -30,7 +33,6 @@ builder.Services.AddCors(options =>
 });
 
 // Registrar el contexto de la base de datos
-
 builder.Services.AddDbContext<UsuariosDbContext>(options =>
     options.UseNpgsql(connectionString));
 
