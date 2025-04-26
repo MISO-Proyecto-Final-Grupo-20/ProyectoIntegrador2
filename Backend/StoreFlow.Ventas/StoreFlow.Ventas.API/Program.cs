@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Ventas.API.Datos;
+using StoreFlow.Ventas.API.EndPoints;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -40,8 +41,7 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-app.UseHttpsRedirection();
+app.MapCrearPedidoEndPont();
 
 
 using (var scope = app.Services.CreateScope())

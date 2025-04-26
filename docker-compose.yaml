@@ -138,6 +138,16 @@ services:
     depends_on:
       dblogistica:
         condition: service_healthy
+
+  orquestador:
+    build: 
+      context: Backend
+      dockerfile: StoreFlow.Orquestador/StoreFlow.Orquestador.Worker/Dockerfile
+    env_file:
+      - .env
+    depends_on: 
+        - 'rabbitmq'
+        - 'redis-stack'
     
   mobileapp:
     build:
@@ -184,3 +194,10 @@ services:
     image: "rabbitmq:4-management"
     ports:
       - "15672:15672"
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
