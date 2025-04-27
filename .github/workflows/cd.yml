@@ -61,7 +61,7 @@ jobs:
       - name: Build and push Usuarios Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Backend/StoreFlow.Usuarios
+          context: ./Backend
           file: ./Backend/StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile
           platforms: linux/amd64
           push: true
@@ -73,7 +73,7 @@ jobs:
       - name: Build and push Compras Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Backend/StoreFlow.Compras
+          context: ./Backend
           file: ./Backend/StoreFlow.Compras/StoreFlow.Compras.API/Dockerfile
           platforms: linux/amd64
           push: true
@@ -85,7 +85,7 @@ jobs:
       - name: Build and push Ventas Service
         uses: docker/build-push-action@v4
         with:
-          context: ./Backend/StoreFlow.Ventas
+          context: ./Backend
           file: ./Backend/StoreFlow.Ventas/StoreFlow.Ventas.API/Dockerfile
           platforms: linux/amd64
           push: true
@@ -93,6 +93,43 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:latest
+
+      - name: Build and push Inventarios Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Backend
+          file: ./Backend/StoreFlow.Inventarios/StoreFlow.Inventarios.API/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Inventarios:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Inventarios:latest
+
+      - name: Build and push Logistica Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Backend
+          file: ./Backend/StoreFlow.Logistica/StoreFlow.Logistica.API/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Logistica:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Logistica:latest
+
+      - name: Build and push Orquestador Service
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Backend
+          file: ./Backend/StoreFlow.Orquestador/StoreFlow.Orquestador.Worker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Orquestador:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Orquestador:latest            
+    
 
       - name: Build and push Gateway
         uses: docker/build-push-action@v4
@@ -154,6 +191,21 @@ jobs:
         run: |
           kubectl set image deployment/ventas ventas=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/ventas:${{ env.VERSION }} -n storeflow
 
+      - name: Update inventarios image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/inventarios inventarios=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/inventarios:${{ env.VERSION }} -n storeflow 
+
+      - name: Update logistica image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/logistica logistica=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/logistica:${{ env.VERSION }} -n storeflow
+
+      - name: Update orquestador image in AKS
+        if: env.AKS_EXISTS == 'true'
+        run: |
+          kubectl set image deployment/orquestador orquestador=${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/orquestador:${{ env.VERSION }} -n storeflow                                
+
       - name: Update gateway image in AKS
         if: env.AKS_EXISTS == 'true'
         run: |
@@ -208,6 +260,36 @@ jobs:
           min-versions-to-keep: 3
           delete-only-untagged-versions: false
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old Inventarios images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/inventarios'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old Logistica images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/logistica'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old Orquestador images
+        continue-on-error: true
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: '${{ env.REPO_NAME }}/orquestador'
+          package-type: 'container'
+          min-versions-to-keep: 3
+          delete-only-untagged-versions: false
+          token: ${{ secrets.GITHUB_TOKEN }}           
 
       - name: Delete old Gateway images
         continue-on-error: true
