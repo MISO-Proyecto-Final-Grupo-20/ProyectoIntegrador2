@@ -35,7 +35,7 @@ builder.Host.ConfigurarObservabilidad("Ventas");
 
 
 builder.Services.AddDbContext<VentasDbContext>(options => { options.UseNpgsql(connectionString); });
-
+builder.Services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
 
 var app = builder.Build();
 

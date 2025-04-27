@@ -11,25 +11,26 @@ public static class GeneradorTokenPruebas
 
     public static string GenerarTokenUsuarioCcp(string correo = "admin@correo.com")
     {
-        return GenerarToken(correo, "UsuarioCcp");
+        return GenerarToken(correo, "UsuarioCcp", 1);
     }
 
     public static string GenerarTokenVendedor(string correo = "vendedor@correo.com")
     {
-        return GenerarToken(correo,"Vendedor");
+        return GenerarToken(correo,"Vendedor", 2);
     }
     
     public static string GenerarTokenCliente(string correo = "cliente@correo.com")
     {
-        return GenerarToken(correo,"Cliente");
+        return GenerarToken(correo,"Cliente", 3);
     }
 
-    private static string GenerarToken(string correo, string rol)
+    private static string GenerarToken(string correo, string rol, int idUsuario)
     {
         var claims = new[]
         {
             new Claim("correo", correo),
-            new Claim(ClaimTypes.Role, rol)
+            new Claim(ClaimTypes.Role, rol),
+            new Claim("idUsuario", idUsuario.ToString())
         };
         var clave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ClavePruebas));
         var credenciales = new SigningCredentials(clave, SecurityAlgorithms.HmacSha256);

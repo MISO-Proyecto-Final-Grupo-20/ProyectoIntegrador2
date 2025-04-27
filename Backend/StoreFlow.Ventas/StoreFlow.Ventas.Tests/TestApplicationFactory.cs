@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NSubstitute;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
 using System.Security.Claims;
@@ -15,7 +14,7 @@ namespace StoreFlow.Ventas.Tests;
 
 public static class TestApplicationFactory
 {
-    public static WebApplication Create(IPublishEndpoint publishEndpoint)
+    public static WebApplication Create(IPublishEndpoint publishEndpoint, DateTime fecha)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -55,6 +54,8 @@ public static class TestApplicationFactory
 
         builder.Services.AddDbContext<VentasDbContext>(options =>
             options.UseInMemoryDatabase("VentasTestDb"));
+        
+        builder.Services.AddScoped<IDateTimeProvider>(_ => new TestDateTimeProvider(fecha));
 
 
         var app = builder.Build();
@@ -64,5 +65,10 @@ public static class TestApplicationFactory
 
 
         return app;
+    }
+    
+    public class TestDateTimeProvider(DateTime utcNow) : IDateTimeProvider
+    {
+        public DateTime UtcNow { get; } = utcNow;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Inventarios;
+﻿using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
+
+namespace StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Inventarios;
 
 public record ValidarInventario(
-    Guid IdProceso);
+    Guid IdProceso, SolicitudDePedido Solicitud);

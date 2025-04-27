@@ -32,4 +32,10 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
                 .IsRequired();
         });
     }
+
+    public async Task GuardarPedidoAsync(Pedido pedido)
+    {
+        await Pedidos.AddAsync(pedido);
+        await SaveChangesAsync();
+    }
 }
