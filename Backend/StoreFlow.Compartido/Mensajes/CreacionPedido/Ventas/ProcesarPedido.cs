@@ -2,5 +2,9 @@
 
 public record ProcesarPedido(
     Guid Id,
-    int IdPedido
+    SolicitudDePedido solicitud
 );
+
+public record SolicitudDePedido(int IdCliente, ProductoSolicitado[] productosSolicitados);
+
+public record ProductoSolicitado(int Id, int Cantidad, decimal Precio);

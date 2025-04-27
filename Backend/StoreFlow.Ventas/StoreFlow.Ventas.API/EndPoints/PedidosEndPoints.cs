@@ -7,10 +7,13 @@ public static class PedidosEndPoints
 {
     public static void MapCrearPedidoEndPont(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/pedido", async (CrearPedidoCommand crearPedido, IPublishEndpoint publishEndpoint) =>
+        app.MapPost("/pedido", async (CrearPedidoRequest crearPedido, IPublishEndpoint publishEndpoint) =>
         {
-            var mensajeProcesarPeido = new ProcesarPedido(Guid.CreateVersion7(), 1);
-            await publishEndpoint.Publish(mensajeProcesarPeido);
+            var solicitud = crearPedido.CrearSolicitud();
+            var procesarPedido = new ProcesarPedido(Guid.CreateVersion7(), solicitud);
+
+            await publishEndpoint.Publish(procesarPedido);
+            
             return Results.Accepted();
         });
     }
@@ -18,4 +21,28 @@ public static class PedidosEndPoints
 
 public record CrearPedidoResponse();
 
-public record CrearPedidoCommand();
+
+public record CrearPedidoRequest(int IdCliente, ProductoPedidoRequest[] productosPedidos)
+{
+    public SolicitudDePedido CrearSolicitud()
+    {
+        return new SolicitudDePedido(IdCliente, productosPedidos.Select(x => x.CrearProductoPedido()).ToArray());
+    }
+}
+
+public record ProductoPedidoRequest(string Codigo, int Cantidad, decimal Precio)
+{
+    public ProductoSolicitado CrearProductoPedido()
+    {
+        if(int.TryParse(Codigo, out int codigo) == false)
+        {
+            throw new ArgumentException("El código del producto no es válido.");
+        }
+        return new ProductoSolicitado(codigo, Cantidad, Precio);
+    }
+};
+
+
+
+
+

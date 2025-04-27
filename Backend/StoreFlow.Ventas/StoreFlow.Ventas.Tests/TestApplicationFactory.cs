@@ -52,10 +52,11 @@ public static class TestApplicationFactory
         builder.WebHost.UseTestServer();
 
         builder.Services.AddDbContext<VentasDbContext>(options =>
-            options.UseInMemoryDatabase("UsuariosTestDb"));
+            options.UseInMemoryDatabase("VentasTestDb"));
 
 
         var app = builder.Build();
+        
 
         app.MapCrearPedidoEndPont();
 
