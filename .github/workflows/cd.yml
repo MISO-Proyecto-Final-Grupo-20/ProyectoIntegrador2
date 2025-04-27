@@ -103,8 +103,8 @@ jobs:
           push: true
           provenance: false
           tags: |
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Inventarios:${{ env.VERSION }}
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Inventarios:latest
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/inventarios:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/inventarios:latest
 
       - name: Build and push Logistica Service
         uses: docker/build-push-action@v4
@@ -115,8 +115,8 @@ jobs:
           push: true
           provenance: false
           tags: |
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Logistica:${{ env.VERSION }}
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Logistica:latest
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/logistica:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/logistica:latest
 
       - name: Build and push Orquestador Service
         uses: docker/build-push-action@v4
@@ -127,8 +127,8 @@ jobs:
           push: true
           provenance: false
           tags: |
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Orquestador:${{ env.VERSION }}
-            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/Orquestador:latest            
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/orquestador:${{ env.VERSION }}
+            ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/orquestador:latest            
     
 
       - name: Build and push Gateway
