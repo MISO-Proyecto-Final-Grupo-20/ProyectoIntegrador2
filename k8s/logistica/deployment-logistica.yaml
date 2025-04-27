@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ventas
+  name: logistica
   namespace: storeflow
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ventas
+      app: logistica
   template:
     metadata:
       labels:
-        app: ventas
+        app: logistica
     spec:
       containers:
-        - name: ventas
-          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/ventas
+        - name: logistica
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/logistica
           ports:
             - containerPort: 8080
           env:
-            - name: CONNECTION_STRING_VENTAS
+            - name: CONNECTION_STRING_LOGISTICA
               valueFrom:
                 secretKeyRef:
                   name: app-secrets
-                  key: CONNECTION_STRING_VENTAS
+                  key: CONNECTION_STRING_LOGISTICA
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

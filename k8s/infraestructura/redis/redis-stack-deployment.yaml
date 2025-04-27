@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-stack
+  namespace: storeflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-stack
+  template:
+    metadata:
+      labels:
+        app: redis-stack
+    spec:
+      containers:
+        - name: redis-stack
+          image: redis/redis-stack:latest
+          ports:
+            - containerPort: 8001
+            - containerPort: 6379

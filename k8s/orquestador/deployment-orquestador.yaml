@@ -1,39 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ventas
+  name: orquestador
   namespace: storeflow
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ventas
+      app: orquestador
   template:
     metadata:
       labels:
-        app: ventas
+        app: orquestador
     spec:
       containers:
-        - name: ventas
-          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/ventas
-          ports:
-            - containerPort: 8080
+        - name: orquestador
+          image: ghcr.io/miso-proyecto-final-grupo-20/proyectointegrador2/orquestador
           env:
-            - name: CONNECTION_STRING_VENTAS
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets
-                  key: CONNECTION_STRING_VENTAS
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: app-secrets
-                  key: JWT_SECRET
             - name: RABBITMQ_HOST
               valueFrom:
                 secretKeyRef:
                   name: app-secrets
                   key: RABBITMQ_HOST
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REDIS_URL
             - name: OTEL_ENDPOINT
               valueFrom:
                 secretKeyRef:

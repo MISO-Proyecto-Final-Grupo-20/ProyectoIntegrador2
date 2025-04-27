@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspire-dashboard-public
+  namespace: storeflow
+spec:
+  type: LoadBalancer
+  selector:
+    app: aspire-dashboard
+  ports:
+    - port: 18888
+      targetPort: 18888
+      name: http
