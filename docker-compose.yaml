@@ -17,8 +17,8 @@ services:
 
   usuarios:
     build: 
-      context: Backend/StoreFlow.Usuarios
-      dockerfile: StoreFlow.Usuarios.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Usuarios/StoreFlow.Usuarios.API/Dockerfile 
     env_file:
       - .env
     ports:
@@ -45,8 +45,8 @@ services:
 
   compras:
     build: 
-      context: Backend/StoreFlow.Compras
-      dockerfile: StoreFlow.Compras.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Compras/StoreFlow.Compras.API/Dockerfile 
     env_file:
       - .env
     ports:
@@ -73,8 +73,8 @@ services:
   
   ventas:
     build: 
-      context: Backend/StoreFlow.Ventas
-      dockerfile: StoreFlow.Ventas.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Ventas/StoreFlow.Ventas.API/Dockerfile 
     env_file:
       - .env
     ports:
@@ -101,8 +101,8 @@ services:
   
   inventarios:
     build: 
-      context: Backend/StoreFlow.Inventarios
-      dockerfile: StoreFlow.Inventarios.API/Dockerfile 
+      context: Backend
+      dockerfile: StoreFlow.Inventarios/StoreFlow.Inventarios.API/Dockerfile 
     env_file:
       - .env
     ports:
@@ -110,6 +110,44 @@ services:
     depends_on:
       dbinventarios:
         condition: service_healthy
+
+  dblogistica:
+    image: postgres
+    container_name: dblogistica
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: logistica
+    ports:
+        - "5437:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  logisitca:
+    build: 
+      context: Backend
+      dockerfile: StoreFlow.Logistica/StoreFlow.Logistica.API/Dockerfile 
+    env_file:
+      - .env
+    ports:
+      - '8094:8080' 
+    depends_on:
+      dblogistica:
+        condition: service_healthy
+
+  orquestador:
+    build: 
+      context: Backend
+      dockerfile: StoreFlow.Orquestador/StoreFlow.Orquestador.Worker/Dockerfile
+    env_file:
+      - .env
+    depends_on: 
+        - 'rabbitmq'
+        - 'redis-stack'
     
   mobileapp:
     build:
@@ -141,3 +179,25 @@ services:
       - compras
       - ventas
       - inventarios
+
+  aspire-dashboard:
+    container_name: aspire-dashboard
+    image: mcr.microsoft.com/dotnet/aspire-dashboard
+    ports:
+      - "18888:18888"
+      - "4317:18889"
+    environment:
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+    restart: unless-stopped
+
+  rabbitmq:
+    image: "rabbitmq:4-management"
+    ports:
+      - "15672:15672"
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - "8001:8001"
+    restart: unless-stopped

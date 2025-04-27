@@ -1,47 +1,22 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Inventarios.API.Datos;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING_INVENTARIOS");
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new InvalidOperationException("La variable de entorno 'CONNECTION_STRING_INVENTARIOS' no está definida.");
-}
+var connectionString = EnvironmentUtilidades.ObtenerVariableEntornoRequerida("CONNECTION_STRING_INVENTARIOS");
 
-var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET");
-if (string.IsNullOrEmpty(jwtSecret))
-{
-    throw new InvalidOperationException("La variable de entorno 'JWT_SECRET' no está definida.");
-}
-
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            RoleClaimType = ClaimTypes.Role,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
-        };
-    });
-
+builder.Services.ConfigurarAutenticacion();
 builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
 });
+
+builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
+builder.Host.ConfigurarObservabilidad("Inventarios");
 
 builder.Services.AddCors(options =>
 {
@@ -53,12 +28,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddDbContext<InventariosDbContext>(options =>
-{
-    options.UseNpgsql(connectionString);
-});
-
-
+builder.Services.AddDbContext<InventariosDbContext>(options => { options.UseNpgsql(connectionString); });
 
 
 var app = builder.Build();
@@ -79,4 +49,6 @@ app.Run();
 
 
 [ExcludeFromCodeCoverage]
-public partial class Program { }
+public partial class Program
+{
+}

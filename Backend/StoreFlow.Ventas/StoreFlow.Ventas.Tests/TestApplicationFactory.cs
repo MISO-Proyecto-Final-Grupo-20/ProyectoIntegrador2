@@ -1,13 +1,15 @@
-﻿using System.Security.Claims;
-using System.Text;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NSubstitute;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
+using System.Security.Claims;
+using System.Text;
 
 namespace StoreFlow.Ventas.Tests;
 
@@ -32,7 +34,8 @@ public static class TestApplicationFactory
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     RoleClaimType = ClaimTypes.Role,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
                 };
             });
 
@@ -41,6 +44,10 @@ public static class TestApplicationFactory
             opciones.AddPolicy("SoloUsuariosCcp", policy =>
                 policy.RequireRole("UsuarioCcp"));
         });
+
+        var publishEndpointMock = Substitute.For<IPublishEndpoint>();
+
+        builder.Services.AddSingleton(publishEndpointMock);
 
         builder.WebHost.UseTestServer();
 
@@ -51,6 +58,7 @@ public static class TestApplicationFactory
         var app = builder.Build();
 
         app.MapCrearPedidoEndPont();
+
 
         return app;
     }

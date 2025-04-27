@@ -11,10 +11,11 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["StoreFlow.Compras.API/StoreFlow.Compras.API.csproj", "StoreFlow.Compras.API/"]
-RUN dotnet restore "./StoreFlow.Compras.API/StoreFlow.Compras.API.csproj"
+COPY ["StoreFlow.Compras/StoreFlow.Compras.API/StoreFlow.Compras.API.csproj", "StoreFlow.Compras/StoreFlow.Compras.API/"]
+COPY ["StoreFlow.Compartido/StoreFlow.Compartidos.Core.csproj", "StoreFlow.Compartido/"]
+RUN dotnet restore "./StoreFlow.Compras/StoreFlow.Compras.API/StoreFlow.Compras.API.csproj"
 COPY . .
-WORKDIR "/src/StoreFlow.Compras.API"
+WORKDIR "/src/StoreFlow.Compras/StoreFlow.Compras.API"
 RUN dotnet build "./StoreFlow.Compras.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

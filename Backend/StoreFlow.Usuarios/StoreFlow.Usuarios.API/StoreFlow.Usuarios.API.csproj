@@ -6,28 +6,39 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>6f2864b1-c7c3-43fa-a08e-ec8e738646f0</UserSecretsId>
+        <DockerfileContext>..\..</DockerfileContext>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
+      <Compile Remove="Excepciones\**" />
+      <Content Remove="Excepciones\**" />
+      <EmbeddedResource Remove="Excepciones\**" />
+      <None Remove="Excepciones\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Datos\" />
-      <Folder Include="Excepciones\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\StoreFlow.Compartido\StoreFlow.Compartidos.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

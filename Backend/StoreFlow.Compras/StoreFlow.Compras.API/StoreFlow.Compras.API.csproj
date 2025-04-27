@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,10 @@
 
   <ItemGroup>
     <Folder Include="Errores\Fabricantes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\StoreFlow.Compartido\StoreFlow.Compartidos.Core.csproj" />
   </ItemGroup>
 
 </Project>

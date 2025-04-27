@@ -1,0 +1,6 @@
+@StoreFlow.Logistica.API_HostAddress = http://localhost:5084
+
+GET {{StoreFlow.Logistica.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

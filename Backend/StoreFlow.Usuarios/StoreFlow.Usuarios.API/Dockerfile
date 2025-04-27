@@ -5,17 +5,17 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["StoreFlow.Usuarios.API/StoreFlow.Usuarios.API.csproj", "StoreFlow.Usuarios.API/"]
-RUN dotnet restore "./StoreFlow.Usuarios.API/StoreFlow.Usuarios.API.csproj"
+COPY ["StoreFlow.Usuarios/StoreFlow.Usuarios.API/StoreFlow.Usuarios.API.csproj", "StoreFlow.Usuarios/StoreFlow.Usuarios.API/"]
+COPY ["StoreFlow.Compartido/StoreFlow.Compartidos.Core.csproj", "StoreFlow.Compartido/"]
+RUN dotnet restore "./StoreFlow.Usuarios/StoreFlow.Usuarios.API/StoreFlow.Usuarios.API.csproj"
 COPY . .
-WORKDIR "/src/StoreFlow.Usuarios.API"
+WORKDIR "/src/StoreFlow.Usuarios/StoreFlow.Usuarios.API"
 RUN dotnet build "./StoreFlow.Usuarios.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

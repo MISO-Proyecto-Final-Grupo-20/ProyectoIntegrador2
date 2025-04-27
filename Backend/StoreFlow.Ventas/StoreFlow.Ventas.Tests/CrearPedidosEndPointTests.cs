@@ -1,8 +1,8 @@
-﻿using System.Net;
-using System.Net.Http.Json;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.AspNetCore.Builder;
 using StoreFlow.Ventas.API.EndPoints;
+using System.Net;
+using System.Net.Http.Json;
 
 namespace StoreFlow.Ventas.Tests;
 
@@ -13,7 +13,8 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        _app = TestApplicationFactory.Create();
+        _app = TestApplicationFactory.Create(
+        );
         await _app.StartAsync();
         _client = _app.GetTestClient();
     }
@@ -22,16 +23,13 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
     [Fact]
     public async Task CrearPedidoEndPont()
     {
-        var response = await _client.PostAsJsonAsync("/pedido", new CrearPedidoCommand()); 
+        var response = await _client.PostAsJsonAsync("/pedido", new CrearPedidoCommand());
 
         Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
-
     }
-    
+
     public async Task DisposeAsync()
     {
         await _app.StopAsync();
     }
-
-
 }

@@ -6,10 +6,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CONNECTION_STRING": "Host=localhost;Port=5432;Username=postgres;Password=postgres;Database=ventas",
         "RABBITMQ_HOST": "amqp://guest:guest@localhost:5672",
-        "ELASTIC_URI": "http://elastic:pass123@localhost:9200",
-        "ELASTIC_APM_URI": "http://localhost:8400",
-        "ELASTIC_APM_SERVER_URL": "http://localhost:8400",
-        "PORCENTAJE_FALLOS": "50"
+        "OTEL_ENDPOINT": "http://aspire-dashboard:18889"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5054"
