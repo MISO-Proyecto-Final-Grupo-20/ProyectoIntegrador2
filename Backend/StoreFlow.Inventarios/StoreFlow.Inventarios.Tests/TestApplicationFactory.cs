@@ -44,7 +44,7 @@ namespace StoreFlow.Inventarios.Tests
             builder.WebHost.UseTestServer();
 
             builder.Services.AddDbContext<InventariosDbContext>(options =>
-                options.UseInMemoryDatabase("UsuariosTestDb"));
+                options.UseInMemoryDatabase("InventarioTestDb"));
 
 
 

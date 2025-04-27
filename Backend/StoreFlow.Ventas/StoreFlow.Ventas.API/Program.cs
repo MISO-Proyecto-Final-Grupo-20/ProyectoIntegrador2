@@ -14,6 +14,9 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
+    
+    opciones.AddPolicy("Cliente" , policy =>
+        policy.RequireRole("Cliente"));
 });
 
 

@@ -15,7 +15,7 @@ namespace StoreFlow.Ventas.Tests;
 
 public static class TestApplicationFactory
 {
-    public static WebApplication Create()
+    public static WebApplication Create(IPublishEndpoint publishEndpoint)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -43,11 +43,13 @@ public static class TestApplicationFactory
         {
             opciones.AddPolicy("SoloUsuariosCcp", policy =>
                 policy.RequireRole("UsuarioCcp"));
+            opciones.AddPolicy("Cliente", policy =>
+                policy.RequireRole("Cliente"));
         });
 
-        var publishEndpointMock = Substitute.For<IPublishEndpoint>();
+        
 
-        builder.Services.AddSingleton(publishEndpointMock);
+        builder.Services.AddSingleton(publishEndpoint);
 
         builder.WebHost.UseTestServer();
 

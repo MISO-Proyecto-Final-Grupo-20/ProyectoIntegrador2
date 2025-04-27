@@ -18,6 +18,11 @@ public static class GeneradorTokenPruebas
     {
         return GenerarToken(correo,"Vendedor");
     }
+    
+    public static string GenerarTokenCliente(string correo = "cliente@correo.com")
+    {
+        return GenerarToken(correo,"Cliente");
+    }
 
     private static string GenerarToken(string correo, string rol)
     {

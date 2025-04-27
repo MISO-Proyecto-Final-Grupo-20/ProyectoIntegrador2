@@ -18,7 +18,7 @@ public class ProductosEndpointTests : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        _app = TestApplicationFactory.Create();
+        _app = TestApplicationFactory.Create(Guid.NewGuid().ToString());
         await _app.StartAsync();
         _client = _app.GetTestClient();
 

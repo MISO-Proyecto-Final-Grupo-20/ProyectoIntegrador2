@@ -15,7 +15,7 @@ public static class PedidosEndPoints
             await publishEndpoint.Publish(procesarPedido);
             
             return Results.Accepted();
-        });
+        }).RequireAuthorization("Cliente");
     }
 }
 
