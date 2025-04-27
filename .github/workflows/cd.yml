@@ -129,7 +129,6 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/orquestador:${{ env.VERSION }}
             ${{ env.REGISTRY }}/${{ env.LOWERCASE_PREFIX }}/orquestador:latest            
-    
 
       - name: Build and push Gateway
         uses: docker/build-push-action@v4
