@@ -23,7 +23,8 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
         modelBuilder.Entity<ProductoPedido>(entidad =>
         {
             entidad.ToTable("ProductosPedidos");
-            entidad.HasKey(e => e.IdProducto);
+            entidad.HasKey(e => new {e.IdPedido, e.IdProducto});
+            entidad.Property(e => e.IdProducto).ValueGeneratedNever();
             
             entidad.Property(e => e.Cantidad)
                 .IsRequired();

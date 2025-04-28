@@ -11,7 +11,7 @@ public class Pedido
     {
         IdCliente = idCliente;
         FechaCreacion = fechaCreacion;
-        ProductosPedidos = productosPedidos;
+        ProductosPedidos = productosPedidos.ToList();
     }
     
     public Pedido(SolicitudDePedido solicitud)
@@ -19,7 +19,7 @@ public class Pedido
         var productosPedidos = solicitud
             .productosSolicitados
             .Select(p => new ProductoPedido(p.Id, p.Cantidad, p.Precio, p.TieneInventario))
-            .ToArray();
+            .ToList();
 
         IdCliente = solicitud.IdCliente;
         FechaCreacion = solicitud.FechaCreacion;
@@ -28,12 +28,17 @@ public class Pedido
     public int Id { get; private set; }
     public int IdCliente { get; private set; }
     public DateTime FechaCreacion { get; private set; }
-    public ProductoPedido[] ProductosPedidos { get; private set; }
+    public List<ProductoPedido> ProductosPedidos { get; private set; }
     
 }
 
 public class ProductoPedido
 {
+    private ProductoPedido()
+    {
+        
+    }
+    
     public ProductoPedido(int idProducto, int cantidad, decimal precio, bool tieneInventario)
     {
         IdProducto = idProducto;

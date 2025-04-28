@@ -9,20 +9,20 @@ public static class PedidosEndPoints
 {
     public static void MapCrearPedidoEndPont(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/pedido", async (HttpContext httpContext, CrearPedidoRequest crearPedido, IPublishEndpoint publishEndpoint, IDateTimeProvider dateTimeProvider) =>
+        app.MapPost("/pedidos", async (HttpContext httpContext, ProductoPedidoRequest[] crearPedido, IPublishEndpoint publishEndpoint, IDateTimeProvider dateTimeProvider) =>
         {
             var token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            
+            var pedidoRequest = new CrearPedidoRequest(crearPedido);
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
             var idUsuario = int.Parse(jwtToken.Claims.First(c => c.Type == "idUsuario").Value);
             
-            var solicitud = crearPedido.CrearSolicitud(idUsuario, dateTimeProvider.UtcNow);
+            var solicitud = pedidoRequest.CrearSolicitud(idUsuario, dateTimeProvider.UtcNow);
             var procesarPedido = new ProcesarPedido(Guid.CreateVersion7(), solicitud);
-
+            
             await publishEndpoint.Publish(procesarPedido);
             
-            return Results.Accepted();
+            return Results.Accepted(null, idUsuario);
         }).RequireAuthorization("Cliente");
     }
 }

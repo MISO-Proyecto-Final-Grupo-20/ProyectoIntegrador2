@@ -30,11 +30,11 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenCliente();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         
-        var response = await _client.PostAsJsonAsync("/pedido", new CrearPedidoRequest( 
+        var response = await _client.PostAsJsonAsync<ProductoPedidoRequest[]>("/pedidos",
         [
             new ProductoPedidoRequest("1", 2, 10),
             new ProductoPedidoRequest("2", 3, 20)
-        ]));
+        ]);
         
         await _publishEndpointMock!.Received(1).Publish(Arg.Is<ProcesarPedido>(p => p.solicitud.IdCliente == 3));
         
@@ -44,11 +44,11 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
     [Fact]
     public async Task CrearPedido_SinToken_RetornaUnauthorazed()
     {
-        var response = await _client.PostAsJsonAsync("/pedido", new CrearPedidoRequest( 
+        var response = await _client.PostAsJsonAsync<ProductoPedidoRequest[]>("/pedidos",  
         [
             new ProductoPedidoRequest("1", 2, 10),
             new ProductoPedidoRequest("2", 3, 20)
-        ]));
+        ]);
         
         
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
