@@ -30,4 +30,19 @@ public class ProductosService(ComprasDbContext db) : IProductosService
         var response = new CrearProductoResponse(producto.Id, producto.Nombre, producto.Sku);
         return Resultado<CrearProductoResponse>.Exito(response);
     }
+
+    public async Task<ProductoResponse[]> ObtenerProductosAsync()
+    {
+        var productos = await db.Productos
+            .OrderBy(p => p.Nombre)
+            .ToListAsync();
+        
+        return  productos
+            .Select(p => new ProductoResponse(
+                p.ImagenUrl,
+                p.Nombre,
+                p.Id.ToString(),
+                p.Precio))
+            .ToArray();
+    }
 }

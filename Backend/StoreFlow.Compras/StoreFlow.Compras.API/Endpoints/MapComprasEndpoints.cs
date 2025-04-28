@@ -44,5 +44,11 @@ public static class ComprasEndpoints
 
             return Results.Created($"/productos/{resultado.Valor!.Id}", resultado.Valor);
         }).RequireAuthorization("SoloUsuariosCcp");
+        
+        app.MapGet("/productos", async (IProductosService productosService) =>
+        {
+            var resultado = await productosService.ObtenerProductosAsync();
+            return Results.Ok(resultado);
+        });
     }
 }

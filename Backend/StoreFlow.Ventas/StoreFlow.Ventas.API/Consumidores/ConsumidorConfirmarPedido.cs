@@ -1,19 +1,20 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
+using StoreFlow.Ventas.API.Datos;
+using StoreFlow.Ventas.API.Entidades;
 
 namespace StoreFlow.Ventas.API.Consumidores;
 
-public class ConsumidorConfirmarPedido : IConsumer<ConfirmarPedido>
+public class ConsumidorConfirmarPedido(ILogger<RegistrarPedido> logger, VentasDbContext ventasDbContext)
+    : IConsumer<RegistrarPedido>
 {
-    private readonly ILogger<ConsumidorConfirmarPedido> _logger;
 
-    public ConsumidorConfirmarPedido(ILogger<ConsumidorConfirmarPedido> logger)
+    public async Task Consume(ConsumeContext<RegistrarPedido> context)
     {
-        _logger = logger;
-    }
+        var solicitud = context.Message.SolicitudValiada;
+        var pedido = new Pedido(solicitud);
 
-    public async Task Consume(ConsumeContext<ConfirmarPedido> context)
-    {
-        _logger.LogInformation($"Pedido confirmado: {context.Message.IdPedido}");
+        await ventasDbContext.GuardarPedidoAsync(pedido);
     }
 }

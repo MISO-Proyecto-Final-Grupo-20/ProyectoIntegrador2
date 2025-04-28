@@ -6,4 +6,5 @@ namespace StoreFlow.Compras.API.Servicios;
 public interface IProductosService
 {
     Task<Resultado<CrearProductoResponse>> CrearProductoAsync(CrearProductoRequest request);
+    Task<ProductoResponse[]> ObtenerProductosAsync();
 }

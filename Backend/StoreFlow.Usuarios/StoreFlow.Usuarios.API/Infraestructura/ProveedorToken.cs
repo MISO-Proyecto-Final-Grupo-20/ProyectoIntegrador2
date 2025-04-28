@@ -18,7 +18,7 @@ public sealed class ProveedorToken
         }
     }
 
-    public string ObtenerToken(string correoElectronico, string rol)
+    public string ObtenerToken(string correoElectronico, string rol, int idUsuario)
     {
         var llaveSeguridad = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_jwtSecret));
         var credenciales = new SigningCredentials(llaveSeguridad, SecurityAlgorithms.HmacSha256);
@@ -28,7 +28,8 @@ public sealed class ProveedorToken
             Subject = new ClaimsIdentity(
             [
                 new Claim("correo", correoElectronico),
-                new Claim(  ClaimTypes.Role, rol)
+                new Claim(  ClaimTypes.Role, rol),
+                new Claim("idUsuario", idUsuario.ToString()),
             ]),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = credenciales
