@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NSubstitute;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
 using System.Security.Claims;
@@ -15,7 +14,7 @@ namespace StoreFlow.Ventas.Tests;
 
 public static class TestApplicationFactory
 {
-    public static WebApplication Create()
+    public static WebApplication Create(IPublishEndpoint publishEndpoint, DateTime fecha)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -43,23 +42,33 @@ public static class TestApplicationFactory
         {
             opciones.AddPolicy("SoloUsuariosCcp", policy =>
                 policy.RequireRole("UsuarioCcp"));
+            opciones.AddPolicy("Cliente", policy =>
+                policy.RequireRole("Cliente"));
         });
 
-        var publishEndpointMock = Substitute.For<IPublishEndpoint>();
+        
 
-        builder.Services.AddSingleton(publishEndpointMock);
+        builder.Services.AddSingleton(publishEndpoint);
 
         builder.WebHost.UseTestServer();
 
         builder.Services.AddDbContext<VentasDbContext>(options =>
-            options.UseInMemoryDatabase("UsuariosTestDb"));
+            options.UseInMemoryDatabase("VentasTestDb"));
+        
+        builder.Services.AddScoped<IDateTimeProvider>(_ => new TestDateTimeProvider(fecha));
 
 
         var app = builder.Build();
+        
 
         app.MapCrearPedidoEndPont();
 
 
         return app;
+    }
+    
+    public class TestDateTimeProvider(DateTime utcNow) : IDateTimeProvider
+    {
+        public DateTime UtcNow { get; } = utcNow;
     }
 }
