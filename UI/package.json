@@ -6,7 +6,17 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run --browser chrome",
+    "test:e2e:headless": "cypress run --headless",
+    "test:e2e:mobile": "cypress run --config viewportWidth=375,viewportHeight=667",
+    "test:e2e:tablet": "cypress run --config viewportWidth=768,viewportHeight=1024",
+    "test:e2e:component": "cypress run --component",
+    "test:e2e:ci": "cypress run --headless --browser chrome --config video=true",
+    "test:e2e:smoke": "cypress run --spec \"cypress/e2e/login.cy.ts,cypress/e2e/inventory.cy.ts\"",
+    "test:e2e:docker": "cypress run --config baseUrl=http://localhost:3000,env.apiUrl=http://localhost:8099/api"
   },
   "private": true,
   "devDependencies": {
@@ -31,16 +41,17 @@
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@types/cypress": "^0.1.6",
     "@types/jest": "^29.5.12",
     "@types/node": "18.16.9",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
     "@typescript-eslint/utils": "^8.19.0",
     "angular-eslint": "^18.3.0",
+    "cypress": "^14.3.2",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.2.4",
-
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-preset-angular": "14.5.4",
@@ -80,7 +91,7 @@
     "zone.js": "~0.14.3"
   },
   "optionalDependencies": {
-  "@nx/nx-linux-x64-gnu": "19.3.0"
+    "@nx/nx-linux-x64-gnu": "19.3.0"
   },
   "workspaces": [
     "./apps/*"
