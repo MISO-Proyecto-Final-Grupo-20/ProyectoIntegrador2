@@ -11,5 +11,5 @@ public class Inventario
     }
 
     public int IdProducto { get; private set; }
-    public int Cantidad { get; private set; }
+    public int Cantidad { get; set; }
 }

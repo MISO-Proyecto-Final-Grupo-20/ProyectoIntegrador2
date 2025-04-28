@@ -1,7 +1,7 @@
 import { environment } from '../../environments/environment';
 
 export const ClientesUrls = {
-  obtenerProductos: `${environment.apiUrl}/productos`,
-  validarInventarioProducto: `${environment.apiUrl}/productos/existeProducto`,
-  crearPedido: `${environment.apiUrl}/pedidos`,
+  obtenerProductos: `${environment.apiUrl}/compras/productos`,
+  validarInventarioProducto: `${environment.apiUrl}/inventarios/existeProducto`,
+  crearPedido: `${environment.apiUrl}/ventas/pedidos`,
 };

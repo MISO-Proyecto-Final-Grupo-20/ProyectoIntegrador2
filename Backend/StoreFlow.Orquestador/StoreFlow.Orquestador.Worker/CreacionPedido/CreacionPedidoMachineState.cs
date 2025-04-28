@@ -30,13 +30,19 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
             x.CorrelateById(context => context.Message.IdProceso);
             x.SelectId(context => context.Message.IdProceso);
         });
+        
+        Event(() => PedidoRegistrado, x =>
+        {
+            x.CorrelateById(context => context.Message.IdProceso);
+            x.SelectId(context => context.Message.IdProceso);
+        });
 
 
         Initially(
             When(IniciarProcesarPedido)
                 .Then(contex =>
                 {
-                    contex.Saga.solicitud = contex.Message.solicitud;
+                    contex.Saga.SolicitudDePedido = contex.Message.solicitud;
                     contex.Publish(new ValidarInventario(contex.Message.IdProceso, contex.Message.solicitud));
                 })
                 .TransitionTo(ValidandoInventario)
@@ -46,7 +52,7 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
             When(InventarioValidado)
                 .Then(context =>
                 {
-                    context.Saga.solicitud = context.Message.SolicitudValiada;
+                    context.Saga.SolicitudDePedido = context.Message.SolicitudValiada;
                     context.Publish(new RegistrarPedido(context.Message.IdProceso, context.Message.SolicitudValiada));
                 })
                 .TransitionTo(RegistrandoPedido)

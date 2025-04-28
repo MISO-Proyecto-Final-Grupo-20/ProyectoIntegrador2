@@ -3,6 +3,7 @@ using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Inventarios.API.Datos;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using StoreFlow.Inventarios.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
+    
+    opciones.AddPolicy("Cliente", policy =>
+        policy.RequireRole("Cliente"));
 });
 
 builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
@@ -37,6 +41,8 @@ var app = builder.Build();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapInventariosEndpoints();
 
 
 using (var scope = app.Services.CreateScope())

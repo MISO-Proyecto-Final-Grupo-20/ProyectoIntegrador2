@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Inventarios.API.Datos;
+using StoreFlow.Inventarios.API.Endpoints;
 
 namespace StoreFlow.Inventarios.Tests
 {
@@ -39,6 +40,9 @@ namespace StoreFlow.Inventarios.Tests
             {
                 opciones.AddPolicy("SoloUsuariosCcp", policy =>
                     policy.RequireRole("UsuarioCcp"));
+                
+                opciones.AddPolicy("Cliente", policy =>
+                    policy.RequireRole("Cliente"));
             });
 
             builder.WebHost.UseTestServer();
@@ -46,11 +50,11 @@ namespace StoreFlow.Inventarios.Tests
             builder.Services.AddDbContext<InventariosDbContext>(options =>
                 options.UseInMemoryDatabase("InventarioTestDb"));
 
-
-
+            
 
             var app = builder.Build();
 
+            app.MapInventariosEndpoints();
 
             return app;
         }

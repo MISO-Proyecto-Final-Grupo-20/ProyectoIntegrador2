@@ -25,25 +25,55 @@ public class InventarioRepositorioTest
 
         await using (var context = new InventariosDbContext(options))
         {
-            // Crear el pedido de prueba
             var pedido = new SolicitudDePedido(
                 3,
                 new DateTime(2025, 4, 27),
-                new[]
-                {
+                [
                     new ProductoSolicitado(Id: 1, Cantidad: 5, Precio: 100, TieneInventario: false),
                     new ProductoSolicitado(Id: 2, Cantidad: 10, Precio: 50, TieneInventario: false),
                     new ProductoSolicitado(Id: 3, Cantidad: 1, Precio: 20, TieneInventario: false)
-                }
+                ]
             );
 
-            var resultado = await context.ValidarPedidoConInventarioAsync(pedido);
+            var pedidoValidado = await context.ValidarPedidoConInventarioAsync(pedido);
 
-            Assert.Equal(resultado.FechaCreacion, pedido.FechaCreacion);
-            Assert.Equal(resultado.IdCliente, pedido.IdCliente);
-            Assert.True(resultado.productosSolicitados[0].TieneInventario); 
-            Assert.False(resultado.productosSolicitados[1].TieneInventario);
-            Assert.False(resultado.productosSolicitados[2].TieneInventario); 
+            Assert.Equal(pedidoValidado.FechaCreacion, pedido.FechaCreacion);
+            Assert.Equal(pedidoValidado.IdCliente, pedido.IdCliente);
+            Assert.True(pedidoValidado.productosSolicitados[0].TieneInventario); 
+            Assert.False(pedidoValidado.productosSolicitados[1].TieneInventario);
+            Assert.False(pedidoValidado.productosSolicitados[2].TieneInventario); 
+            
+            
+            var inventarioActualizado = await context.Inventarios.ToListAsync();
+            
+            Assert.Equal(5, inventarioActualizado.First(i => i.IdProducto == 1).Cantidad); 
+            Assert.Equal(5, inventarioActualizado.First(i => i.IdProducto == 2).Cantidad); 
+            Assert.DoesNotContain(inventarioActualizado, i => i.IdProducto == 3); 
+        }
+    }
+    
+    [Theory]
+    [InlineData(1, 10, 5, true)] 
+    [InlineData(2, 5, 10, false)]
+    [InlineData(3, 0, 1, false)] 
+    public async Task ExisteInventariosuficiente_DeberiaRetornarEstadoCorrecto(
+        int idProducto, int cantidadInicial, int cantidadSolicitada, bool tieneInventarioEsperado)
+    {
+        var options = new DbContextOptionsBuilder<InventariosDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+    
+        await using (var context = new InventariosDbContext(options))
+        {
+            context.Inventarios.Add(new Inventario(idProducto, cantidadInicial));
+            await context.SaveChangesAsync();
+        }
+    
+        await using (var context = new InventariosDbContext(options))
+        {
+            var resultado = await context.ExisteInventarioSuficienteAsync(idProducto, cantidadSolicitada);
+    
+            Assert.Equal(tieneInventarioEsperado, resultado);
         }
     }
 }
