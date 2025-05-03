@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "email": "usuarioccp@correo.com",
+    "password": "123456"
+  },
+  "vendedor": {
+    "email": "vendedor@correo.com",
+    "password": "456789"
+  },
+    "cliente": {
+        "email": "cliente@correo.com",
+        "password": "789123"
+    }
+}

@@ -44,7 +44,38 @@ public static class ComprasEndpoints
 
             return Results.Created($"/productos/{resultado.Valor!.Id}", resultado.Valor);
         }).RequireAuthorization("SoloUsuariosCcp");
-        
+
+        app.MapPost("/productos/masivo", async (
+            HttpRequest request,
+            IProductosService productosService) =>
+        {
+            if (!request.HasFormContentType)
+                return Results.BadRequest("Debe enviar el archivo como multipart/form-data.");
+
+            var form = await request.ReadFormAsync();
+            var archivoCsv = form.Files.FirstOrDefault();
+
+            if (archivoCsv is null || archivoCsv.Length == 0)
+                return Results.BadRequest("El archivo CSV es obligatorio.");
+
+            var resultado = await productosService.ValidarProductosMasivoAsync(archivoCsv);
+
+            return Results.Ok(resultado);
+        }).RequireAuthorization("SoloUsuariosCcp");
+
+
+        app.MapPost("/productos/guardar-masivo", async (
+            List<RegistrarProducto> productos,
+            IProductosService service) =>
+        {
+            if (productos == null || productos.Count == 0)
+                return Results.BadRequest("Debe enviar al menos un producto.");
+
+            await service.GuardarProductosMasivosAsync(productos);
+            return Results.NoContent();
+        }).RequireAuthorization("SoloUsuariosCcp");
+
+
         app.MapGet("/productos", async (IProductosService productosService) =>
         {
             var resultado = await productosService.ObtenerProductosAsync();
