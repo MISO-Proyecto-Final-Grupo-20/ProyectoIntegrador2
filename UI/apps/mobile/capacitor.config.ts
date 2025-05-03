@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'StoreFlow',
   webDir: '../../dist/apps/mobile/browser',
   plugins: {
-    'CapacitorHttp': {
-      'enabled': true
-    }
-  }
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;

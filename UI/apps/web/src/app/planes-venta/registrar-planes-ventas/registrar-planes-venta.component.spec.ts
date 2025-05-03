@@ -8,6 +8,8 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AlertaService, OpcionesLista } from '@storeflow/design-system';
 import { Vendedor } from '../../app-model';
+import { AppService } from '../../app.service';
+import { AppsUrls } from '../../app.urls';
 import { RegistroPlanVenta } from '../planes-venta.model';
 import { PlanesVentaService } from '../planes-venta.service';
 import { PlanesVentaUrls } from '../planes-venta.urls';
@@ -50,6 +52,7 @@ describe('RegistrarPlanesVentaComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RegistrarPlanesVentaComponent, BrowserAnimationsModule],
       providers: [
+        AppService,
         PlanesVentaService,
         HttpTestingController,
         provideHttpClient(),
@@ -75,7 +78,7 @@ describe('RegistrarPlanesVentaComponent', () => {
   });
 
   it('debe obtener el listado de vendedores al inicializar el componente', () => {
-    const peticion = httpMock.expectOne(PlanesVentaUrls.obtenerVendedores);
+    const peticion = httpMock.expectOne(AppsUrls.vendedores);
     expect(peticion.request.method).toEqual('GET');
     peticion.flush(vendedores);
     expect(component.vendedores()).toEqual(vendedores);
@@ -87,7 +90,7 @@ describe('RegistrarPlanesVentaComponent', () => {
       2: false,
       3: false,
     };
-    const peticion = httpMock.expectOne(PlanesVentaUrls.obtenerVendedores);
+    const peticion = httpMock.expectOne(AppsUrls.vendedores);
     peticion.flush(vendedores);
     const actual = component.controlesVendedores.value;
     expect(actual).toEqual(esperado);
@@ -101,7 +104,7 @@ describe('RegistrarPlanesVentaComponent', () => {
   });
 
   it('debe habilitarse el "boton-registrar-planes-ventas", cuando el formulario sea valido y tenga un vendedor seleccionado', () => {
-    const peticion = httpMock.expectOne(PlanesVentaUrls.obtenerVendedores);
+    const peticion = httpMock.expectOne(AppsUrls.vendedores);
     peticion.flush(vendedores);
     llenarFormulario();
 
@@ -118,9 +121,7 @@ describe('RegistrarPlanesVentaComponent', () => {
       ...formulario,
       vendedores: [1],
     };
-    const peticionVendedores = httpMock.expectOne(
-      PlanesVentaUrls.obtenerVendedores
-    );
+    const peticionVendedores = httpMock.expectOne(AppsUrls.vendedores);
     peticionVendedores.flush(vendedores);
     llenarFormulario();
     fixture.detectChanges();

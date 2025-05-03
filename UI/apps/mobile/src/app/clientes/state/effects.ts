@@ -88,11 +88,24 @@ export const effectsStore = withMethods(
       )
     );
 
+    const obtenerPedidos = rxMethod<void>(
+      pipe(
+        switchMap(() =>
+          service
+            .obtenerPedidos()
+            .pipe(
+              tap((pedidos) => patchState(store, { pedidos: [...pedidos] }))
+            )
+        )
+      )
+    );
+
     const effects = {
       obtenerProductos,
       validarInventarioProducto,
       seleccionarProducto,
       crearPedido,
+      obtenerPedidos,
     };
 
     return effects;

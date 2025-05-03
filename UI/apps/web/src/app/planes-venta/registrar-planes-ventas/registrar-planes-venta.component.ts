@@ -13,6 +13,7 @@ import {
   TipoAlerta,
 } from '@storeflow/design-system';
 import { Vendedor } from '../../app-model';
+import { AppService } from '../../app.service';
 import { MensajesPlanesVenta } from '../planes-venta.constantes';
 import {
   FormularioPlanesVenta,
@@ -24,12 +25,13 @@ import { PlanesVentaService } from '../planes-venta.service';
   selector: 'app-registrar-planes-venta',
   standalone: true,
   imports: [SharedModule, ReactiveFormsModule],
-  providers: [PlanesVentaService],
+  providers: [PlanesVentaService, AppService],
   templateUrl: './registrar-planes-venta.component.html',
   styleUrl: './registrar-planes-venta.component.scss',
 })
 export class RegistrarPlanesVentaComponent {
-  service = inject(PlanesVentaService);
+  private service = inject(PlanesVentaService);
+  private appService = inject(AppService);
   alertaService = inject(AlertaService);
   periodosTiempo = signal<OpcionesLista>([]);
   vendedores = signal<Vendedor[]>([]);
@@ -77,7 +79,7 @@ export class RegistrarPlanesVentaComponent {
   }
 
   obtenerVendedores() {
-    this.service.obtenerVendedores().subscribe({
+    this.appService.obtenerVendedores().subscribe({
       next: (vendedores) => {
         this.vendedores.set(vendedores);
         this.asignarControlesVendedores(vendedores);

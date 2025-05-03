@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { PanelPedidosComponent } from '../../shared/panel-pedidos/panel-pedidos.component';
+import { ClientesStore } from '../state';
 
 @Component({
   selector: 'app-pedidos-pendientes',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './pedidos-pendientes.component.html',
-  styleUrl: './pedidos-pendientes.component.scss',
+  imports: [PanelPedidosComponent],
+  template: `<app-panel-pedidos
+    [pedidos]="store.pedidosPendientes()"
+  ></app-panel-pedidos> `,
 })
-export class PedidosPendientesComponent {}
+export class PedidosPendientesComponent {
+  store = inject(ClientesStore);
+  constructor() {
+    this.store.obtenerPedidos();
+  }
+}

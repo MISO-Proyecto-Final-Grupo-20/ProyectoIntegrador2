@@ -1,5 +1,6 @@
 import { TipoCategoria } from '@storeflow/design-system';
-import { ConfiguracionMenu } from './app.model';
+import { ConfiguracionEstadoPedido, ConfiguracionMenu } from './app.model';
+import { EstadoPedido } from './app.enum';
 
 export const DescripcionesCategoria: Record<TipoCategoria, string> = {
   [TipoCategoria.Cliente]: 'Cliente',
@@ -55,4 +56,22 @@ export const MensajesAlertas = {
   clienteRegistradoExitoso: $localize`:@@mensajeClienteRegistrado:Cliente registrado`,
   noHaySuficienteInventario: $localize`:@@mensajeNoHaySuficienteInventario:No hay sufiente inventario`,
   pedidoCreado: $localize`:@@mensajePedidoCreado:Pedido creado`,
+};
+
+export const ConfiguracionEstadosPedidos: Record<
+  EstadoPedido,
+  ConfiguracionEstadoPedido
+> = {
+  [EstadoPedido.pendiente]: {
+    descripcion: $localize`:@@pendiente:Pendiente`,
+    color: 'bg-warning-600',
+  },
+  [EstadoPedido.enCamino]: {
+    descripcion: $localize`:@@enCamino:En camino`,
+    color: 'bg-primary-700',
+  },
+  [EstadoPedido.entregado]: {
+    descripcion: $localize`:@@entregado:Entregado`,
+    color: 'bg-success-600',
+  },
 };

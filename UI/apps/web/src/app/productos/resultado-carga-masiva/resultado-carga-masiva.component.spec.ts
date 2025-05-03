@@ -12,6 +12,7 @@ describe('ResultadoCargaMasivaComponent', () => {
     errores: ['Alimentos SAS S.A.S.'],
     productos: [
       {
+        id: 1,
         nombre: 'Paca de leche x12 unidades',
         fabricanteAsociado: { id: 2, nombre: 'Alquería S.A.' },
         codigo: 'A7X9B3Q5LZ82MND4VYKCJ6T1W0GFRP',

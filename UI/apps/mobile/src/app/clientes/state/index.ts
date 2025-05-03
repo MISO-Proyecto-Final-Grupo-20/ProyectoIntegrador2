@@ -8,6 +8,8 @@ const initialState: ClientesState = {
   productos: [],
   filtroProducto: '',
   productosSeleccionados: [],
+  pedidos: [],
+  filtroPedido: '',
 };
 
 export const ClientesStore = signalStore(

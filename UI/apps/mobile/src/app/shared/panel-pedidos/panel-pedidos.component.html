@@ -1,0 +1,94 @@
+<mat-accordion multi>
+  @for (pedido of pedidos(); track $index) {
+    <mat-expansion-panel
+      class="mat-elevation-z0"
+      hideToggle
+      (opened)="abrirPanel($index)"
+      (closed)="cerrarPanel($index)"
+    >
+      <mat-expansion-panel-header class="p-16">
+        <div class="row justify-content-between gap-8 flex-1 nowrap">
+          <div>
+            <div class="column gap-4">
+              <div class="row align-items-center gap-10">
+                <p class="mat-body-1 color-on-surface">
+                  Pedido #{{ pedido.numero }}
+                </p>
+                <div
+                  class="chip-small"
+                  [ngClass]="configuracionEstadosPedidos[pedido.estado].color"
+                >
+                  <p>
+                    {{ configuracionEstadosPedidos[pedido.estado].descripcion }}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <div
+                  class="row gap-4 align-items-center mat-body-2 color-on-surface"
+                >
+                  <p i18n="fechaEntrega">Fecha de entrega:</p>
+                  <p>{{ pedido.fechaEntrega | date }}</p>
+                </div>
+                <div
+                  class="row gap-4 align-items-center mat-body-2 color-on-surface"
+                >
+                  <p class="mat-body-2 color-on-surface" i18n="lugarEntrega">
+                    Lugar de entrega:
+                  </p>
+                  <p class="mat-body-2 color-on-surface">
+                    {{ pedido.lugarEntrega }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="mat-body-1 color-accent">
+              {{ pedido.total | number }} COP
+            </p>
+          </div>
+          <div class="column justify-content-between align-items-end">
+            <p class="mat-body-2 color-on-surface">
+              {{ pedido.fechaRegistro | date }}
+            </p>
+            <mat-icon class="color-grey-600">{{
+              obtenerIconoPanel($index)
+            }}</mat-icon>
+          </div>
+        </div>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div>
+        @for (producto of pedido.productos; track $index) {
+          <mat-list class="bg-white overflow">
+            <mat-list-item>
+              <div class="row justify-content-between">
+                <div class="row gap-8 align-items-center">
+                  <div
+                    class="tamanio-30 column align-items-center justify-content-center"
+                  >
+                    <img
+                      class="max-tamanio-30"
+                      [src]="producto.imagen"
+                      alt="imagen producto"
+                    />
+                  </div>
+                  <div class="gap-2">
+                    <p class="mat-body-1 color-grey-800">
+                      {{ producto.nombre }}
+                    </p>
+                    <p class="color-accent">
+                      {{ producto.precio | number }} COP
+                    </p>
+                  </div>
+                </div>
+                <h3 class="color-grey-800 min-width-27">
+                  {{ producto.cantidad }}
+                </h3>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        }
+      </div>
+    </mat-expansion-panel>
+  }
+</mat-accordion>

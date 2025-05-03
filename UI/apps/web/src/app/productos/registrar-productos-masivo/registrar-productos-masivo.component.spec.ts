@@ -7,12 +7,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { AlertaService } from '@storeflow/design-system';
+import { Producto } from '../../app-model';
 import { EstadoCarga } from '../productos.enum';
-import {
-  Producto,
-  RegistrarProducto,
-  ResultadoCargaMasiva,
-} from '../productos.model';
+import { RegistrarProducto, ResultadoCargaMasiva } from '../productos.model';
 import { ProductosService } from '../productos.service';
 import { ProductosUrls } from '../productos.urls';
 import { RegistrarProductosMasivoComponent } from './registrar-productos-masivo.component';
@@ -25,6 +22,7 @@ describe('RegistrarProductosMasivoComponent', () => {
 
   const productos: Producto[] = [
     {
+      id: 1,
       nombre: 'Paca de leche x12 unidades',
       fabricanteAsociado: { id: 2, nombre: 'Alquería S.A.' },
       codigo: 'A7X9B3Q5LZ82MND4VYKCJ6T1W0GFRP',

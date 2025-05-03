@@ -1,12 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
+import { ListadoFabricantes } from '../app-model';
 import { productosSimulados } from './productos.mock';
-import {
-  ListadoFabricantes,
-  RegistrarProducto,
-  ResultadoCargaMasiva,
-} from './productos.model';
+import { RegistrarProducto, ResultadoCargaMasiva } from './productos.model';
 import { ProductosUrls } from './productos.urls';
 
 @Injectable()

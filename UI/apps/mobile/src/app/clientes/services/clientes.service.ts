@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { Producto, RegistroPedido } from '../clientes.model';
 import { ClientesUrls } from '../clientes.urls';
 import { mockProductos } from '../mocks-clientes';
+import { mocksPedidos } from '../../app.mocks';
+import { Pedido } from '../../app.model';
 
 @Injectable()
 export class ClientesService {
@@ -25,5 +27,10 @@ export class ClientesService {
   crearPedido(productos: RegistroPedido[]): Observable<void> {
     return this.http.post<void>(ClientesUrls.crearPedido, productos);
     // return of(void 0);
+  }
+
+  obtenerPedidos(): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(ClientesUrls.obtenerPedidosPendientes);
+    // return of(mocksPedidos);
   }
 }

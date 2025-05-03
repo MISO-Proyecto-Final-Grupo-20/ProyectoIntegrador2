@@ -10,11 +10,15 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { TipoAlerta } from '../components/alerta/alerta.model';
 import { AlertaService } from '../components/alerta/alerta.service';
 
+const UrlsSinIntercepcion = ['login'];
+
 export const StoreFlowInterceptor = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
   const alertaService = inject(AlertaService);
+  if (UrlsSinIntercepcion.some((url) => req.url.includes(url)))
+    return next(req);
 
   return next(req).pipe(
     catchError((httpError: HttpErrorResponse) => {

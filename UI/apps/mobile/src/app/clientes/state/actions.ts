@@ -6,5 +6,7 @@ export const actionsStore = withMethods(
   (state: SignalsOf<Partial<ClientesState>>) => ({
     asignarFiltroProductos: (filtroProducto: string | null) =>
       patchState(state, { filtroProducto }),
+    asignarFiltroPedidos: (filtroPedido: string | null) =>
+      patchState(state, { filtroPedido }),
   })
 );

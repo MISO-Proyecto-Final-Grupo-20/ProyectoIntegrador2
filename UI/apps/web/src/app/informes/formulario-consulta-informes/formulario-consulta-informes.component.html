@@ -1,0 +1,76 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/notas.svg" width="34" height="31" />
+    <h3 i18n="informes.titulo">Informes</h3>
+  </div>
+  <div class="p-12 row gap-8 align-items-center" [formGroup]="formulario">
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label i18n="vendedor">Vendedor</mat-label>
+      <mat-select
+        data-testid="select-informes-vendedor"
+        formControlName="vendedor"
+      >
+        @for (vendedor of vendedores(); track vendedor.id) {
+          <mat-option [value]="vendedor.id">
+            {{ vendedor.nombre }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="row width-38 gap-36 px-7 justify-content-between">
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="fechaInicial">Fecha inicial</mat-label>
+        <input
+          formControlName="fechaInicial"
+          data-testid="calendar-informes-fecha-inicial"
+          matInput
+          [matDatepicker]="fechaInicial"
+        />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="fechaInicial"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaInicial></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="fechaFinal">Fecha final</mat-label>
+        <input
+          data-testid="calendar-informes-fecha-final"
+          matInput
+          formControlName="fechaFinal"
+          [matDatepicker]="fechaFinal"
+        />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="fechaFinal"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #fechaFinal></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label i18n="producto">Producto</mat-label>
+      <mat-select
+        data-testid="select-informes-producto"
+        formControlName="producto"
+      >
+        @for (producto of productos(); track producto.id) {
+          <mat-option [value]="producto.id">
+            {{ producto.nombre }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      data-testid="boton-consultar-informes"
+      i18n="consultar"
+      [disabled]="formulario.invalid"
+      (click)="emitirConsulta()"
+    >
+      Consultar
+    </button>
+  </div>
+</mat-card>

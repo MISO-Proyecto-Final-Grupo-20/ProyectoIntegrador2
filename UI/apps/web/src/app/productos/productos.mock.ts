@@ -13,6 +13,7 @@ export const productosSimulados: ResultadoCargaMasiva = {
   ],
   productos: [
     {
+      id: 1,
       nombre: 'Paca de leche x12 unidades',
       fabricanteAsociado: { id: 2, nombre: 'Alquería S.A.' },
       codigo: 'A7X9B3Q5LZ82MND4VYKCJ6T1W0GFRP',
@@ -21,6 +22,7 @@ export const productosSimulados: ResultadoCargaMasiva = {
       precio: 1000,
     },
     {
+      id: 2,
       nombre: 'Chocolatinas JET x40 unidades',
       fabricanteAsociado: { id: 1, nombre: 'Grupo Nutresa S.A.' },
       codigo: 'MND4VYKCJ6T1W0GFRP',
@@ -29,6 +31,7 @@ export const productosSimulados: ResultadoCargaMasiva = {
       precio: 1000,
     },
     {
+      id: 3,
       nombre: 'Galletas Festival x 10 unidades',
       fabricanteAsociado: { id: 1, nombre: 'Grupo Nutresa S.A.' },
       codigo: 'A7X9B3Q5LZ82MND4VY',

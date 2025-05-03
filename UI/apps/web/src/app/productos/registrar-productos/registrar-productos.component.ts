@@ -10,8 +10,9 @@ import {
   SharedModule,
   TipoAlerta,
 } from '@storeflow/design-system';
+import { ListadoFabricantes } from '../../app-model';
 import { MensajesProductos } from '../productos.contantes';
-import { ListadoFabricantes, RegistrarProducto } from '../productos.model';
+import { RegistrarProducto } from '../productos.model';
 import { ProductosService } from '../productos.service';
 import { RegistrarProductosMasivoService } from '../registrar-productos-masivo/registrar-productos-masivo.service';
 

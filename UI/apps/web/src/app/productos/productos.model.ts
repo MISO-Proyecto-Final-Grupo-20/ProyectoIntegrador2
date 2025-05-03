@@ -1,15 +1,4 @@
-export interface ListadoFabricantes {
-  id: number;
-  nombre: string;
-}
-
-export interface Producto {
-  nombre: string;
-  fabricanteAsociado: ListadoFabricantes;
-  codigo: string;
-  precio: number;
-  imagen: string;
-}
+import { Producto } from '../app-model';
 
 export interface RegistrarProducto {
   nombre: string;
