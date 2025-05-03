@@ -130,10 +130,11 @@ public class ProductosEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
-
+    
     [Fact]
     public async Task DebeRetornarOk_CuandoSeObtienenProductos()
     {
+    
         using var scope = _app.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ComprasDbContext>();
         db.Productos.Add(new Producto
@@ -145,7 +146,7 @@ public class ProductosEndpointTests : IAsyncLifetime
             ImagenUrl = "https://imagen.com/a.jpg",
             FabricanteId = 1
         });
-
+        
         db.Productos.Add(new Producto
         {
             Id = 2,
@@ -156,9 +157,9 @@ public class ProductosEndpointTests : IAsyncLifetime
             FabricanteId = 1
         });
         await db.SaveChangesAsync();
-
+    
         var response = await _client.GetAsync("/productos");
-
+    
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var productos = await response.Content.ReadFromJsonAsync<ProductoResponse[]>();
         Assert.NotNull(productos);
@@ -168,6 +169,7 @@ public class ProductosEndpointTests : IAsyncLifetime
         Assert.Equal("Producto 2", productos[1].Nombre);
         Assert.Equal(10000, productos[0].Precio);
         Assert.Equal("https://imagen.com/a.jpg", productos[0].Imagen);
+        
     }
 
     [Fact]
