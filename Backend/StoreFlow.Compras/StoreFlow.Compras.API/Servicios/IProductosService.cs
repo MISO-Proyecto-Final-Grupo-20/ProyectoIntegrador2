@@ -7,4 +7,6 @@ public interface IProductosService
 {
     Task<Resultado<CrearProductoResponse>> CrearProductoAsync(CrearProductoRequest request);
     Task<ProductoResponse[]> ObtenerProductosAsync();
+    Task<ResultadoCargaMasivaResponse> ValidarProductosMasivoAsync(IFormFile archivoCsv);
+    Task GuardarProductosMasivosAsync(List<RegistrarProducto> productos);
 }
