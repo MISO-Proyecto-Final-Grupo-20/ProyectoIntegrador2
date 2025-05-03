@@ -12,6 +12,8 @@
 
 :root {
   --mdc-list-list-item-one-line-container-height: 65px;
+  --mat-expansion-header-collapsed-state-height: auto;
+  --mat-expansion-header-expanded-state-height: auto;
 }
 
 .tab-100 {
@@ -21,4 +23,12 @@
   .mat-mdc-tab-link {
     flex: 1;
   }
+}
+
+.mat-expansion-panel-header {
+  padding: 16px !important;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 !important;
 }

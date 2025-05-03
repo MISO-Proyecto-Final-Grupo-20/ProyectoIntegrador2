@@ -1,7 +1,8 @@
 import { Component, inject, input } from '@angular/core';
 import { SharedModule } from '@storeflow/design-system';
+import { Producto } from '../../app-model';
 import { ModalMostrarErroresService } from '../modal-mostrar-errores/modal-mostrar-errores.service';
-import { Producto, ResultadoCargaMasiva } from '../productos.model';
+import { ResultadoCargaMasiva } from '../productos.model';
 
 @Component({
   selector: 'app-resultado-carga-masiva',

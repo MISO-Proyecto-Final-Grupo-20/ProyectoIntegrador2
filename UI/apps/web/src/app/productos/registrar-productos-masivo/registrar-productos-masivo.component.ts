@@ -8,13 +8,10 @@ import {
   TipoAlerta,
   Utilidades,
 } from '@storeflow/design-system';
+import { Producto } from '../../app-model';
 import { MensajesProductos } from '../productos.contantes';
 import { EstadoCarga } from '../productos.enum';
-import {
-  Producto,
-  RegistrarProducto,
-  ResultadoCargaMasiva,
-} from '../productos.model';
+import { RegistrarProducto, ResultadoCargaMasiva } from '../productos.model';
 import { ProductosService } from '../productos.service';
 import { ResultadoCargaMasivaComponent } from '../resultado-carga-masiva/resultado-carga-masiva.component';
 

@@ -1,3 +1,5 @@
+import { Pedido } from '../app.model';
+
 export interface Producto {
   imagen: string;
   nombre: string;
@@ -14,6 +16,8 @@ export interface ClientesState {
   productos: Producto[];
   filtroProducto: string | null;
   productosSeleccionados: ProductoSeleccionado[];
+  pedidos: Pedido[];
+  filtroPedido: string | null;
 }
 
 export interface RegistroPedido {

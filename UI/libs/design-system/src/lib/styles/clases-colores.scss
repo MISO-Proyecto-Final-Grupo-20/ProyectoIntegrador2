@@ -53,3 +53,15 @@
 .bg-warn-50 {
   background-color: map-get($warn, 50);
 }
+
+.bg-warning-600 {
+  background-color: map-get($warning, 600);
+}
+
+.bg-primary-700 {
+  background-color: map-get($primary, 700);
+}
+
+.bg-success-600 {
+  background-color: map-get($success, 600);
+}

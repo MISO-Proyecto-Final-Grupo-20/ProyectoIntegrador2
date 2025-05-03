@@ -1,0 +1,42 @@
+@if (tieneInformes) {
+  <div class="column gap-4" data-testid="listado-informes">
+    <div class="row gap-4 px-16">
+      <p class="mat-body-1 color-grey-600 flex-1" i18n="vendedor">Vendedor</p>
+      <p class="mat-body-1 color-grey-600 flex-1" i18n="fechaVenta">
+        Fecha de venta
+      </p>
+      <p class="mat-body-1 color-grey-600 flex-1" i18n="producto">Producto</p>
+      <p class="mat-body-1 color-grey-600 width-18" i18n="vendedor">Cantidad</p>
+    </div>
+    <mat-list class="bg-white">
+      @for (informe of informes(); track $index) {
+        <mat-list-item>
+          <div class="row">
+            <p class="mat-body-1 color-grey-700 flex-1">
+              {{ informe.vendedor }}
+            </p>
+            <p class="mat-body-1 color-grey-700 flex-1">
+              {{ informe.fechaVenta | date }}
+            </p>
+            <p class="mat-body-1 color-grey-700 flex-1">
+              {{ informe.producto }}
+            </p>
+            <p class="mat-body-1 color-grey-700 width-18">
+              {{ informe.cantidad }}
+            </p>
+          </div>
+        </mat-list-item>
+      }
+    </mat-list>
+  </div>
+} @else {
+  <div
+    data-testid="informes-empty"
+    class="heigth-100 column gap-10 align-items-center justify-content-center"
+  >
+    <img src="/assets/images/empty-informes.svg" width="131" height="105" />
+    <p class="mat-body-2 color-on-surface text-center" i18n="informes.empty">
+      Empieza realizando una consulta para mostrar más detalles.
+    </p>
+  </div>
+}

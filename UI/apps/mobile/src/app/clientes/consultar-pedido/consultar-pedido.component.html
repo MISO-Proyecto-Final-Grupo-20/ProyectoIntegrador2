@@ -1,1 +1,20 @@
-<p>consultar-pedido works!</p>
+<div class="p-16 column gap-8">
+  <app-card-informacion
+    [titulo]="titulo"
+    [descripcion]="descripcion"
+  ></app-card-informacion>
+  <div class="row justify-content-end">
+    <mat-form-field class="width-240" appearance="outline" class="bg-white">
+      <input
+        i18n-placeholder="pedido.buscarPedido"
+        placeholder="Buscar pedido "
+        [formControl]="controlBuscar"
+        type="text"
+        matInput
+        data-testid="input-buscar-pedido"
+      />
+      <mat-icon matSuffix class="color-grey-500">search</mat-icon>
+    </mat-form-field>
+  </div>
+  <app-panel-pedidos [pedidos]="store.pedidosFiltrados()"></app-panel-pedidos>
+</div>

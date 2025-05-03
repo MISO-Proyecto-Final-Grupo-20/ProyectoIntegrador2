@@ -34,3 +34,20 @@ input::-webkit-inner-spin-button {
 .mat-mdc-tab-links {
   border-bottom: 2px solid map-get($grey, 300);
 }
+
+.chip-small {
+  padding-inline: 12px;
+  height: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.mat-expansion-panel {
+  margin: 0 !important;
+  margin-bottom: 8px !important ;
+}
