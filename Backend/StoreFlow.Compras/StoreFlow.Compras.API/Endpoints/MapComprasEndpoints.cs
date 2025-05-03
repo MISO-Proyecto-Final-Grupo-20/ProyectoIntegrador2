@@ -53,7 +53,7 @@ public static class ComprasEndpoints
                 return Results.BadRequest("Debe enviar el archivo como multipart/form-data.");
 
             var form = await request.ReadFormAsync();
-            var archivoCsv = form.Files.GetFile("archivo");
+            var archivoCsv = form.Files.FirstOrDefault();
 
             if (archivoCsv is null || archivoCsv.Length == 0)
                 return Results.BadRequest("El archivo CSV es obligatorio.");
