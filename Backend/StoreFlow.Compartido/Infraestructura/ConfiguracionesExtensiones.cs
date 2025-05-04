@@ -1,4 +1,5 @@
-﻿using AspNetCore.SignalR.OpenTelemetry;
+﻿using System.Diagnostics.CodeAnalysis;
+using AspNetCore.SignalR.OpenTelemetry;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using System.Text;
 
 namespace StoreFlow.Compartidos.Core.Infraestructura;
 
+[ExcludeFromCodeCoverage]
 public static class ConfiguracionesExtensiones
 {
     public static void ConfigurarAutenticacion(this IServiceCollection services)

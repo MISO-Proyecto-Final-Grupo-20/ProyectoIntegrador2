@@ -43,21 +43,7 @@ public class UsuariosDbContext(DbContextOptions<UsuariosDbContext> options) : Db
         SaveChanges();
     }
 
-    public (InformacionCliente informacionCliente, InformacionVendedor? informacionVendedor)
-        ObtenerInformacionClienteYVendedor(int idCliente, int? idVendedor)
-    {
-        var informacionCliente = Usuarios
-            .Where(u => u.Id == idCliente)
-            .Select(u => new InformacionCliente(u.Id, u.Direccion ?? "Sin Dirección registrada.", u.NombreCompleto))
-            .AsEnumerable()
-            .FirstOrDefault(new InformacionCliente(idCliente, "Sin Dirección registrada.", "Sin Nombre registrado."));
-
-        var informacionVendedor = Usuarios.Where(u => u.Id == idVendedor)
-            .Select(u => new InformacionVendedor(u.Id, u.NombreCompleto))
-            .FirstOrDefault();
-        
-        return (informacionCliente, informacionVendedor);
-    }
+   
 
     public async Task<ClienteResponse[]> ObtenerClientesAsync()
     {
