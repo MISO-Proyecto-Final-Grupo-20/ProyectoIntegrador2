@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
-using StoreFlow.Ventas.API.EndPoints;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using MassTransit;
 using NSubstitute;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
@@ -169,8 +167,36 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
         Assert.Equal("Semestral", periodos[2].Descripcion);
         Assert.Equal((int)Periodicidad.Anual, periodos[3].Id);
         Assert.Equal("Anual", periodos[3].Descripcion);
+    }
+
+    [Fact]
+    public async Task ObtenerReporteVentas_RetornaOk()
+    {
+        await _dbContext.GuardarPedidoAsync(
+            new Pedido(3,
+                new DateTime(2025, 4, 27),
+                [
+                    new ProductoPedido(1, 2, 10_000, false, null, null, null),
+                    new ProductoPedido(2, 3, 20_000, true, null, null, null)
+                ], "nombre cliente 3", "direccion cliente 3", null, null));
         
+        await _dbContext.GuardarPedidoAsync(
+            new Pedido(2,
+                new DateTime(2025, 5, 3),
+                [
+                    new ProductoPedido(1, 5, 10_000, true,"codigo 1", "producto 1", "imagen 1"),
+                    new ProductoPedido(2, 20, 20_000, true, "codigo 2", "producto 2", "imangen 2")
+                ],"nombreCliente 2", "direccion cliente 2", 1, "Vendedor 1"));
         
+        var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        var response = await _client.PostAsJsonAsync("/consultaInformes", new ReporteVentasRequest(1, new DateTime(2025, 5, 3), new DateTime(2025, 5, 3), 1));
+        var reporte = await response.Content.ReadFromJsonAsync<ReporteVentasResponse[]>();
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(reporte);
+        Assert.Single(reporte);
+        Assert.Equivalent(new ReporteVentasResponse("Vendedor 1", new DateTime(2025, 5, 3), "producto 1", 5), reporte.First());
         
     }
 
