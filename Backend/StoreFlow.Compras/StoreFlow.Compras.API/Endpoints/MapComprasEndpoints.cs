@@ -81,5 +81,7 @@ public static class ComprasEndpoints
             var resultado = await productosService.ObtenerProductosAsync();
             return Results.Ok(resultado);
         });
+        
+
     }
 }
