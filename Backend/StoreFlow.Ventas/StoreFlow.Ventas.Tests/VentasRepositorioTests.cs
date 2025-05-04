@@ -3,6 +3,7 @@ using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 using StoreFlow.Ventas.API.Datos;
+using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
 
 namespace StoreFlow.Ventas.Tests;
@@ -126,8 +127,203 @@ public class VentasRepositorioTests
             Assert.Equal("codigo 101", pedidosObtenidos[0].Productos[0].Codigo);
             Assert.Equal("nombre 101", pedidosObtenidos[0].Productos[0].Nombre);
             Assert.Equal("imagen 101", pedidosObtenidos[0].Productos[0].Imagen);
+        }
+        
+        
+        
+    }
+
+    [Fact]
+    public async Task ObtenerReporteVentas_ConTodosLosParametrosNull_RetornaTodo()
+    {
+        var options = new DbContextOptionsBuilder<VentasDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        await using (var context = new VentasDbContext(options))
+        {
+            var pedido1 = new Pedido(1, new DateTime(2025, 4, 27),
+            [
+                new ProductoPedido(101, 2, 50, true, "codigo 101", "nombre 101", "imagen 101"),
+                new ProductoPedido(102, 1, 100, true, null, null, null)
+            ], "cliente 1", "direccion cliente 1", 1, "Vendedor 1");
+
+            var pedido2 = new Pedido(2, new DateTime(2025, 4, 28),
+            [
+                new ProductoPedido(201, 3, 30, true, null, null, null),
+                new ProductoPedido(202, 4, 40, true, null, null, null)
+            ], "cliente 2", "direccion cliente 2", null, null);
+
+            await context.GuardarPedidoAsync(pedido1);
+            await context.GuardarPedidoAsync(pedido2);
             
+            var reporte = await context.ObtenerReporteVentasAsync(new ReporteVentasRequest(null, null, null, null));
             
+            Assert.NotNull(reporte);
+
+            ReporteVentasResponse[] reporteEsperado =
+            [
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "nombre 101", 2),
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "Producto sin nombre", 1),
+                new ("Venta directa", new DateTime(2025, 4, 28), "Producto sin nombre", 3),
+                new ("Venta directa", new DateTime(2025, 4, 28), "Producto sin nombre", 4),
+            ]; 
+            Assert.Equivalent(reporteEsperado, reporte);
+            
+        }
+    }
+    
+    [Fact]
+    public async Task ObtenerReporteVentas_ConIdVendedor()
+    {
+        var options = new DbContextOptionsBuilder<VentasDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        await using (var context = new VentasDbContext(options))
+        {
+            var pedido1 = new Pedido(1, new DateTime(2025, 4, 27),
+            [
+                new ProductoPedido(101, 2, 50, true, "codigo 101", "nombre 101", "imagen 101"),
+                new ProductoPedido(102, 1, 100, true, null, null, null)
+            ], "cliente 1", "direccion cliente 1", 1, "Vendedor 1");
+
+            var pedido2 = new Pedido(2, new DateTime(2025, 4, 28),
+            [
+                new ProductoPedido(201, 3, 30, true, null, null, null),
+                new ProductoPedido(202, 4, 40, true, null, null, null)
+            ], "cliente 2", "direccion cliente 2", null, null);
+
+            await context.GuardarPedidoAsync(pedido1);
+            await context.GuardarPedidoAsync(pedido2);
+            
+            var reporte = await context.ObtenerReporteVentasAsync(new ReporteVentasRequest(1, null, null, null));
+            
+            Assert.NotNull(reporte);
+
+            ReporteVentasResponse[] reporteEsperado =
+            [
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "nombre 101", 2),
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "Producto sin nombre", 1),
+            ]; 
+            Assert.Equal(2, reporte.Length);
+            Assert.Equivalent(reporteEsperado, reporte);
+            
+        }
+    }
+    
+    [Fact]
+    public async Task ObtenerReporteVentas_ConFechaIncial()
+    {
+        var options = new DbContextOptionsBuilder<VentasDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        await using (var context = new VentasDbContext(options))
+        {
+            var pedido1 = new Pedido(1, new DateTime(2025, 4, 27),
+            [
+                new ProductoPedido(101, 2, 50, true, "codigo 101", "nombre 101", "imagen 101"),
+                new ProductoPedido(102, 1, 100, true, null, null, null)
+            ], "cliente 1", "direccion cliente 1", 1, "Vendedor 1");
+
+            var pedido2 = new Pedido(2, new DateTime(2025, 4, 28),
+            [
+                new ProductoPedido(201, 3, 30, true, null, null, null),
+                new ProductoPedido(202, 4, 40, true, null, null, null)
+            ], "cliente 2", "direccion cliente 2", null, null);
+
+            await context.GuardarPedidoAsync(pedido1);
+            await context.GuardarPedidoAsync(pedido2);
+            
+            var reporte = await context.ObtenerReporteVentasAsync(new ReporteVentasRequest(null, new DateTime(2025, 4, 28), null, null));
+            
+            Assert.NotNull(reporte);
+
+            ReporteVentasResponse[] reporteEsperado =
+            [
+                new ("Venta directa", new DateTime(2025, 4, 28), "Producto sin nombre", 3),
+                new ("Venta directa", new DateTime(2025, 4, 28), "Producto sin nombre", 4),
+            ]; 
+            Assert.Equal(2, reporte.Length);
+            Assert.Equivalent(reporteEsperado, reporte);
+            
+        }
+    }
+    
+    [Fact]
+    public async Task ObtenerReporteVentas_ConFechaFinal()
+    {
+        var options = new DbContextOptionsBuilder<VentasDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        await using (var context = new VentasDbContext(options))
+        {
+            var pedido1 = new Pedido(1, new DateTime(2025, 4, 27),
+            [
+                new ProductoPedido(101, 2, 50, true, "codigo 101", "nombre 101", "imagen 101"),
+                new ProductoPedido(102, 1, 100, true, null, null, null)
+            ], "cliente 1", "direccion cliente 1", 1, "Vendedor 1");
+
+            var pedido2 = new Pedido(2, new DateTime(2025, 4, 28),
+            [
+                new ProductoPedido(201, 3, 30, true, null, null, null),
+                new ProductoPedido(202, 4, 40, true, null, null, null)
+            ], "cliente 2", "direccion cliente 2", null, null);
+
+            await context.GuardarPedidoAsync(pedido1);
+            await context.GuardarPedidoAsync(pedido2);
+            
+            var reporte = await context.ObtenerReporteVentasAsync(new ReporteVentasRequest(null, null, new DateTime(2025, 4, 27), null));
+            
+            Assert.NotNull(reporte);
+
+            ReporteVentasResponse[] reporteEsperado =
+            [
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "nombre 101", 2),
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "Producto sin nombre", 1),
+            ];
+            Assert.Equal(2, reporte.Length);
+            Assert.Equivalent(reporteEsperado, reporte);
+            
+        }
+    }
+    
+    [Fact]
+    public async Task ObtenerReporteVentas_ConProducto()
+    {
+        var options = new DbContextOptionsBuilder<VentasDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        await using (var context = new VentasDbContext(options))
+        {
+            var pedido1 = new Pedido(1, new DateTime(2025, 4, 27),
+            [
+                new ProductoPedido(101, 2, 50, true, "codigo 101", "nombre 101", "imagen 101"),
+                new ProductoPedido(102, 1, 100, true, null, null, null)
+            ], "cliente 1", "direccion cliente 1", 1, "Vendedor 1");
+
+            var pedido2 = new Pedido(2, new DateTime(2025, 4, 28),
+            [
+                new ProductoPedido(201, 3, 30, true, null, null, null),
+                new ProductoPedido(202, 4, 40, true, null, null, null)
+            ], "cliente 2", "direccion cliente 2", null, null);
+
+            await context.GuardarPedidoAsync(pedido1);
+            await context.GuardarPedidoAsync(pedido2);
+            
+            var reporte = await context.ObtenerReporteVentasAsync(new ReporteVentasRequest(null, null, null, 101));
+            
+            Assert.NotNull(reporte);
+
+            ReporteVentasResponse[] reporteEsperado =
+            [
+                new ("Vendedor 1", new DateTime(2025, 4, 27), "nombre 101", 2),
+            ];
+            Assert.Equal(1, reporte.Length);
+            Assert.Equivalent(reporteEsperado, reporte);
             
         }
     }

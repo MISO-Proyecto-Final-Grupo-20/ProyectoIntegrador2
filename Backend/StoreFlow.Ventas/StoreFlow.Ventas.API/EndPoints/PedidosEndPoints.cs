@@ -38,6 +38,14 @@ public static class PedidosEndPoints
             
             return Results.Ok(pedidos);
         }).RequireAuthorization("Cliente");
+
+        app.MapPost("/", async (ReporteVentasRequest request, VentasDbContext ventasDbContext) =>
+        {
+            ReporteVentasResponse[] report = await ventasDbContext.ObtenerReporteVentasAsync(request);
+            return Results.Ok(report);
+        });
+
+
     }
 
     
