@@ -3,12 +3,14 @@ using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.DTOs;
 using StoreFlow.Usuarios.API.Entidades;
+using StoreFlow.Usuarios.API.Servicios;
 
 namespace StoreFlow.Usuarios.Tests;
 
 public class UsuariosDbContextTests
 {
-    private UsuariosDbContext _contexto;
+    private readonly UsuariosDbContext _contexto;
+    private readonly UsuariosServicios _usuariosServicios;
 
     public UsuariosDbContextTests()
     {
@@ -17,6 +19,7 @@ public class UsuariosDbContextTests
                 .Options;
 
         _contexto = new UsuariosDbContext(opciones);
+        _usuariosServicios = new UsuariosServicios(_contexto);
     }
     [Fact]
     public void Agregar_UsuarioCliente()
@@ -55,7 +58,7 @@ public class UsuariosDbContextTests
         _contexto.CrearUsuarioCliente(new CrearClienteRequest("cliente", "correo@correo.com", "Direccion", "12345678" ));
         _contexto.CrearUsuarioVendedor(new CrearVendedorRequest("vendedor", "vendedor@correo.com", "12345678" ));
 
-        var informacionClienteYVendedor = _contexto.ObtenerInformacionClienteYVendedor(1, null);
+        var informacionClienteYVendedor = _usuariosServicios.ObtenerInformacionClienteYVendedor(1, null);
         Assert.Null(informacionClienteYVendedor.informacionVendedor);
         Assert.Equal(new InformacionCliente(1, "Direccion", "cliente"), informacionClienteYVendedor.informacionCliente);
     }
@@ -66,7 +69,7 @@ public class UsuariosDbContextTests
         _contexto.CrearUsuarioCliente(new CrearClienteRequest("cliente", "correo@correo.com", "Direccion", "12345678"));
         _contexto.CrearUsuarioVendedor(new CrearVendedorRequest("vendedor", "vendedor@correo.com", "12345678"));
 
-        var informacionClienteYVendedor = _contexto.ObtenerInformacionClienteYVendedor(1, 2);
+        var informacionClienteYVendedor = _usuariosServicios.ObtenerInformacionClienteYVendedor(1, 2);
         
         Assert.Equal(new InformacionCliente(1, "Direccion", "cliente"), informacionClienteYVendedor.informacionCliente);
         Assert.Equal(new InformacionVendedor(2, "vendedor"), informacionClienteYVendedor.informacionVendedor);
@@ -77,7 +80,7 @@ public class UsuariosDbContextTests
     {
         _contexto.CrearUsuarioVendedor(new CrearVendedorRequest("vendedor", "vendedor@correo.com", "12345678"));
 
-        var informacionClienteYVendedor = _contexto.ObtenerInformacionClienteYVendedor(4, 1);
+        var informacionClienteYVendedor = _usuariosServicios.ObtenerInformacionClienteYVendedor(4, 1);
         
         Assert.Equal(new InformacionCliente(4, "Sin Dirección registrada.", "Sin Nombre registrado."), informacionClienteYVendedor.informacionCliente);
         Assert.Equal(new InformacionVendedor(1, "vendedor"), informacionClienteYVendedor.informacionVendedor);

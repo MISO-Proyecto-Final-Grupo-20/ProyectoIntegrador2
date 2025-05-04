@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using StoreFlow.Usuarios.API.DTOs;
 
 namespace StoreFlow.Usuarios.API.Entidades;
 
@@ -22,4 +23,10 @@ public class Usuario
     
     [MaxLength(100)]
     public string? Direccion { get; set; } = null!;
+
+    public ClienteResponse ConvertirAClienteResponse()
+    {
+        return new ClienteResponse(Id, NombreCompleto, Direccion ?? "Sin Dirección registrada.");
+    }
+    
 }

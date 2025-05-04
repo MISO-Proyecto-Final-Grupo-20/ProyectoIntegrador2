@@ -5,6 +5,7 @@ using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using StoreFlow.Usuarios.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<IUsuariosServicios, UsuariosServicios>();
 builder.Services.AddSingleton<ProveedorToken>();
 
 var app = builder.Build();

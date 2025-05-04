@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Usuarios.API.Datos;
 using StoreFlow.Usuarios.API.Endpoints;
 using StoreFlow.Usuarios.API.Infraestructura;
+using StoreFlow.Usuarios.API.Servicios;
 using StoreFlow.Usuarios.Tests.Utilidades;
 
 namespace StoreFlow.Usuarios.Tests
@@ -51,6 +52,7 @@ namespace StoreFlow.Usuarios.Tests
 
             Environment.SetEnvironmentVariable("JWT_SECRET", "EstaEsUnaClaveSuperSecretaDe32Caracteres!");
 
+            builder.Services.AddScoped<IUsuariosServicios, UsuariosServicios>();
             builder.Services.AddSingleton<ProveedorToken>();
 
             var app = builder.Build();

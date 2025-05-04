@@ -1,11 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using MassTransit;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.DTOs;
-using StoreFlow.Ventas.API.Entidades;
 using StoreFlow.Ventas.API.Servicios;
 
 namespace StoreFlow.Ventas.API.EndPoints;
