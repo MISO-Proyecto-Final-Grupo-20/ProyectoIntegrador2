@@ -254,6 +254,26 @@ namespace StoreFlow.Usuarios.Tests
             Assert.Equal(clientesEsperados, clientes);
         }
 
+        [Fact]
+        public async Task ObtenerVendedores()
+        {
+            var request =
+                new CrearVendedorRequest("nombre usuario", "nuevo_usuario@correo.com", "12345678");
+            var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            _ = await _client.PostAsJsonAsync("/vendedor", request);
+            
+            var response = await _client.GetAsync("/vendedores");
+            response.EnsureSuccessStatusCode();
+            var vendedores = await response.Content.ReadFromJsonAsync<VendedorResponse[]>();
+            Assert.NotNull(vendedores);
+            VendedorResponse[] vendedoresEsperados = [
+                new(4, "nombre usuario", "nuevo_usuario@correo.com"),
+                new(2, "Vendedor User", "vendedor@correo.com")];
+            
+            Assert.Equal(vendedoresEsperados, vendedores);
+        }
+
         public async Task DisposeAsync()
         {
             await _app.StopAsync();

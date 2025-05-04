@@ -29,5 +29,12 @@ public static class CrearVendedorEndpoints
             }
 
         }).RequireAuthorization("SoloUsuariosCcp");
+        
+        app.MapGet("/vendedores", async (UsuariosDbContext db) =>
+        {
+            var vendedores = await db.ObtenerVendedoresAsync();
+            return Results.Ok(vendedores);
+            
+        }).RequireAuthorization("SoloUsuariosCcp");
     }
 }

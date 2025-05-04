@@ -17,4 +17,5 @@ public record PlanVentaDto(int Id, string Nombre, string Descripcion, decimal Pr
 
 public record CrearPlanVentaDto(string Nombre, string Descripcion, decimal Precio, int PeriodoTiempoId);
 
+
 public record ActualizarPlanVentaDto(string Nombre, string Descripcion, decimal Precio, int PeriodoTiempoId);

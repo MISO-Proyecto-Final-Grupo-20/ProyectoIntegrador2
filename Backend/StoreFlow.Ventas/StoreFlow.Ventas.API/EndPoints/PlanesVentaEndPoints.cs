@@ -9,14 +9,14 @@ public static class PlanesVentaEndPoints
 {
     public static void MapPlanesVentaEndPoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/periodosTiempo", async (VentasDbContext dbContext) =>
-        {
-            var periodos = await dbContext.PeriodosTiempo
-                .Select(p => new PeriodoTiempoDto(p.Id, p.Nombre))
-                .ToListAsync();
-                
-            return Results.Ok(periodos);
-        });
+        // app.MapGet("/periodosTiempo", async (VentasDbContext dbContext) =>
+        // {
+        //     var periodos = await dbContext.PeriodosTiempo
+        //         .Select(p => new PeriodoTiempoDto(p.Id, p.Nombre))
+        //         .ToListAsync();
+        //         
+        //     return Results.Ok(periodos);
+        // });
         
         var planesVentaGroup = app.MapGroup("/planesVenta");
         
