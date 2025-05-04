@@ -182,7 +182,7 @@ public class ProductosEndpointTests : IAsyncLifetime
         var archivoContent = new ByteArrayContent(Array.Empty<byte>());
         archivoContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
         {
-            Name = "\"archivo\"",
+            Name = "\"archivo\"",   
             FileName = "\"archivo.csv\""
         };
 

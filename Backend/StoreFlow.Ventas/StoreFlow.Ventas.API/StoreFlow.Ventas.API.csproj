@@ -31,8 +31,4 @@
       <ProjectReference Include="..\..\StoreFlow.Compartido\StoreFlow.Compartidos.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Servicios\" />
-    </ItemGroup>
-
 </Project>

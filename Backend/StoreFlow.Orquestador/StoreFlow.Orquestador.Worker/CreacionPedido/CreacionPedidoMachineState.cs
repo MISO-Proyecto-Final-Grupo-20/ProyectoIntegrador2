@@ -1,6 +1,6 @@
 ﻿using MassTransit;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Inventarios;
-using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Logistica;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
 namespace StoreFlow.Orquestador.Worker.CreacionPedido;
@@ -9,10 +9,11 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
 {
     public State ValidandoInventario { get; private set; }
     public State RegistrandoPedido { get; private set; }
+    public State ObteniendoInformacionProductos { get; private set; }
     public Event<ProcesarPedido> IniciarProcesarPedido { get; private set; }
+    public Event<InformacionProductoObtenida> InformacionProductoObtenida { get; private set; }
     public Event<InventarioValidado> InventarioValidado { get; private set; }
     public Event<PedidoRegistrado> PedidoRegistrado { get; set; }
-    // public Event<PedidoPreparadoParaEnvio> PedidoListoParaEnvio { get; private set; }
 
     
     public CreacionPedidoMachineState()
@@ -24,8 +25,16 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
             x.CorrelateById(context => context.Message.IdProceso);
             x.SelectId(context => context.Message.IdProceso);
         });
+        
+        
 
         Event(() => InventarioValidado, x =>
+        {
+            x.CorrelateById(context => context.Message.IdProceso);
+            x.SelectId(context => context.Message.IdProceso);
+        });
+        
+        Event(() => InformacionProductoObtenida, x =>
         {
             x.CorrelateById(context => context.Message.IdProceso);
             x.SelectId(context => context.Message.IdProceso);
@@ -53,10 +62,21 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
                 .Then(context =>
                 {
                     context.Saga.SolicitudDePedido = context.Message.SolicitudValiada;
-                    context.Publish(new RegistrarPedido(context.Message.IdProceso, context.Message.SolicitudValiada));
+                    var idsProductos = context.Saga.SolicitudDePedido.productosSolicitados.Select(p =>p.Id).ToArray();
+                    
+                    context.Publish(new ObtenerInformacionProductos(context.Message.IdProceso, idsProductos));
                 })
-                .TransitionTo(RegistrandoPedido)
+                .TransitionTo(ObteniendoInformacionProductos)
         );
+
+        During(ObteniendoInformacionProductos,
+            When(InformacionProductoObtenida)
+                .Then(context =>
+                {
+                    context.Saga.InformacionProductos = context.Message.InformacionProductos;
+                    context.Publish(new RegistrarPedido(context.Message.IdProceso, context.Saga.SolicitudDePedido, context.Saga.InformacionProductos));
+                })
+                .TransitionTo(RegistrandoPedido));
 
         During(RegistrandoPedido,
             When(PedidoRegistrado)
@@ -66,44 +86,5 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
 
     
 
-    // public CreacionPedidoMachineState()
-    // {
-    //     InstanceState(x => x.CurrentState);
-    //
-    //     Event(() => IniciarProcesarPedido, x =>
-    //     {
-    //         x.CorrelateById(context => context.Message.IdProceso);
-    //         x.SelectId(context => context.Message.IdProceso);
-    //     });
-    //
-    //     Event(() => InventarioValidado, x =>
-    //     {
-    //         x.CorrelateById(context => context.Message.IdProceso);
-    //         x.SelectId(context => context.Message.IdProceso);
-    //     });
-    //
-    //     Event(() => PedidoListoParaEnvio, x =>
-    //     {
-    //         x.CorrelateById(context => context.Message.IdProceso);
-    //         x.SelectId(context => context.Message.IdProceso);
-    //     });
-    //
-    //
-    //     Initially(
-    //         When(IniciarProcesarPedido)
-    //             .Then(contex => contex.Publish(new ValidarInventario(contex.Message.IdProceso)))
-    //             .TransitionTo(ValidandoInventario)
-    //     );
-    //
-    //     During(ValidandoInventario,
-    //         When(InventarioValidado)
-    //             .Then(context => context.Publish(new PrepararEnvioPedido(context.Message.IdProceso)))
-    //             .TransitionTo(PreparandoEnvio)
-    //     );
-    //
-    //     During(PreparandoEnvio,
-    //         When(PedidoListoParaEnvio).Then(context => context.Publish(new ConfirmarPedido(context.Saga.IdPedido)))
-    //             .Finalize()
-    //     );
-    // }
+   
 }

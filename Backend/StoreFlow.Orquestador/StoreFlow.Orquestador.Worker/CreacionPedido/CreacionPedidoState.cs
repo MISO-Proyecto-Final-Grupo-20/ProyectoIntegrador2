@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
 namespace StoreFlow.Orquestador.Worker.CreacionPedido;
@@ -9,4 +10,5 @@ public class CreacionPedidoState : SagaStateMachineInstance, ISagaVersion
     public int Version { get; set; }
     public string CurrentState { get; set; }
     public SolicitudDePedido SolicitudDePedido { get; set; }
+    public List<InformacionPoducto> InformacionProductos { get; set; }
 }

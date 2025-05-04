@@ -4,6 +4,7 @@ using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using StoreFlow.Ventas.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 

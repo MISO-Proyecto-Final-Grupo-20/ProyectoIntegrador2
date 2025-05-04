@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
 using StoreFlow.Compras.API.Comunes;
 using StoreFlow.Compras.API.Datos;
 using StoreFlow.Compras.API.DTOs;
@@ -44,6 +45,21 @@ public class ProductosService(ComprasDbContext db) : IProductosService
                 p.Id.ToString(),
                 p.Precio))
             .ToArray();
+    }
+    
+    public async Task<List<InformacionPoducto>> ObtenerProductosAsync(int[] idsProductos)
+    {
+        var productos = await db.Productos
+            .Where(p => idsProductos.Contains(p.Id))
+            .ToListAsync();
+
+        return productos
+            .Select(p => new InformacionPoducto(p.Id,
+                p.ImagenUrl,
+                p.Nombre,
+                p.Sku,
+                p.Precio))
+            .ToList();
     }
 
     public async Task<ResultadoCargaMasivaResponse> ValidarProductosMasivoAsync(IFormFile archivoCsv)
