@@ -59,6 +59,18 @@ public class UsuariosDbContext(DbContextOptions<UsuariosDbContext> options) : Db
         return (informacionCliente, informacionVendedor);
     }
 
+    public async Task<ClienteResponse[]> ObtenerClientesAsync()
+    {
+        var clientes = await Usuarios
+            .Where(u => u.TipoUsuario == TiposUsuarios.Cliente)
+            .OrderBy(c => c.NombreCompleto)
+            .ToArrayAsync();
+        
+        return  clientes
+            .Select(c => c.ConvertirAClienteResponse())
+            .ToArray();
+    }
+
     private void LanzarExcepcionSiCorreoEstaRepetido(string? usuarioCorreoElectronico)
     {
         var correoRepetido = Usuarios

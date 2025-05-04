@@ -234,6 +234,26 @@ namespace StoreFlow.Usuarios.Tests
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Fact]
+        public async Task ObtenerClientes()
+        {
+            
+            var request =
+                new CrearClienteRequest("nombre usuario", "nuevo_usuario@correo.com", "direccion", "12345678");
+            _ = await _client.PostAsJsonAsync("/cliente", request);
+            
+            var response = await _client.GetAsync("/cliente");
+            response.EnsureSuccessStatusCode();
+            var clientes = await response.Content.ReadFromJsonAsync<ClienteResponse[]>();
+            Assert.NotNull(clientes);
+
+            ClienteResponse[] clientesEsperados = [
+                new(4, "nombre usuario", "direccion"),
+                new(1, "Test User", "Direccion")];
+            
+            Assert.Equal(clientesEsperados, clientes);
+        }
+
         public async Task DisposeAsync()
         {
             await _app.StopAsync();
@@ -243,13 +263,19 @@ namespace StoreFlow.Usuarios.Tests
         {
             using var scope = _app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<UsuariosDbContext>();
+            
+            // Limpiar la base de datos antes de agregar nuevos usuarios
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.EnsureCreatedAsync();
+            
 
             db.Usuarios.Add(new Usuario
             {
                 CorreoElectronico = "test@correo.com",
                 Contrasena = "123456",
                 NombreCompleto = "Test User",
-                TipoUsuario = TiposUsuarios.Cliente
+                TipoUsuario = TiposUsuarios.Cliente,
+                Direccion = "Direccion"
             });
 
             db.Usuarios.Add(new Usuario
