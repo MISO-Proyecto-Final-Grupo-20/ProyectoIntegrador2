@@ -8,6 +8,7 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
     public DbSet<Pedido> Pedidos { get; set; }
     public DbSet<PeriodoTiempo> PeriodosTiempo { get; set; }
     public DbSet<PlanVenta> PlanesVenta { get; set; }
+    public DbSet<PlanDeVentas> PlanesDeVentas { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -72,6 +73,13 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
         });
+
+        modelBuilder.Entity<PlanDeVentas>(entidad =>
+        {
+            entidad.ToTable("PlanesDeVentas");
+            entidad.HasKey(e => new {e.PeriodoTiempo, e.IdVendedor});
+            entidad.Property(p => p.NombreVendedor).HasMaxLength(200);
+        });
     }
 
     public async Task GuardarPedidoAsync(Pedido pedido)
@@ -88,5 +96,26 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
             .ToListAsync();
         
         return pedidos.Select(p => p.ConvertirAResponse()).ToList();
+    }
+
+    public async Task GuardarPlanesDeVentas(PlanDeVentas[] planesDeVentas)
+    {
+        var planesDeVentasActuales = await  PlanesDeVentas.ToListAsync();
+        
+        var repetidos = (from actual in planesDeVentasActuales
+                join nuevo in planesDeVentas on new {actual.PeriodoTiempo, actual.IdVendedor} equals new {nuevo.PeriodoTiempo, nuevo.IdVendedor}
+                select actual)
+            .ToList();
+
+        if (repetidos.Count > 0)
+        {
+            PlanesDeVentas.RemoveRange(repetidos);
+            await SaveChangesAsync();
+        }
+        
+        await PlanesDeVentas.AddRangeAsync(planesDeVentas);
+        await SaveChangesAsync();
+            
+
     }
 }

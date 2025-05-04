@@ -47,6 +47,7 @@ app.UseAuthorization();
 
 app.MapCrearPedidoEndPont();
 app.MapPlanesVentaEndPoints();
+app.MapPlanesDeVentasEndPoints();
 
 
 using (var scope = app.Services.CreateScope())

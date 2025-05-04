@@ -22,4 +22,8 @@
     <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mensajes\CreacionPedido\Logistica\" />
+  </ItemGroup>
+
 </Project>

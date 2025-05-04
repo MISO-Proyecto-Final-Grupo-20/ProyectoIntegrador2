@@ -66,7 +66,17 @@ public class UsuariosDbContext(DbContextOptions<UsuariosDbContext> options) : Db
             throw new UsuarioConCorreoRepetidoException(usuarioCorreoElectronico!);
     }
 
-    
+
+    public async Task<VendedorResponse[]> ObtenerVendedoresAsync()
+    {
+        var vendedores = await Usuarios.Where(u => u.TipoUsuario == TiposUsuarios.Vendedor)
+            .OrderBy(c => c.NombreCompleto)
+            .ToListAsync();
+        
+        return vendedores
+            .Select(v => v.ConvertirAVendedorResponse())
+            .ToArray();
+    }
 }
 
 public class UsuarioConCorreoRepetidoException(string correo) : Exception(string.Format(UsuariosResources.ElCorreoYaEstaRegistrado, correo));

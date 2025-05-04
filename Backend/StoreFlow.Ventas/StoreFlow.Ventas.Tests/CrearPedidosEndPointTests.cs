@@ -100,6 +100,80 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
       
     }
 
+    [Fact]
+    public async Task CrearPlanesDeCuentas_RetornaOk()
+    {
+        var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var response = await _client.PostAsJsonAsync("/planesDeVentas",
+        new CrearPlanVentaRequest(1, 15_000_000, [
+            new(1, "Vendedor 1"), 
+            new(2, "Vendedor 2")
+        ]));
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var planDeVentasCreado = _dbContext.PlanesDeVentas.OrderBy(p => p.IdVendedor).ToList();
+        
+        Assert.Equal(2, planDeVentasCreado.Count);
+        Assert.Equal(1, planDeVentasCreado[0].IdVendedor);
+        Assert.Equal("Vendedor 1", planDeVentasCreado[0].NombreVendedor);
+        Assert.Equal(Periodicidad.Mensual, planDeVentasCreado[0].PeriodoTiempo);
+        Assert.Equal(15_000_000, planDeVentasCreado[0].MetaVentas);
+    }
+    
+    [Fact]
+    public async Task CrearPlanesDeCuentas_EnPeriodoYVendedor_AcutalizaMeta_RetornaOk()
+    {
+        var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        _ = await _client.PostAsJsonAsync("/planesDeVentas",
+            new CrearPlanVentaRequest(1, 15_000_000, [
+                new(1, "Vendedor 1"), 
+                new(2, "Vendedor 2")
+            ]));
+        
+        var response = await _client.PostAsJsonAsync("/planesDeVentas",
+            new CrearPlanVentaRequest(1, 30_000_000, [
+                new(1, "Vendedor 1"), 
+            ]));
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var planDeVentasCreado = _dbContext.PlanesDeVentas.OrderBy(p => p.IdVendedor).ToList();
+        
+        Assert.Equal(2, planDeVentasCreado.Count);
+        Assert.Equal(1, planDeVentasCreado[0].IdVendedor);
+        Assert.Equal("Vendedor 1", planDeVentasCreado[0].NombreVendedor);
+        Assert.Equal(Periodicidad.Mensual, planDeVentasCreado[0].PeriodoTiempo);
+        Assert.Equal(30_000_000, planDeVentasCreado[0].MetaVentas);
+        Assert.Equal(15_000_000, planDeVentasCreado[1].MetaVentas);
+    }
+
+    [Fact]
+    public async Task ObtenerPeriodosDeTiempo_RetornaOk()
+    {
+        var response = await _client.GetAsync($"/periodosTiempo");
+        
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var periodos = await response.Content.ReadFromJsonAsync<List<PeriodoTiempoResponse>>();
+        Assert.NotNull(periodos);
+        Assert.Equal(4, periodos.Count);
+        Assert.Equal((int)Periodicidad.Mensual, periodos[0].Id);
+        Assert.Equal("Mensual", periodos[0].Descripcion);
+        Assert.Equal((int)Periodicidad.Trimestral, periodos[1].Id);
+        Assert.Equal("Trimestral", periodos[1].Descripcion);
+        Assert.Equal((int)Periodicidad.Semestral, periodos[2].Id);
+        Assert.Equal("Semestral", periodos[2].Descripcion);
+        Assert.Equal((int)Periodicidad.Anual, periodos[3].Id);
+        Assert.Equal("Anual", periodos[3].Descripcion);
+        
+        
+        
+    }
+
     public async Task DisposeAsync()
     {
         await _app.StopAsync();

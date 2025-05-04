@@ -33,3 +33,8 @@ public static class CrearVendedorRequestValidator
             throw new ArgumentException("La contraseña debe tener al menos 8 caracteres");
     }
 }
+
+public record VendedorResponse(
+    int Id,
+    string Nombre,
+    string Correo);

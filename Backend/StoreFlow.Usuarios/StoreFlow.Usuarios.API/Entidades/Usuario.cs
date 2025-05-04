@@ -29,4 +29,9 @@ public class Usuario
         return new ClienteResponse(Id, NombreCompleto, Direccion ?? "Sin Dirección registrada.");
     }
     
+    public VendedorResponse ConvertirAVendedorResponse()
+    {
+        return new VendedorResponse(Id, NombreCompleto, CorreoElectronico);
+    }
+    
 }
