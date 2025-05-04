@@ -31,7 +31,7 @@ public static class UsuariosEndpoints
             if (!string.Equals(usuario.TipoUsuario.ToString(), loginDto!.TipoCategoria, StringComparison.CurrentCultureIgnoreCase))
                 return Results.Unauthorized();
 
-            string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.TipoUsuario.ToString(), usuario.Id);
+            string token = proveedorToken.ObtenerToken(usuario.CorreoElectronico,usuario.TipoUsuario.ToString(), usuario.Id, usuario.NombreCompleto);
 
             return Results.Ok(new UsuarioLoginResponse(token));
         });

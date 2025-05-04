@@ -9,6 +9,7 @@ using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
 using System.Security.Claims;
 using System.Text;
+using StoreFlow.Ventas.API.Servicios;
 
 namespace StoreFlow.Ventas.Tests;
 

@@ -31,6 +31,10 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
             
             entidad.Property(e => e.Precio)
                 .IsRequired();
+
+            entidad.Property(e => e.Codigo).HasMaxLength(50);
+            entidad.Property(e => e.Nombre).HasMaxLength(150);
+            
         });
     }
 
@@ -38,5 +42,15 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
     {
         await Pedidos.AddAsync(pedido);
         await SaveChangesAsync();
+    }
+    
+    public async Task<List<PedidoResponse>> ObtenerPedidosAsync(int idUsuario)
+    {
+        var pedidos = await Pedidos
+            .Include(p => p.ProductosPedidos.Where(pp => pp.TieneInventario))
+            .Where(p => p.IdCliente == idUsuario)
+            .ToListAsync();
+        
+        return pedidos.Select(p => p.ConvertirAResponse()).ToList();
     }
 }
