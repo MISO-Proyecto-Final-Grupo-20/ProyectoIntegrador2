@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StoreFlow.Ventas.API.Datos;
@@ -11,9 +12,11 @@ using StoreFlow.Ventas.API.Datos;
 namespace StoreFlow.Ventas.API.Migrations
 {
     [DbContext(typeof(VentasDbContext))]
-    partial class VentasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504165740_AgregarPlanesVenta")]
+    partial class AgregarPlanesVenta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,25 +33,11 @@ namespace StoreFlow.Ventas.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DireccionEntrega")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("integer");
-
-                    b.Property<int?>("IdVendedor")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("NombreCliente")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("NombreVendedor")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -114,17 +103,6 @@ namespace StoreFlow.Ventas.API.Migrations
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Codigo")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Imagen")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("numeric");
