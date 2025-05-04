@@ -12,7 +12,7 @@ public class ConsumidorConfirmarPedido(ILogger<RegistrarPedido> logger, VentasDb
     public async Task Consume(ConsumeContext<RegistrarPedido> context)
     {
         var solicitud = context.Message.SolicitudValiada;
-        var pedido = new Pedido(solicitud, context.Message.InformacionProductos);
+        var pedido = new Pedido(solicitud, context.Message.InformacionProductos, context.Message.InformacionCliente, context.Message.InformacionVendedor);
 
         await ventasDbContext.GuardarPedidoAsync(pedido);
     }

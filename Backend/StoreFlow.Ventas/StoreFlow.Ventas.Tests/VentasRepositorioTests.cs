@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.Entidades;
@@ -22,7 +23,7 @@ public class VentasRepositorioTests
             [
                     new ProductoPedido(101, 2, 50, false, null, null, null),
                     new ProductoPedido(102, 1, 100, false, null, null, null)
-            ]);
+            ], "cliente 1", "direccion cliente 1", null, null);
 
             await context.GuardarPedidoAsync(pedido);
 
@@ -33,6 +34,9 @@ public class VentasRepositorioTests
             Assert.NotNull(pedidoGuardado);
             Assert.Equal(1, pedidoGuardado.IdCliente);
             Assert.Equal(1, pedidoGuardado.Id);
+            Assert.Equal("cliente 1", pedidoGuardado.NombreCliente);
+            Assert.Equal("direccion cliente 1", pedidoGuardado.DireccionEntrega);
+            
             Assert.Equal(new DateTime(2025, 4, 27), pedidoGuardado.FechaCreacion);
             
             Assert.Equal(2, pedidoGuardado.ProductosPedidos.Count);
@@ -60,7 +64,7 @@ public class VentasRepositorioTests
                 new(101, "imagen 101", "nombre 101", "codigo 101", 50)
             ];
             
-            var pedido = new Pedido(solicitudPedido, informacionProductos);
+            var pedido = new Pedido(solicitudPedido, informacionProductos, new InformacionCliente(1, "Direccion 1", "Nombre Cliente 1"), new InformacionVendedor(5, "Vendedor 5"));
             
             await context.GuardarPedidoAsync(pedido);
 
@@ -71,6 +75,11 @@ public class VentasRepositorioTests
             Assert.NotNull(pedidoGuardado);
             Assert.Equal(1, pedidoGuardado.IdCliente);
             Assert.Equal(1, pedidoGuardado.Id);
+            Assert.Equal("Nombre Cliente 1", pedidoGuardado.NombreCliente);
+            Assert.Equal("Direccion 1", pedidoGuardado.DireccionEntrega);
+            Assert.Equal(5, pedidoGuardado.IdVendedor);
+            Assert.Equal("Vendedor 5", pedidoGuardado.NombreVendedor);
+            
             Assert.Equal(new DateTime(2025, 4, 27), pedidoGuardado.FechaCreacion);
             
             Assert.Equal(2, pedidoGuardado.ProductosPedidos.Count);

@@ -1,4 +1,5 @@
 ﻿using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 
 namespace StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
@@ -15,9 +16,11 @@ public record ProductoSolicitado(int Id, int Cantidad, decimal Precio, bool Tien
 public record RegistrarPedido(
     Guid IdProceso,
     SolicitudDePedido SolicitudValiada,
-    List<InformacionPoducto> InformacionProductos);
+    List<InformacionPoducto> InformacionProductos,
+    InformacionCliente InformacionCliente,
+    InformacionVendedor? InformacionVendedor);
 
 public record PedidoRegistrado(Guid IdProceso);
 
 
-public record InformacionCliente(string LugarEntrega, string NombreCliente);
+

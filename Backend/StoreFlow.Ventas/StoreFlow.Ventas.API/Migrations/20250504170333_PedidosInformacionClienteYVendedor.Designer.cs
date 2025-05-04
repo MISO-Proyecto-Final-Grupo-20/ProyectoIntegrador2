@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StoreFlow.Ventas.API.Datos;
@@ -11,9 +12,11 @@ using StoreFlow.Ventas.API.Datos;
 namespace StoreFlow.Ventas.API.Migrations
 {
     [DbContext(typeof(VentasDbContext))]
-    partial class VentasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250504170333_PedidosInformacionClienteYVendedor")]
+    partial class PedidosInformacionClienteYVendedor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
 namespace StoreFlow.Ventas.API.Entidades;
@@ -9,14 +10,18 @@ public class Pedido
    
     private Pedido() { }
     
-    public Pedido(int idCliente, DateTime fechaCreacion, ProductoPedido[] productosPedidos)
+    public Pedido(int idCliente, DateTime fechaCreacion, ProductoPedido[] productosPedidos, string nombreCliente, string direccionEntrega, int? idVendedor, string? nombreVendedor)
     {
         IdCliente = idCliente;
         FechaCreacion = fechaCreacion;
+        NombreCliente = nombreCliente;
+        DireccionEntrega = direccionEntrega;
+        IdVendedor = idVendedor;
+        NombreVendedor = nombreVendedor;
         ProductosPedidos = productosPedidos.ToList();
     }
     
-    public Pedido(SolicitudDePedido solicitud, List<InformacionPoducto> informacionProductos)
+    public Pedido(SolicitudDePedido solicitud, List<InformacionPoducto> informacionProductos, InformacionCliente informacionCliente, InformacionVendedor? informacionVendedor)
     {
         
         var productosPedidos = from productoSolicitado in solicitud.productosSolicitados
@@ -35,17 +40,25 @@ public class Pedido
         
     
         IdCliente = solicitud.IdCliente;
+        NombreCliente = informacionCliente.NombreCliente;
+        DireccionEntrega = informacionCliente.LugarEntrega;
+        IdVendedor = informacionVendedor?.Id;
+        NombreVendedor = informacionVendedor?.Nombre;
         FechaCreacion = solicitud.FechaCreacion;
         ProductosPedidos = productosPedidos.ToList();
     }
     public int Id { get; private set; }
     public int IdCliente { get; private set; }
     public DateTime FechaCreacion { get; private set; }
+    public string NombreCliente { get; private set; }
+    public string DireccionEntrega { get; private set; }
+    public int? IdVendedor { get; private set; }
+    public string? NombreVendedor { get; private set; }
     public List<ProductoPedido> ProductosPedidos { get; private set; }
 
     public PedidoResponse ConvertirAResponse()
     {
-        return new PedidoResponse(Id, IdCliente, FechaCreacion, FechaCreacion.AddDays(3), string.Empty, EstadoPedido.Pendiente, ProductosPedidos.Select(x => x.ConvertirAResponse()).ToArray(), ProductosPedidos.Sum(x => x.Precio * x.Cantidad));
+        return new PedidoResponse(Id, IdCliente, FechaCreacion, FechaCreacion.AddDays(3), DireccionEntrega, EstadoPedido.Pendiente, ProductosPedidos.Select(x => x.ConvertirAResponse()).ToArray(), ProductosPedidos.Sum(x => x.Precio * x.Cantidad), NombreCliente);
     }
     
 }
@@ -80,7 +93,7 @@ public class ProductoPedido
     }
 }
 
-public record PedidoResponse(int Numero, int IdCliente, DateTime FechaRegistro, DateTime FechaEntrega, string LugarEntrega, EstadoPedido Estado,   ProductoPedidoResponse[] Productos, decimal Total);
+public record PedidoResponse(int Numero, int IdCliente, DateTime FechaRegistro, DateTime FechaEntrega, string LugarEntrega, EstadoPedido Estado,   ProductoPedidoResponse[] Productos, decimal Total, string NombreCliente);
 
 
 public record ProductoPedidoResponse(int Id, int Cantidad, decimal Precio, string? Codigo, string? Nombre, string? Imagen);

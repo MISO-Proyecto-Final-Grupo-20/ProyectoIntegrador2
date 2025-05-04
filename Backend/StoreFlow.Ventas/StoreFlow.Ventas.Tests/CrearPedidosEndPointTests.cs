@@ -70,7 +70,7 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
                 [
                     new ProductoPedido(1, 2, 10_000, false, null, null, null),
                     new ProductoPedido(2, 3, 20_000, true, null, null, null)
-                ]));
+                ], "nombre cliente 3", "direccion cliente 3", null, null));
         
         await _dbContext.GuardarPedidoAsync(
             new Pedido(2,
@@ -78,7 +78,7 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
                 [
                     new ProductoPedido(1, 5, 10_000, true, null, null, null),
                     new ProductoPedido(2, 20, 20_000, true, null, null, null)
-                ]));
+                ],"nombreCliente 2", "direccion cliente 2", null, null));
         
         var jwt = GeneradorTokenPruebas.GenerarTokenCliente();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
@@ -93,6 +93,8 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
         Assert.NotNull(pedidos);
         Assert.Single(pedidos);
         Assert.Equal(3, pedidos[0].IdCliente);
+        Assert.Equal("nombre cliente 3", pedidos[0].NombreCliente);
+        Assert.Equal("direccion cliente 3", pedidos[0].LugarEntrega);
         Assert.Single(pedidos[0].Productos);
         Assert.Equal(2, pedidos[0].Productos[0].Id);
       
