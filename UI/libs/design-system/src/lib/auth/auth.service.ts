@@ -7,6 +7,16 @@ import { Sesion } from '../modelos/generales.model';
 export class AuthService {
   private tokenKey = 'store_token';
 
+  constructor() {
+    const token = this.obtenerToken();
+    if (token) {
+      const decoded = jwtDecode(token);
+      if (decoded) {
+        (window as any).sesion = decoded;
+      }
+    }
+  }
+
   registrarToken(token: string): void {
     const tokenAEnviar = `Bearer ${token}`;
     localStorage.setItem(this.tokenKey, tokenAEnviar);

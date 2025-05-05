@@ -45,6 +45,8 @@ public static class TestApplicationFactory
                 policy.RequireRole("UsuarioCcp"));
             opciones.AddPolicy("Cliente", policy =>
                 policy.RequireRole("Cliente"));
+            opciones.AddPolicy("Vendedor" , policy =>
+                policy.RequireRole("Vendedor"));
         });
 
         

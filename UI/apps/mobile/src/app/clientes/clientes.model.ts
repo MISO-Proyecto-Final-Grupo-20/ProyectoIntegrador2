@@ -1,32 +1,9 @@
-import { Pedido } from '../app.model';
-
-export interface Producto {
-  imagen: string;
-  nombre: string;
-  codigo: string;
-  precio: number;
-  seleccionado?: boolean;
-}
-
-export interface ProductoSeleccionado extends Producto {
-  cantidad: number;
-}
+import { Pedido, Producto, ProductoSeleccionado } from '../app.model';
 
 export interface ClientesState {
   productos: Producto[];
-  filtroProducto: string | null;
+  filtroProducto: string;
   productosSeleccionados: ProductoSeleccionado[];
   pedidos: Pedido[];
-  filtroPedido: string | null;
-}
-
-export interface RegistroPedido {
-  codigo: string;
-  cantidad: number;
-  precio: number;
-}
-
-export interface TabsCrearPedido {
-  titulo: string;
-  ruta: string;
+  filtroPedido: string;
 }

@@ -19,13 +19,29 @@ public static class PedidosEndPoints
             var jwtToken = handler.ReadJwtToken(token);
             var idUsuario = int.Parse(jwtToken.Claims.First(c => c.Type == "idUsuario").Value);
             
-            var solicitud = pedidoRequest.CrearSolicitud(idUsuario, dateTimeProvider.UtcNow);
+            var solicitud = pedidoRequest.CrearSolicitud(idUsuario, dateTimeProvider.UtcNow, null);
             var procesarPedido = new ProcesarPedido(Guid.CreateVersion7(), solicitud);
             
             await publishEndpoint.Publish(procesarPedido);
             
             return Results.Accepted(null, idUsuario);
         }).RequireAuthorization("Cliente");
+        
+        app.MapPost("/pedidos/{idCliente:int}", async (HttpContext httpContext, int idCliente,  ProductoPedidoRequest[] crearPedido, IPublishEndpoint publishEndpoint, IDateTimeProvider dateTimeProvider) =>
+        {
+            var token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var pedidoRequest = new CrearPedidoRequest(crearPedido);
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var idUsuario = int.Parse(jwtToken.Claims.First(c => c.Type == "idUsuario").Value);
+            
+            var solicitud = pedidoRequest.CrearSolicitud(idCliente, dateTimeProvider.UtcNow, idUsuario);
+            var procesarPedido = new ProcesarPedido(Guid.CreateVersion7(), solicitud);
+            
+            await publishEndpoint.Publish(procesarPedido);
+            
+            return Results.Accepted(null, idUsuario);
+        }).RequireAuthorization("Vendedor");
         
         app.MapGet("/pedidos/pendientes", async (HttpContext httpContext, VentasDbContext ventasDbContext) =>
         {
@@ -38,6 +54,18 @@ public static class PedidosEndPoints
             
             return Results.Ok(pedidos);
         }).RequireAuthorization("Cliente");
+        
+        app.MapGet("/pedidos/pendientes/{idCliente:int}", async (HttpContext httpContext, int idCliente, VentasDbContext ventasDbContext) =>
+        {
+            var token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var idVendedor = int.Parse(jwtToken.Claims.First(c => c.Type == "idUsuario").Value);
+            
+            var pedidos = await ventasDbContext.ObtenerPedidosAsync(idCliente, idVendedor);
+            
+            return Results.Ok(pedidos);
+        }).RequireAuthorization("Vendedor");
 
         app.MapPost("/consultaInformes", async (ReporteVentasRequest request, VentasDbContext ventasDbContext) =>
         {

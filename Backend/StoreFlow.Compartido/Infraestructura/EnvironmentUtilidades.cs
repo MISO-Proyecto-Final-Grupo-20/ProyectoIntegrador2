@@ -1,5 +1,8 @@
-﻿namespace StoreFlow.Compartidos.Core.Infraestructura
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace StoreFlow.Compartidos.Core.Infraestructura
 {
+    [ExcludeFromCodeCoverage]
     public static class EnvironmentUtilidades
     {
         public static string ObtenerVariableEntornoRequerida(string nombreVariable)

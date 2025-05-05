@@ -120,7 +120,7 @@ public class ProductosEndpointTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task DebeRetornarForbidden_CuandoElRolNoEsUsuarioCcp()
+    public async Task DebeRetornarOk_CuandoElRolNoEsUsuarioCcp()
     {
         var request = new CrearProductoRequest("Producto", 1, "SKU006", 20000, "https://imagen.com/e.jpg");
         var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();

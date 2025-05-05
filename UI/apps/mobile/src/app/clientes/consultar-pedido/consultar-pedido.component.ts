@@ -15,7 +15,6 @@ import { PanelPedidosComponent } from '../../shared/panel-pedidos/panel-pedidos.
     PanelPedidosComponent,
   ],
   templateUrl: './consultar-pedido.component.html',
-  styleUrl: './consultar-pedido.component.scss',
 })
 export class ConsultarPedidoComponent {
   store = inject(ClientesStore);
@@ -24,7 +23,7 @@ export class ConsultarPedidoComponent {
   constructor() {
     this.store.asignarFiltroPedidos('');
     this.controlBuscar.valueChanges.subscribe((valor) =>
-      this.store.asignarFiltroPedidos(valor)
+      this.store.asignarFiltroPedidos(valor ?? '')
     );
     this.store.obtenerPedidos();
   }

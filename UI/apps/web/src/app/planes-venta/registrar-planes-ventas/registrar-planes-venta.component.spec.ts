@@ -119,7 +119,7 @@ describe('RegistrarPlanesVentaComponent', () => {
   it('debe registrarse correctamente el plan de ventas correctamente, cuando se le de click al "boton-registrar-plan-ventas"  ', () => {
     const esperado: RegistroPlanVenta = {
       ...formulario,
-      vendedores: [1],
+      vendedores: [{ id: vendedores[0].id, nombre: vendedores[0].nombre }],
     };
     const peticionVendedores = httpMock.expectOne(AppsUrls.vendedores);
     peticionVendedores.flush(vendedores);

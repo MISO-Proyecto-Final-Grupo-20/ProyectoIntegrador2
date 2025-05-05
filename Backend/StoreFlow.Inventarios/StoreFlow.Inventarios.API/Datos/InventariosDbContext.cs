@@ -31,7 +31,7 @@ public class InventariosDbContext(DbContextOptions<InventariosDbContext> options
     
     public async Task<SolicitudDePedido> ValidarPedidoConInventarioAsync(SolicitudDePedido pedido)
     {
-        var idSProductosSolicitados = pedido.productosSolicitados
+        var idSProductosSolicitados = pedido.ProductosSolicitados
             .Select(p => p.Id)
             .ToList();
 
@@ -39,7 +39,7 @@ public class InventariosDbContext(DbContextOptions<InventariosDbContext> options
             .Where(i => idSProductosSolicitados.Contains(i.IdProducto))
             .ToListAsync();
         
-        var productosConEstadoInventario = pedido.productosSolicitados
+        var productosConEstadoInventario = pedido.ProductosSolicitados
                     .Select(productoSolicitado =>
                     {
                         var inventario = inventarios.FirstOrDefault(i => i.IdProducto == productoSolicitado.Id);
@@ -49,7 +49,7 @@ public class InventariosDbContext(DbContextOptions<InventariosDbContext> options
                     })
                     .ToArray();
 
-        var pedidoValidado = pedido with { productosSolicitados = productosConEstadoInventario };
+        var pedidoValidado = pedido with { ProductosSolicitados = productosConEstadoInventario };
 
         await DescontarInventarioAsync(pedidoValidado);
 
@@ -58,7 +58,7 @@ public class InventariosDbContext(DbContextOptions<InventariosDbContext> options
 
     private async Task DescontarInventarioAsync(SolicitudDePedido pedido)
     {
-        var productosConInventario = pedido.productosSolicitados
+        var productosConInventario = pedido.ProductosSolicitados
             .Where(p => p.TieneInventario)
             .ToList();
         

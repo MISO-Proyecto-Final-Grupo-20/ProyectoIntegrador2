@@ -33,3 +33,26 @@ export interface ConfiguracionEstadoPedido {
   descripcion: string;
   color: string;
 }
+
+export interface Tab {
+  titulo: string;
+  ruta: string;
+}
+
+export interface Producto {
+  imagen: string;
+  nombre: string;
+  codigo: string;
+  precio: number;
+  seleccionado?: boolean;
+}
+
+export interface ProductoSeleccionado extends Producto {
+  cantidad: number;
+}
+
+export interface RegistroPedido {
+  codigo: string;
+  cantidad: number;
+  precio: number;
+}

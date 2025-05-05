@@ -9,7 +9,7 @@ import { DescripcionesCategoria } from '../../app.constantes';
   imports: [SharedModule, RouterModule],
   styleUrl: './header.component.scss',
   template: `<mat-toolbar class="sombra-header justify-content-between">
-    <div class="row align-items-center gap-8">
+    <div class="row align-items-center gap-8 nowrap">
       @if (rutaVolver()) {
         <button
           data-testid="boton-volver"
@@ -24,7 +24,10 @@ import { DescripcionesCategoria } from '../../app.constantes';
       <img src="assets/images/icono-header-store-flow.svg" />
     </div>
     @if (mostrarAvatar()) {
-      <div class="row gap-4 align-items-center" data-testid="seccion-avatar">
+      <div
+        class="row gap-4 align-items-center nowrap"
+        data-testid="seccion-avatar"
+      >
         <div>
           <p in18="sesion.categoria" class="color-grey-700">
             {{ descripcionCategoria }}:

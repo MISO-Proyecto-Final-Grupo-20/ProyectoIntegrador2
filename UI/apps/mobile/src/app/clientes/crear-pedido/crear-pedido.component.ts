@@ -1,16 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { SharedModule } from '@storeflow/design-system';
+import { RouterModule } from '@angular/router';
 import { CardInformacionComponent } from '../../shared/card-informacion/card-informacion.component';
 import { configuracionTabsCrearPedido } from '../clientes.constantes';
-import { TabsCrearPedido } from '../clientes.model';
 import { ClientesService } from '../services/clientes.service';
 import { ClientesStore } from '../state';
+import { TabsComponent } from '../../shared/tabs/tabs.component';
 
 @Component({
   selector: 'app-crear-pedido',
   standalone: true,
-  imports: [SharedModule, CardInformacionComponent, RouterModule],
+  imports: [CardInformacionComponent, RouterModule, TabsComponent],
   providers: [ClientesService],
   template: `<div class="p-16 column gap-20 heigth-100">
     <app-card-informacion
@@ -18,27 +17,7 @@ import { ClientesStore } from '../state';
       [descripcion]="descripcion"
     ></app-card-informacion>
     <div class="flex-1 column">
-      <nav
-        mat-tab-nav-bar
-        color="accent"
-        class="tab-100 "
-        [tabPanel]="tabPanel"
-      >
-        @for (tab of tabsCrearPedido; track $index) {
-          <div
-            data-testid="tab-crear-pedido"
-            class="flex-1"
-            name="tab"
-            [active]="estaSeleccionado(tab.ruta)"
-            (click)="seleccionarTab(tab)"
-            mat-tab-link
-          >
-            {{ tab.titulo }}
-          </div>
-        }
-      </nav>
-      <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
-
+      <app-tabs [tabs]="tabsCrearPedido"></app-tabs>
       <div class="flex-1">
         <router-outlet></router-outlet>
       </div>
@@ -47,7 +26,6 @@ import { ClientesStore } from '../state';
 })
 export class CrearPedidoComponent {
   store = inject(ClientesStore);
-  router = inject(Router);
   tabsCrearPedido = configuracionTabsCrearPedido;
   get titulo() {
     return $localize`:@@tituloCrearPedido:Crear un pedido`;
@@ -55,14 +33,6 @@ export class CrearPedidoComponent {
 
   get descripcion() {
     return $localize`:@@descripcionCrearPedido:Selecciona los productos que necesitas y la cantidad`;
-  }
-
-  seleccionarTab(seleccion: TabsCrearPedido) {
-    this.router.navigateByUrl(seleccion.ruta);
-  }
-
-  estaSeleccionado(url: string) {
-    return this.router.url === url;
   }
 
   constructor() {

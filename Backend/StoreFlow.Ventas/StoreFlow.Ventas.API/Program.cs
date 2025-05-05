@@ -18,6 +18,9 @@ builder.Services.AddAuthorization(opciones =>
     
     opciones.AddPolicy("Cliente" , policy =>
         policy.RequireRole("Cliente"));
+    
+    opciones.AddPolicy("Vendedor" , policy =>
+        policy.RequireRole("Vendedor"));
 });
 
 

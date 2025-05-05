@@ -1,0 +1,62 @@
+<div class="column gap-8 heigth-100 pb-46 mt-8">
+  <div class="row justify-content-end">
+    <mat-form-field appearance="outline" class="bg-white width-240">
+      <input
+        i18n-placeholder="producto.buscarProducto"
+        placeholder="Buscar producto "
+        [formControl]="controlBuscar"
+        type="text"
+        matInput
+        data-testid="input-buscar-producto"
+      />
+      <mat-icon matSuffix class="color-grey-500">search</mat-icon>
+    </mat-form-field>
+  </div>
+  <mat-list class="bg-white overflow">
+    @for (producto of productos(); track $index) {
+      <div
+        (click)="emitirSeleccionarProducto(producto)"
+        data-testid="lista-seleccionar-producto"
+      >
+        <mat-list-item color="primary">
+          <div class="row justify-content-between nowrap">
+            <div class="row gap-8 align-items-center nowrap">
+              <div
+                class="tamanio-30 column align-items-center justify-content-center"
+              >
+                <img
+                  class="max-tamanio-30"
+                  [src]="producto.imagen"
+                  alt="imagen producto"
+                />
+              </div>
+              <div class="column gap-2 flex-1">
+                <p class="mat-body-1 color-grey-800 white-space-normal">
+                  {{ producto.nombre }}
+                </p>
+                <p class="color-accent">{{ producto.precio | number }} COP</p>
+              </div>
+            </div>
+            <mat-checkbox
+              [checked]="producto.seleccionado"
+              disableRipple
+            ></mat-checkbox>
+          </div>
+        </mat-list-item>
+      </div>
+    }
+  </mat-list>
+</div>
+
+<button
+  data-testid="boton-ver-carrito"
+  mat-flat-button
+  color="accent"
+  class="boton-ver-carrito"
+  i18n="ver-carrito"
+  [disabled]="!cantidadProductosSeleccionados()"
+  (click)="emitirAbrirModalCrearPedido()"
+>
+  <mat-icon>add_shopping_cart</mat-icon>
+  Ver carrito ({{ cantidadProductosSeleccionados() }})
+</button>

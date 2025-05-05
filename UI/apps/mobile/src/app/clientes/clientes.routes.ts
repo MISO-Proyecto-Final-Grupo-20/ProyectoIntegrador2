@@ -5,9 +5,9 @@ import { EntregasProgramadasComponent } from './entregas-programadas/entregas-pr
 import { MenuNavegacionClientesComponent } from './menu-navegacion-clientes/menu-navegacion-clientes.component';
 import { ModalAgregarProductoService } from './modal-agregar-producto/modal-agregar-producto.service';
 import { PedidosPendientesComponent } from './pedidos-pendientes/pedidos-pendientes.component';
-import { ProductosComponent } from './productos/productos.component';
 import { ClientesService } from './services/clientes.service';
 import { ClientesStore } from './state';
+import { ProductosContainerComponent } from './productos-container/productos-container.component';
 
 export const ClientesRoutes: Route[] = [
   {
@@ -23,7 +23,7 @@ export const ClientesRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: ProductosComponent,
+            component: ProductosContainerComponent,
           },
           {
             path: 'pedidosPendientes',

@@ -5,10 +5,10 @@ namespace StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
 public record ProcesarPedido(
     Guid IdProceso,
-    SolicitudDePedido solicitud
+    SolicitudDePedido Solicitud
 );
 
-public record SolicitudDePedido(int IdCliente, DateTime FechaCreacion, ProductoSolicitado[] productosSolicitados);
+public record SolicitudDePedido(int IdCliente, DateTime FechaCreacion, ProductoSolicitado[] ProductosSolicitados, int? IdVendedor);
 
 public record ProductoSolicitado(int Id, int Cantidad, decimal Precio, bool TieneInventario);
 

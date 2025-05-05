@@ -5,8 +5,8 @@ namespace StoreFlow.Ventas.API.DTOs;
 
 public record CrearPedidoRequest(ProductoPedidoRequest[] ProductosPedidos)
 {
-    public SolicitudDePedido CrearSolicitud(int idUsuario, DateTime fechaCreacion)
+    public SolicitudDePedido CrearSolicitud(int idCliente, DateTime fechaCreacion, int? idVendedor)
     {
-        return new SolicitudDePedido(idUsuario, fechaCreacion, ProductosPedidos.Select(x => x.CrearProductoPedido()).ToArray());
+        return new SolicitudDePedido(idCliente, fechaCreacion, ProductosPedidos.Select(x => x.CrearProductoPedido()).ToArray(), idVendedor);
     }
 }

@@ -11,7 +11,6 @@
 }
 
 :root {
-  --mdc-list-list-item-one-line-container-height: 65px;
   --mat-expansion-header-collapsed-state-height: auto;
   --mat-expansion-header-expanded-state-height: auto;
 }
@@ -31,4 +30,9 @@
 
 .mat-expansion-panel-body {
   padding: 0 !important;
+}
+
+.mdc-list-item.mdc-list-item--with-one-line {
+  height: auto !important;
+  min-height: 65px !important;
 }

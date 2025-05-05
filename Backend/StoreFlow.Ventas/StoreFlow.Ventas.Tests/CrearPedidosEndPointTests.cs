@@ -41,7 +41,7 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
             new ProductoPedidoRequest("2", 3, 20)
         ]);
 
-        await _publishEndpointMock!.Received(1).Publish(Arg.Is<ProcesarPedido>(p => p.solicitud.IdCliente == 3));
+        await _publishEndpointMock!.Received(1).Publish(Arg.Is<ProcesarPedido>(p => p.Solicitud.IdCliente == 3));
 
         Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
     }

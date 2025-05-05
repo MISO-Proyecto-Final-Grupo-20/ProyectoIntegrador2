@@ -54,11 +54,21 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
         await SaveChangesAsync();
     }
     
-    public async Task<List<PedidoResponse>> ObtenerPedidosAsync(int idUsuario)
+    public async Task<List<PedidoResponse>> ObtenerPedidosAsync(int idCliente)
     {
         var pedidos = await Pedidos
             .Include(p => p.ProductosPedidos.Where(pp => pp.TieneInventario))
-            .Where(p => p.IdCliente == idUsuario)
+            .Where(p => p.IdCliente == idCliente)
+            .ToListAsync();
+        
+        return pedidos.Select(p => p.ConvertirAResponse()).ToList();
+    }
+    
+    public async Task<List<PedidoResponse>> ObtenerPedidosAsync(int idCliente, int idVendedor)
+    {
+        var pedidos = await Pedidos
+            .Include(p => p.ProductosPedidos.Where(pp => pp.TieneInventario))
+            .Where(p => p.IdVendedor == idVendedor && p.IdCliente == idCliente)
             .ToListAsync();
         
         return pedidos.Select(p => p.ConvertirAResponse()).ToList();

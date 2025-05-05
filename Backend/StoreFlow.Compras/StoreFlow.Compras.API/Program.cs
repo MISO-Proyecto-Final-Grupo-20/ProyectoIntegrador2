@@ -17,6 +17,12 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
+    
+    opciones.AddPolicy("Vendedor" , policy =>
+        policy.RequireRole("Vendedor"));
+    
+    opciones.AddPolicy("UsuariosCcpOVendedor", policy =>
+            policy.RequireRole("UsuarioCcp", "Vendedor"));
 });
 
 builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());

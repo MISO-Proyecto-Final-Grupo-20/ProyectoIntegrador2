@@ -58,8 +58,8 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
             When(IniciarProcesarPedido)
                 .Then(contex =>
                 {
-                    contex.Saga.SolicitudDePedido = contex.Message.solicitud;
-                    contex.Publish(new ValidarInventario(contex.Message.IdProceso, contex.Message.solicitud));
+                    contex.Saga.SolicitudDePedido = contex.Message.Solicitud;
+                    contex.Publish(new ValidarInventario(contex.Message.IdProceso, contex.Message.Solicitud));
                 })
                 .TransitionTo(ValidandoInventario)
         );
@@ -70,7 +70,7 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
                 {
                     context.Saga.SolicitudDePedido = context.Message.SolicitudValiada;
                     
-                    context.Publish(new ObtenerInformacionClienteYVendedor(context.Message.IdProceso, context.Saga.SolicitudDePedido.IdCliente, null));
+                    context.Publish(new ObtenerInformacionClienteYVendedor(context.Message.IdProceso, context.Saga.SolicitudDePedido.IdCliente, context.Saga.SolicitudDePedido.IdVendedor));
                 })
                 .TransitionTo(ObteniendoInformacionClienteYVendedor)
         );
@@ -81,7 +81,7 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
                     context.Saga.InformacionCliente = context.Message.InformacionCliente;
                     context.Saga.InformacionVendedor = context.Message.InformacionVendedor;
                     
-                    var idsProductos = context.Saga.SolicitudDePedido.productosSolicitados.Select(p =>p.Id).ToArray();
+                    var idsProductos = context.Saga.SolicitudDePedido.ProductosSolicitados.Select(p =>p.Id).ToArray();
                     context.Publish(new ObtenerInformacionProductos(context.Message.IdProceso, idsProductos));
                 }).TransitionTo(ObteniendoInformacionProductos));
 

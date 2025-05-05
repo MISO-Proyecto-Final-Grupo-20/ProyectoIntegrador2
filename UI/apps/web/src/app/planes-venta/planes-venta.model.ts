@@ -11,5 +11,10 @@ export interface FormularioPlanesVenta {
 export interface RegistroPlanVenta {
   periodoTiempo: number;
   valorVentas: number;
-  vendedores: number[];
+  vendedores: VendedorPlanVenta[];
+}
+
+export interface VendedorPlanVenta {
+  id: number;
+  nombre: string;
 }
