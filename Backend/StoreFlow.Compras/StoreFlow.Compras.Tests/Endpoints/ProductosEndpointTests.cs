@@ -158,7 +158,7 @@ public class ProductosEndpointTests : IAsyncLifetime
         });
         await db.SaveChangesAsync();
     
-        var response = await _client.GetAsync("/productos");
+        var response = await _client.GetAsync("/productos/catalogo");
     
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var productos = await response.Content.ReadFromJsonAsync<ProductoResponse[]>();

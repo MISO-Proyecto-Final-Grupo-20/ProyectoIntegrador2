@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
 
 namespace StoreFlow.Ventas.API.Datos;
@@ -6,8 +7,6 @@ namespace StoreFlow.Ventas.API.Datos;
 public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbContext(options)
 {
     public DbSet<Pedido> Pedidos { get; set; }
-    public DbSet<PeriodoTiempo> PeriodosTiempo { get; set; }
-    public DbSet<PlanVenta> PlanesVenta { get; set; }
     public DbSet<PlanDeVentas> PlanesDeVentas { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,39 +38,6 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
             entidad.Property(e => e.Codigo).HasMaxLength(50);
             entidad.Property(e => e.Nombre).HasMaxLength(150);
             
-        });
-        
-        modelBuilder.Entity<PeriodoTiempo>(entidad =>
-        {
-            entidad.ToTable("PeriodosTiempo");
-            entidad.HasKey(e => e.Id);
-            
-            entidad.Property(e => e.Nombre)
-                .IsRequired()
-                .HasMaxLength(50);
-                
-            entidad.HasMany(e => e.PlanesVenta)
-                .WithOne(p => p.PeriodoTiempo)
-                .HasForeignKey(p => p.PeriodoTiempoId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-        
-        modelBuilder.Entity<PlanVenta>(entidad =>
-        {
-            entidad.ToTable("PlanesVenta");
-            entidad.HasKey(e => e.Id);
-            
-            entidad.Property(e => e.Nombre)
-                .IsRequired()
-                .HasMaxLength(100);
-                
-            entidad.Property(e => e.Descripcion)
-                .IsRequired()
-                .HasMaxLength(500);
-                
-            entidad.Property(e => e.Precio)
-                .IsRequired()
-                .HasColumnType("decimal(18,2)");
         });
 
         modelBuilder.Entity<PlanDeVentas>(entidad =>
@@ -116,6 +82,39 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
         await PlanesDeVentas.AddRangeAsync(planesDeVentas);
         await SaveChangesAsync();
             
+
+    }
+
+    public async Task<ReporteVentasResponse[]> ObtenerReporteVentasAsync(ReporteVentasRequest request)
+    {
+        DateTime fechaFinalParaReporte = DateTime.MinValue;
+        if(request.FechaFinal.HasValue)
+            fechaFinalParaReporte= request.FechaFinal.Value.AddDays(1);
+
+        var pedidosObtenidos = await Pedidos
+            .Include(p => p.ProductosPedidos)
+            .Where(p =>
+                (!request.Vendedor.HasValue || p.IdVendedor == request.Vendedor) &&
+                (!request.FechaInicial.HasValue || p.FechaCreacion >= request.FechaInicial) &&
+                (!request.FechaFinal.HasValue || p.FechaCreacion < fechaFinalParaReporte)
+                && (!request.Producto.HasValue || p.ProductosPedidos.Any(pp => pp.IdProducto == request.Producto))
+            )
+            
+            .SelectMany(p => p.ProductosPedidos, (pedido, producto) => new
+            {
+                Vendedor = pedido.NombreVendedor ?? "Venta directa",
+                Fecha = pedido.FechaCreacion,
+                Producto = producto.Nombre ?? "Producto sin nombre",
+                Cantidad = producto.Cantidad,
+                IdProducto = producto.IdProducto
+                
+            } ).ToListAsync();
+        
+        return pedidosObtenidos
+            .Where( p=> !request.Producto.HasValue || p.IdProducto == request.Producto)
+            .Select(p => new ReporteVentasResponse(p.Vendedor,
+                p.Fecha, p.Producto, p.Cantidad)).ToArray();
+
 
     }
 }
