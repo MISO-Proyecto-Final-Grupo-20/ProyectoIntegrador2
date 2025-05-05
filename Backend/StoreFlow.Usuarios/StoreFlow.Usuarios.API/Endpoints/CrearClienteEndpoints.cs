@@ -30,7 +30,7 @@ public static class CrearClienteEndpoints
 
         });
 
-        app.MapGet("/cliente", async (UsuariosDbContext db) =>
+        app.MapGet("/clientes", async (UsuariosDbContext db) =>
         {
             var clientes = await db.ObtenerClientesAsync();
             return Results.Ok(clientes);

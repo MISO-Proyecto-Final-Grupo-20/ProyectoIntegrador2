@@ -242,7 +242,7 @@ namespace StoreFlow.Usuarios.Tests
                 new CrearClienteRequest("nombre usuario", "nuevo_usuario@correo.com", "direccion", "12345678");
             _ = await _client.PostAsJsonAsync("/cliente", request);
             
-            var response = await _client.GetAsync("/cliente");
+            var response = await _client.GetAsync("/clientes");
             response.EnsureSuccessStatusCode();
             var clientes = await response.Content.ReadFromJsonAsync<ClienteResponse[]>();
             Assert.NotNull(clientes);
