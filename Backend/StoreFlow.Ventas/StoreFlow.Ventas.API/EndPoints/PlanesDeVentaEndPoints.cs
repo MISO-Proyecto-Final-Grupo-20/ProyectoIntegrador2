@@ -8,7 +8,7 @@ public static class PlanesDeVentaEndPoints
 {
     public static void MapPlanesDeVentasEndPoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/planesDeVentas",
+        app.MapPost("/planesVenta",
             async (CrearPlanVentaRequest request, VentasDbContext dbContext) =>
             {
                 var planesDeVentas = PlanDeVentas.CrearPlanesDeVentas(request);

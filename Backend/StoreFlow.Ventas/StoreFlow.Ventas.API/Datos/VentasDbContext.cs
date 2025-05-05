@@ -7,8 +7,6 @@ namespace StoreFlow.Ventas.API.Datos;
 public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbContext(options)
 {
     public DbSet<Pedido> Pedidos { get; set; }
-    public DbSet<PeriodoTiempo> PeriodosTiempo { get; set; }
-    public DbSet<PlanVenta> PlanesVenta { get; set; }
     public DbSet<PlanDeVentas> PlanesDeVentas { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,39 +38,6 @@ public class VentasDbContext(DbContextOptions<VentasDbContext>options) : DbConte
             entidad.Property(e => e.Codigo).HasMaxLength(50);
             entidad.Property(e => e.Nombre).HasMaxLength(150);
             
-        });
-        
-        modelBuilder.Entity<PeriodoTiempo>(entidad =>
-        {
-            entidad.ToTable("PeriodosTiempo");
-            entidad.HasKey(e => e.Id);
-            
-            entidad.Property(e => e.Nombre)
-                .IsRequired()
-                .HasMaxLength(50);
-                
-            entidad.HasMany(e => e.PlanesVenta)
-                .WithOne(p => p.PeriodoTiempo)
-                .HasForeignKey(p => p.PeriodoTiempoId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-        
-        modelBuilder.Entity<PlanVenta>(entidad =>
-        {
-            entidad.ToTable("PlanesVenta");
-            entidad.HasKey(e => e.Id);
-            
-            entidad.Property(e => e.Nombre)
-                .IsRequired()
-                .HasMaxLength(100);
-                
-            entidad.Property(e => e.Descripcion)
-                .IsRequired()
-                .HasMaxLength(500);
-                
-            entidad.Property(e => e.Precio)
-                .IsRequired()
-                .HasColumnType("decimal(18,2)");
         });
 
         modelBuilder.Entity<PlanDeVentas>(entidad =>

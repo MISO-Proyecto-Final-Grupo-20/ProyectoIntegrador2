@@ -46,7 +46,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapCrearPedidoEndPont();
-app.MapPlanesVentaEndPoints();
 app.MapPlanesDeVentasEndPoints();
 
 

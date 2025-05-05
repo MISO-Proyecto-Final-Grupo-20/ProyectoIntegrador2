@@ -104,7 +104,7 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var response = await _client.PostAsJsonAsync("/planesDeVentas",
+        var response = await _client.PostAsJsonAsync("/planesVenta",
         new CrearPlanVentaRequest(1, 15_000_000, [
             new(1, "Vendedor 1"), 
             new(2, "Vendedor 2")
@@ -127,13 +127,13 @@ public class CrearPedidosEndPointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenUsuarioCcp();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        _ = await _client.PostAsJsonAsync("/planesDeVentas",
+        _ = await _client.PostAsJsonAsync("/planesVenta",
             new CrearPlanVentaRequest(1, 15_000_000, [
                 new(1, "Vendedor 1"), 
                 new(2, "Vendedor 2")
             ]));
         
-        var response = await _client.PostAsJsonAsync("/planesDeVentas",
+        var response = await _client.PostAsJsonAsync("/planesVenta",
             new CrearPlanVentaRequest(1, 30_000_000, [
                 new(1, "Vendedor 1"), 
             ]));

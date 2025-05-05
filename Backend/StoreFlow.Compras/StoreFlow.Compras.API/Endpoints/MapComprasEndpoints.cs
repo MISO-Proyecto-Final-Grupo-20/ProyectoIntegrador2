@@ -76,7 +76,7 @@ public static class ComprasEndpoints
         }).RequireAuthorization("SoloUsuariosCcp");
 
 
-        app.MapGet("/productos", async (IProductosService productosService) =>
+        app.MapGet("/productos/catalogo", async (IProductosService productosService) =>
         {
             var resultado = await productosService.ObtenerProductosAsync();
             return Results.Ok(resultado);

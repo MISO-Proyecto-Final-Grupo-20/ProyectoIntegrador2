@@ -63,7 +63,6 @@ public static class TestApplicationFactory
         
 
         app.MapCrearPedidoEndPont();
-        app.MapPlanesVentaEndPoints();
         app.MapPlanesDeVentasEndPoints();
 
 
