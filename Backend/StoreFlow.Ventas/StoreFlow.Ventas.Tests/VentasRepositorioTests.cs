@@ -60,7 +60,7 @@ public class VentasRepositorioTests
                 [
                     new ProductoSolicitado(101, 2, 50, false),
                     new ProductoSolicitado(102, 1, 100, false)
-                ]);
+                ], null);
             List<InformacionPoducto> informacionProductos = [
                 new(101, "imagen 101", "nombre 101", "codigo 101", 50)
             ];

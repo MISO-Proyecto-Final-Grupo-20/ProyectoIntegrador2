@@ -1,5 +1,5 @@
 import { EstadoPedido } from './app.enum';
-import { Pedido, ProductoPedido } from './app.model';
+import { Pedido, Producto, ProductoPedido } from './app.model';
 
 const productos: ProductoPedido[] = [
   {
@@ -121,5 +121,20 @@ export const mocksPedidos: Pedido[] = [
     lugarEntrega: 'Cr 238#47- 889',
     total: 500000,
     productos,
+  },
+];
+
+export const mockProductos: Producto[] = [
+  {
+    imagen: 'https://i.ibb.co/Qvcf4M7R/Leche.png',
+    nombre: 'Leche Leche  de almendra sin azucar 1L, Almendras,',
+    precio: 20000,
+    codigo: '123456789',
+  },
+  {
+    imagen: 'https://i.ibb.co/BVxrgLNY/jugo.png',
+    nombre: 'Jugo de naranja',
+    precio: 10000,
+    codigo: '987654321',
   },
 ];

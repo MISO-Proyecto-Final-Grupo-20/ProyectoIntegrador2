@@ -18,6 +18,7 @@ import { MensajesPlanesVenta } from '../planes-venta.constantes';
 import {
   FormularioPlanesVenta,
   RegistroPlanVenta,
+  VendedorPlanVenta,
 } from '../planes-venta.model';
 import { PlanesVentaService } from '../planes-venta.service';
 
@@ -48,10 +49,12 @@ export class RegistrarPlanesVentaComponent {
     return this.formulario.get('vendedores') as FormGroup;
   }
 
-  get vendedoresSeleccionados(): number[] {
-    return Object.entries(this.controlesVendedores.controls)
-      .filter(([, control]) => control.value)
-      .map(([id]) => parseInt(id));
+  get vendedoresSeleccionados(): VendedorPlanVenta[] {
+    return this.vendedores()
+      .filter(
+        (vendedor) => this.controlesVendedores.controls[vendedor.id]?.value
+      )
+      .map(({ id, nombre }) => ({ id, nombre }));
   }
 
   get desactivarBoton() {

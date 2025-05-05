@@ -4,9 +4,9 @@ import { ClientesState } from '../clientes.model';
 
 export const actionsStore = withMethods(
   (state: SignalsOf<Partial<ClientesState>>) => ({
-    asignarFiltroProductos: (filtroProducto: string | null) =>
+    asignarFiltroProductos: (filtroProducto: string) =>
       patchState(state, { filtroProducto }),
-    asignarFiltroPedidos: (filtroPedido: string | null) =>
+    asignarFiltroPedidos: (filtroPedido: string) =>
       patchState(state, { filtroPedido }),
   })
 );

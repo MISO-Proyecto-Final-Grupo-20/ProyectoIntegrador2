@@ -4,8 +4,8 @@ import { WritableStateSource } from '@ngrx/signals';
 export type OpcionesLista = OpcionLista[];
 
 export enum TipoCategoria {
-  Cliente = 'cliente',
-  Vendedor = 'vendedor',
+  Cliente = 'Cliente',
+  Vendedor = 'Vendedor',
 }
 
 export interface Sesion {

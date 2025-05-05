@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule } from '@storeflow/design-system';
-import { RegistroPedido } from '../clientes.model';
 import { ClientesStore } from '../state';
+import { RegistroPedido } from '../../app.model';
 
 @Component({
   selector: 'app-modal-crear-pedido',

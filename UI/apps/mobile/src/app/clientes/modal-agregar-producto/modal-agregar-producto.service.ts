@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Producto } from '../clientes.model';
 import { ModalAgregarProductoComponent } from './modal-agregar-producto.component';
+import { Producto } from '../../app.model';
 
 @Injectable()
 export class ModalAgregarProductoService {

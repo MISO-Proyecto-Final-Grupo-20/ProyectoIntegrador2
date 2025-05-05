@@ -55,8 +55,8 @@
         data-testid="select-informes-producto"
         formControlName="producto"
       >
-        @for (producto of productos(); track producto.id) {
-          <mat-option [value]="producto.id">
+        @for (producto of productos(); track producto.codigo) {
+          <mat-option [value]="producto.codigo">
             {{ producto.nombre }}
           </mat-option>
         }

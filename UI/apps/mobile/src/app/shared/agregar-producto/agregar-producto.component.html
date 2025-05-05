@@ -1,0 +1,43 @@
+<div class="p-16 column gap-17">
+  <div class="row align-items-center justify-content-between nowrap">
+    <div class="row gap-20 align-items-center nowrap">
+      <img class="max-tamanio" [src]="producto().imagen" />
+      <div class="column gap-2">
+        <p class="mat-body-1 color-grey-800">
+          {{ producto().nombre }}
+        </p>
+        <p class="mat-body-2 color-accent">
+          {{ producto().precio | number }} COP
+        </p>
+      </div>
+    </div>
+    <div class="row gap-13 align-items-center nowrap">
+      <button
+        data-testid="boton-restar-producto"
+        mat-icon-button
+        (click)="restarProducto()"
+      >
+        <mat-icon class="color-primary">remove</mat-icon>
+      </button>
+      <h3 class="color-grey-800">{{ cantidadProductos() }}</h3>
+      <button
+        data-testid="boton-sumar-producto"
+        mat-icon-button
+        (click)="sumarProducto()"
+      >
+        <mat-icon class="color-primary">add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row justify-content-end">
+    <button
+      i18n="agregar"
+      data-testid="boton-agregar-producto"
+      mat-raised-button
+      color="primary"
+      (click)="emitirAgregarProducto()"
+    >
+      Agregar
+    </button>
+  </div>
+</div>

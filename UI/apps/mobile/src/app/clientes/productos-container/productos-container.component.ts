@@ -1,25 +1,27 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '@storeflow/design-system';
-import { Producto } from '../clientes.model';
+import { ProductosComponent } from '../../shared/productos/productos.component';
 import { ModalAgregarProductoService } from '../modal-agregar-producto/modal-agregar-producto.service';
 import { ModalCrearPedidoService } from '../modal-crear-pedido/modal-crear-pedido.service';
 import { ClientesStore } from '../state';
+import { Producto } from '../../app.model';
 
 @Component({
-  selector: 'app-productos',
+  selector: 'app-productos-container',
   standalone: true,
-  imports: [SharedModule, ReactiveFormsModule, CommonModule],
-  providers: [ModalAgregarProductoService, ModalCrearPedidoService],
-  templateUrl: './productos.component.html',
-  styleUrl: './productos.component.scss',
+  imports: [ProductosComponent],
+  providers: [ModalCrearPedidoService, ModalAgregarProductoService],
+  template: `<app-productos
+    [cantidadProductosSeleccionados]="cantidadProductosSeleccionados"
+    (filtarProducto)="filtarProducto($event)"
+    (seleccionarProducto)="seleccionarProducto($event)"
+    (abrirModalCrearPedido)="abrirModalCrearPedido()"
+    [productos]="store.productosFiltradosConSeleccion()"
+  ></app-productos>`,
 })
-export class ProductosComponent {
+export class ProductosContainerComponent {
   modalAgregarProductoService = inject(ModalAgregarProductoService);
   modalCrearPedidoService = inject(ModalCrearPedidoService);
   store = inject(ClientesStore);
-  controlBuscar = new FormControl('');
 
   get cantidadProductosSeleccionados(): number {
     return this.store.productosSeleccionados().length;
@@ -27,14 +29,19 @@ export class ProductosComponent {
 
   constructor() {
     this.store.asignarFiltroProductos('');
-    this.controlBuscar.valueChanges.subscribe((valor) => {
-      this.store.asignarFiltroProductos(valor);
-    });
+  }
+
+  filtarProducto(valor: string) {
+    this.store.asignarFiltroProductos(valor);
   }
 
   seleccionarProducto(producto: Producto) {
     if (producto.seleccionado) {
-      this.store.seleccionarProducto({ ...producto, cantidad: 0 });
+      this.store.seleccionarProducto({
+        ...producto,
+        cantidad: 0,
+        seleccionado: false,
+      });
     } else {
       this.modalAgregarProductoService.abrirModal(producto);
     }

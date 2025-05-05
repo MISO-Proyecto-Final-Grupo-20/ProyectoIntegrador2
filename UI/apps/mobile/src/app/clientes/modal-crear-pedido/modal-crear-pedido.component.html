@@ -7,8 +7,10 @@
   <mat-dialog-content>
     <div class="column gap-17">
       @for (producto of store.productosSeleccionados(); track $index) {
-        <div class="row align-items-center justify-content-between">
-          <div class="row gap-20 align-items-center">
+        <div
+          class="row align-items-center justify-content-between gap-2 nowrap"
+        >
+          <div class="row gap-20 align-items-center nowrap">
             <img class="max-tamanio" [src]="producto.imagen" />
             <div class="column gap-2">
               <p class="mat-body-1 color-grey-800">

@@ -32,16 +32,16 @@ public class InventarioRepositorioTest
                     new ProductoSolicitado(Id: 1, Cantidad: 5, Precio: 100, TieneInventario: false),
                     new ProductoSolicitado(Id: 2, Cantidad: 10, Precio: 50, TieneInventario: false),
                     new ProductoSolicitado(Id: 3, Cantidad: 1, Precio: 20, TieneInventario: false)
-                ]
+                ], null
             );
 
             var pedidoValidado = await context.ValidarPedidoConInventarioAsync(pedido);
 
             Assert.Equal(pedidoValidado.FechaCreacion, pedido.FechaCreacion);
             Assert.Equal(pedidoValidado.IdCliente, pedido.IdCliente);
-            Assert.True(pedidoValidado.productosSolicitados[0].TieneInventario); 
-            Assert.False(pedidoValidado.productosSolicitados[1].TieneInventario);
-            Assert.False(pedidoValidado.productosSolicitados[2].TieneInventario); 
+            Assert.True(pedidoValidado.ProductosSolicitados[0].TieneInventario); 
+            Assert.False(pedidoValidado.ProductosSolicitados[1].TieneInventario);
+            Assert.False(pedidoValidado.ProductosSolicitados[2].TieneInventario); 
             
             
             var inventarioActualizado = await context.Inventarios.ToListAsync();

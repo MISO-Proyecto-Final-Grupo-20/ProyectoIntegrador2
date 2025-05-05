@@ -8,12 +8,12 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { Alerta, AlertaService, TipoAlerta } from '@storeflow/design-system';
 import { MensajesAlertas } from '../../app.constantes';
-import { Producto, ProductoSeleccionado } from '../clientes.model';
-import { ClientesUrls } from '../clientes.urls';
 import { ClientesService } from '../services/clientes.service';
 import { ClientesStore } from '../state';
 import { ModalAgregarProductoComponent } from './modal-agregar-producto.component';
 import { ModalAgregarProductoService } from './modal-agregar-producto.service';
+import { AppsUrls } from '../../app.urls';
+import { Producto, ProductoSeleccionado } from '../../app.model';
 
 describe('ModalAgregarProductoComponent', () => {
   let component: ModalAgregarProductoComponent;
@@ -67,35 +67,17 @@ describe('ModalAgregarProductoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Debe sumar 1 a la cantidad de productos, cuando se le de click al "boton-sumar-producto"', () => {
-    const botonSumar = fixture.debugElement.query(
-      By.css('[data-testid="boton-sumar-producto"]')
-    );
-    botonSumar.nativeElement.click();
-    fixture.detectChanges();
-    expect(component.cantidadProductos()).toEqual(11);
-  });
-
-  it('Debe restar 1 a la cantidad de productos, cuando se le de click al "boton-restar-producto"', () => {
-    const botonSumar = fixture.debugElement.query(
-      By.css('[data-testid="boton-restar-producto"]')
-    );
-    botonSumar.nativeElement.click();
-    fixture.detectChanges();
-    expect(component.cantidadProductos()).toEqual(9);
-  });
-
   it('Debe llamarse el servicio que valida el inventario, cuando se le de click al "boton-agregar-producto"', () => {
     const esperado: ProductoSeleccionado = {
       ...producto,
       seleccionado: true,
-      cantidad: component.cantidadProductos(),
+      cantidad: 10,
     };
     const botonAgregar = fixture.debugElement.query(
       By.css('[data-testid="boton-agregar-producto"]')
     );
     botonAgregar.nativeElement.click();
-    const peticion = httpMock.expectOne(ClientesUrls.validarInventarioProducto);
+    const peticion = httpMock.expectOne(AppsUrls.validarInventarioProducto);
     expect(peticion.request.method).toEqual('POST');
     expect(peticion.request.body).toEqual(esperado);
   });
@@ -109,7 +91,7 @@ describe('ModalAgregarProductoComponent', () => {
       By.css('[data-testid="boton-agregar-producto"]')
     );
     botonAgregar.nativeElement.click();
-    const peticion = httpMock.expectOne(ClientesUrls.validarInventarioProducto);
+    const peticion = httpMock.expectOne(AppsUrls.validarInventarioProducto);
     peticion.flush(false);
 
     expect(alerta.abrirAlerta).toHaveBeenCalledWith(esperadoAlerta);
@@ -119,13 +101,13 @@ describe('ModalAgregarProductoComponent', () => {
     const esperado: ProductoSeleccionado = {
       ...producto,
       seleccionado: true,
-      cantidad: component.cantidadProductos(),
+      cantidad: 10,
     };
     const botonAgregar = fixture.debugElement.query(
       By.css('[data-testid="boton-agregar-producto"]')
     );
     botonAgregar.nativeElement.click();
-    const peticion = httpMock.expectOne(ClientesUrls.validarInventarioProducto);
+    const peticion = httpMock.expectOne(AppsUrls.validarInventarioProducto);
     peticion.flush(true);
     expect(modalAgregarProductoService.cerrarModal).toHaveBeenCalled();
     expect(component.store.productosSeleccionados()).toEqual([esperado]);

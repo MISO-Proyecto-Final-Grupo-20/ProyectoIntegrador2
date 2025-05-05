@@ -23,10 +23,10 @@ public class PlanDeVentas
 
     public static PlanDeVentas[] CrearPlanesDeVentas(CrearPlanVentaRequest request)
     {
-        var periodoTiempo = (Periodicidad)request.periodoTiempo;
+        var periodoTiempo = (Periodicidad)request.PeriodoTiempo;
         
-        return request.vendedores.Select(pv => 
-            new PlanDeVentas(periodoTiempo, request.valorVentas, pv.idVendedor, pv.nombreVendedor))
+        return request.Vendedores.Select(pv => 
+            new PlanDeVentas(periodoTiempo, request.ValorVentas, pv.Id, pv.Nombre))
             .ToArray();
     }
 }

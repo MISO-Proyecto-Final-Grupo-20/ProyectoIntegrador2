@@ -1,27 +1,27 @@
-import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
 import {
   ComponentFixture,
   fakeAsync,
   TestBed,
   tick,
 } from '@angular/core/testing';
+import { ProductosContainerComponent } from './productos-container.component';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Producto, ProductoSeleccionado } from '../clientes.model';
-import { ClientesUrls } from '../clientes.urls';
+import { Producto, ProductoSeleccionado } from '../../app.model';
 import { ModalAgregarProductoService } from '../modal-agregar-producto/modal-agregar-producto.service';
 import { ModalCrearPedidoService } from '../modal-crear-pedido/modal-crear-pedido.service';
+import { provideHttpClient } from '@angular/common/http';
 import { ClientesService } from '../services/clientes.service';
 import { ClientesStore } from '../state';
-import { ProductosComponent } from './productos.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppsUrls } from '../../app.urls';
 
-describe('ProductosComponent', () => {
-  let component: ProductosComponent;
-  let fixture: ComponentFixture<ProductosComponent>;
+describe('ProductosContainerComponent', () => {
+  let component: ProductosContainerComponent;
+  let fixture: ComponentFixture<ProductosContainerComponent>;
   let httpMock: HttpTestingController;
   let modalAgregarProducto: Partial<ModalAgregarProductoService>;
   let modalCrearPedido: Partial<ModalCrearPedidoService>;
@@ -60,7 +60,7 @@ describe('ProductosComponent', () => {
       useValue: modalCrearPedido,
     });
     await TestBed.configureTestingModule({
-      imports: [ProductosComponent, BrowserAnimationsModule],
+      imports: [ProductosContainerComponent, BrowserAnimationsModule],
       providers: [
         ClientesStore,
         HttpTestingController,
@@ -70,18 +70,17 @@ describe('ProductosComponent', () => {
       ],
     }).compileComponents();
     httpMock = TestBed.inject(HttpTestingController);
-    fixture = TestBed.createComponent(ProductosComponent);
+    fixture = TestBed.createComponent(ProductosContainerComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     component.store.obtenerProductos();
-    const peticion = httpMock.expectOne(ClientesUrls.obtenerProductos);
+    const peticion = httpMock.expectOne(AppsUrls.obtenerProductos);
     peticion.flush(productos);
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
   it.each([
     {
       filtro: 'JU',
@@ -103,9 +102,13 @@ describe('ProductosComponent', () => {
       expect(component.store.productosFiltrados()).toEqual(datos.esperado);
     })
   );
-  it('debe abrir el modal de agregar producto, cuando se llame el metodo "seleccionarProducto" y no este seleccionado ', () => {
+
+  it('debe abrir el modal de agregar producto, cuando se le de click al "lista-seleccionar-producto" ', () => {
     const producto: Producto = { ...productos[0], seleccionado: false };
-    component.seleccionarProducto(producto);
+    const lista = fixture.debugElement.queryAll(
+      By.css('[data-testid="lista-seleccionar-producto"]')
+    )[0];
+    lista.nativeElement.click();
     expect(modalAgregarProducto.abrirModal).toHaveBeenCalledWith(producto);
   });
   it('debe eliminar el producto ya seleccionado, cuando se llame el metodo "seleccionarProducto" y el producto se encuentre seleccionado ', () => {

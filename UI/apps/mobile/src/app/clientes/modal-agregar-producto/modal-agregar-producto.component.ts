@@ -1,38 +1,36 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, Inject, signal } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SharedModule } from '@storeflow/design-system';
-import { Producto } from '../clientes.model';
 import { ClientesStore } from '../state';
+import { Producto } from '../../app.model';
+import { AgregarProductoComponent } from '../../shared/agregar-producto/agregar-producto.component';
 
 @Component({
   selector: 'app-modal-agregar-producto',
   standalone: true,
-  imports: [SharedModule, CommonModule],
-  templateUrl: './modal-agregar-producto.component.html',
-  styleUrl: './modal-agregar-producto.component.scss',
+  imports: [SharedModule, AgregarProductoComponent],
+  template: `<section>
+    <div class="row justify-content-end pt-12 px-16">
+      <mat-icon class="cursor-pointer color-grey-800" mat-dialog-close
+        >close</mat-icon
+      >
+    </div>
+    <app-agregar-producto
+      [producto]="producto"
+      (agregarProducto)="agregarProducto($event)"
+    ></app-agregar-producto>
+  </section> `,
 })
 export class ModalAgregarProductoComponent {
   store = inject(ClientesStore);
-  cantidadProductos = signal(10);
 
   constructor(@Inject(MAT_DIALOG_DATA) public producto: Producto) {}
 
-  sumarProducto() {
-    this.cantidadProductos.update((cantidad) => cantidad + 1);
-  }
-
-  restarProducto() {
-    this.cantidadProductos.update((cantidad) =>
-      cantidad > 1 ? cantidad - 1 : cantidad
-    );
-  }
-
-  agregarProducto() {
+  agregarProducto(cantidad: number) {
     this.store.validarInventarioProducto({
       ...this.producto,
       seleccionado: true,
-      cantidad: this.cantidadProductos(),
+      cantidad: cantidad,
     });
   }
 }

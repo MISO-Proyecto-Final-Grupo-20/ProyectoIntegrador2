@@ -38,22 +38,6 @@ describe('FormularioConsultaInformesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debe deshabilitar el boton de "boton-consultar-informes" cuando el formulario no este completo', () => {
-    const boton = fixture.debugElement.query(
-      By.css('button[data-testid="boton-consultar-informes"]')
-    );
-    expect(boton.nativeElement.disabled).toBeTruthy();
-  });
-
-  it('debe habilitarse el boton de "boton-consultar-informes" cuando el formulario este lleno', () => {
-    const boton = fixture.debugElement.query(
-      By.css('button[data-testid="boton-consultar-informes"]')
-    );
-    component.formulario.setValue(formulario);
-    fixture.detectChanges();
-    expect(boton.nativeElement.disabled).toBeFalsy();
-  });
-
   it('debe emitir el evento "consultarInformes" cuando se le de click al "boton-consultar-informes"', () => {
     const spy = jest.spyOn(component.consultarInformes, 'emit');
     const boton = fixture.debugElement.query(

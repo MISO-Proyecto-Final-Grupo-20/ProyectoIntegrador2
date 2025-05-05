@@ -24,7 +24,7 @@ public class Pedido
     public Pedido(SolicitudDePedido solicitud, List<InformacionPoducto> informacionProductos, InformacionCliente informacionCliente, InformacionVendedor? informacionVendedor)
     {
         
-        var productosPedidos = from productoSolicitado in solicitud.productosSolicitados
+        var productosPedidos = from productoSolicitado in solicitud.ProductosSolicitados
             join infoProducto in informacionProductos
                 on productoSolicitado.Id equals infoProducto.Id into productoJoin
             from infoProducto in productoJoin.DefaultIfEmpty()

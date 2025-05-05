@@ -3,12 +3,18 @@ import { Sesion, TipoCategoria } from '../modelos/generales.model';
 
 export class Utilidades {
   static obtenerSesion(): Sesion {
-    //quitar
+    const sesion = (window as any).sesion;
+    if (!sesion) return {} as Sesion;
+    const claimsBase =
+      'http://schemas.microsoft.com/ws/2008/06/identity/claims';
+    const nombreUsuario = sesion[`${claimsBase}/nombre`] ?? sesion['correo'];
+    const categoria = sesion[`${claimsBase}/role`] as TipoCategoria;
+
     return {
-      categoria: TipoCategoria.Cliente,
-      nombreUsuario: 'Camilo Barreto',
-    } as Sesion;
-    // return (window as any).sesion as Sesion;
+      nombreUsuario,
+      email: sesion['correo'],
+      categoria: categoria,
+    };
   }
 
   static obtenerTamanioArchivo(size: number): string {

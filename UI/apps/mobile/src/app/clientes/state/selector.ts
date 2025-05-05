@@ -1,12 +1,9 @@
 import { computed } from '@angular/core';
 import { StateSignals, withComputed } from '@ngrx/signals';
-import {
-  ClientesState,
-  Producto,
-  ProductoSeleccionado,
-} from '../clientes.model';
+import { ClientesState } from '../clientes.model';
 import { EstadoPedido } from '../../app.enum';
 import { Pedido } from '../../app.model';
+import { UtilidadesCrearPedido } from '../../shared/utilidades-crear-pedido';
 
 export const selectorsStore = withComputed((store) => {
   const {
@@ -17,12 +14,12 @@ export const selectorsStore = withComputed((store) => {
     filtroPedido,
   } = store as StateSignals<ClientesState>;
   const productosFiltrados = computed(() =>
-    filtrarProductos(filtroProducto(), productos())
+    UtilidadesCrearPedido.filtrarProductos(filtroProducto(), productos())
   );
   return {
     productosFiltrados,
     productosFiltradosConSeleccion: computed(() =>
-      obtenerProductosFiltradosConSeleccion(
+      UtilidadesCrearPedido.obtenerProductosFiltradosConSeleccion(
         productosFiltrados(),
         productosSeleccionados()
       )
@@ -33,35 +30,6 @@ export const selectorsStore = withComputed((store) => {
     pedidosFiltrados: computed(() => filtrarPedidos(filtroPedido(), pedidos())),
   };
 });
-
-function obtenerProductosFiltradosConSeleccion(
-  productosOriginales: Producto[],
-  seleccionados: ProductoSeleccionado[]
-): Producto[] {
-  return productosOriginales.map((producto) => {
-    const seleccionado = seleccionados.find(
-      (seleccionado) => seleccionado.codigo === producto.codigo
-    );
-    return {
-      ...producto,
-      seleccionado: !!seleccionado,
-    };
-  });
-}
-
-function filtrarProductos(
-  filtro: string | null | undefined,
-  productos: Producto[]
-) {
-  const normalizado = (filtro ?? '').trim().normalize().toLowerCase();
-  if (!normalizado) return productos;
-
-  return productos.filter(
-    ({ nombre, codigo }) =>
-      nombre.normalize().toLowerCase().includes(normalizado) ||
-      codigo.normalize().toLowerCase().includes(normalizado)
-  );
-}
 
 function filtrarPedidos(filtro: string | null, pedidos: Pedido[]) {
   const normalizado = (filtro ?? '').trim().normalize().toLowerCase();

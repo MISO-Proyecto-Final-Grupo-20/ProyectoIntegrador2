@@ -1,23 +1,17 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { patchState, withMethods } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { AlertaService, SignalsOf, TipoAlerta } from '@storeflow/design-system';
 import { pipe, switchMap, tap } from 'rxjs';
 import { MensajesAlertas } from '../../app.constantes';
-import { rutasCrearPedido } from '../clientes.constantes';
-import {
-  ClientesState,
-  ProductoSeleccionado,
-  RegistroPedido,
-} from '../clientes.model';
+import { ClientesState } from '../clientes.model';
 import { ModalAgregarProductoService } from '../modal-agregar-producto/modal-agregar-producto.service';
 import { ClientesService } from '../services/clientes.service';
+import { ProductoSeleccionado, RegistroPedido } from '../../app.model';
 
 export const effectsStore = withMethods(
   (store: SignalsOf<Partial<ClientesState>>) => {
     const service = inject(ClientesService);
-    const router = inject(Router);
     const alertaService = inject(AlertaService);
     const modalAgregarProductoService = inject(ModalAgregarProductoService);
 
@@ -77,7 +71,6 @@ export const effectsStore = withMethods(
               patchState(store, {
                 productosSeleccionados: [],
               });
-              router.navigateByUrl(rutasCrearPedido.pedidosPendientes);
               alertaService.abrirAlerta({
                 tipo: TipoAlerta.Success,
                 descricion: MensajesAlertas.pedidoCreado,
