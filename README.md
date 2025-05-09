@@ -2,6 +2,9 @@
 
 Administrador logístico para suplir tiendas y supermercados.
 
+## Creación del ambiente
+[Guía de Creación](/creacion_ambiente_storeflow_limpio.md)
+
 ## Ingresa a la aplicación web
 
 La aplicación web está destinada para los adminsitradores de CCP.
