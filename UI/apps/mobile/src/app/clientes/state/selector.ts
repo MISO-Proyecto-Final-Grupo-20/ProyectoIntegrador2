@@ -1,6 +1,6 @@
 import { computed } from '@angular/core';
 import { StateSignals, withComputed } from '@ngrx/signals';
-import { ClientesState } from '../clientes.model';
+import { ClientesState, EntregaProgramada } from '../clientes.model';
 import { EstadoPedido } from '../../app.enum';
 import { Pedido } from '../../app.model';
 import { UtilidadesCrearPedido } from '../../shared/utilidades-crear-pedido';
@@ -12,6 +12,8 @@ export const selectorsStore = withComputed((store) => {
     productosSeleccionados,
     pedidos,
     filtroPedido,
+    filtroEntrega,
+    entregasProgramadas,
   } = store as StateSignals<ClientesState>;
   const productosFiltrados = computed(() =>
     UtilidadesCrearPedido.filtrarProductos(filtroProducto(), productos())
@@ -28,14 +30,31 @@ export const selectorsStore = withComputed((store) => {
       pedidos().filter(({ estado }) => estado === EstadoPedido.pendiente)
     ),
     pedidosFiltrados: computed(() => filtrarPedidos(filtroPedido(), pedidos())),
+    entregasFiltradas: computed(() =>
+      filtrarEntregas(filtroEntrega(), entregasProgramadas())
+    ),
   };
 });
 
-function filtrarPedidos(filtro: string | null, pedidos: Pedido[]) {
+function filtrarPorNumero<T>(
+  filtro: string,
+  datos: T[],
+  obtenerNumero: (item: T) => string | number
+): T[] {
   const normalizado = (filtro ?? '').trim().normalize().toLowerCase();
-  if (!normalizado) return pedidos;
-
-  return pedidos.filter(({ numero }) =>
-    numero.toString().normalize().toLowerCase().includes(normalizado)
+  if (!normalizado) return datos;
+  return datos.filter((dato) =>
+    obtenerNumero(dato)
+      .toString()
+      .normalize()
+      .toLowerCase()
+      .includes(normalizado)
   );
+}
+function filtrarPedidos(filtro: string, pedidos: Pedido[]) {
+  return filtrarPorNumero(filtro, pedidos, (pedido) => pedido.numero);
+}
+
+function filtrarEntregas(filtro: string, entregas: EntregaProgramada[]) {
+  return filtrarPorNumero(filtro, entregas, (entrega) => entrega.numero);
 }

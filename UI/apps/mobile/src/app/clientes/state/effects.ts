@@ -93,12 +93,28 @@ export const effectsStore = withMethods(
       )
     );
 
+    const obtenerEntregasProgramadas = rxMethod<void>(
+      pipe(
+        switchMap(() =>
+          service.obtenerEntregasProgramadas().pipe(
+            tap((entregas) =>
+              patchState(store, {
+                entregasProgramadas: [...entregas],
+                filtroEntrega: '',
+              })
+            )
+          )
+        )
+      )
+    );
+
     const effects = {
       obtenerProductos,
       validarInventarioProducto,
       seleccionarProducto,
       crearPedido,
       obtenerPedidos,
+      obtenerEntregasProgramadas,
     };
 
     return effects;

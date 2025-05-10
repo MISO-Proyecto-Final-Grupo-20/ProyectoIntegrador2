@@ -19,7 +19,7 @@ export class MenuNavegacionComponent {
   }
 
   get titulo() {
-    return $localize`:@@tituloMenuNavegacion:Hola ${this.sesion.nombreUsuario}`;
+    return $localize`:@@tituloMenuNavegacion:Hola ${this.sesion.nombre}`;
   }
 
   get descripcion() {

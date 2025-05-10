@@ -1,1 +1,59 @@
-<p>entregas-programadas works!</p>
+<div class="p-16 column gap-8">
+  <app-card-informacion
+    [titulo]="titulo"
+    [descripcion]="descripcion"
+  ></app-card-informacion>
+  <div class="row justify-content-end">
+    <mat-form-field appearance="outline" class="bg-white width-240">
+      <input
+        i18n-placeholder="entregas.buscarEntrega"
+        placeholder="Buscar entrega "
+        [formControl]="controlBuscar"
+        type="text"
+        matInput
+        data-testid="input-buscar-entrega"
+      />
+      <mat-icon matSuffix class="color-grey-500">search</mat-icon>
+    </mat-form-field>
+  </div>
+  <mat-accordion multi>
+    @for (entrega of store.entregasFiltradas(); track $index) {
+      <mat-expansion-panel class="mat-elevation-z0">
+        <mat-expansion-panel-header class="p-16">
+          <div>
+            <div class="column gap-4">
+              <div class="row align-items-center gap-10">
+                <p class="mat-body-1 color-primary">
+                  Entrega #{{ entrega.numero }}
+                </p>
+              </div>
+              <div>
+                <div
+                  class="row gap-4 align-items-center mat-body-2 color-on-surface"
+                >
+                  <p i18n="fechaEntrega">Fecha de entrega:</p>
+                  <p>{{ entrega.fechaEntrega | date }}</p>
+                </div>
+                <div
+                  class="row gap-4 align-items-center mat-body-2 color-on-surface"
+                >
+                  <p class="mat-body-2 color-on-surface" i18n="lugarEntrega">
+                    Lugar de entrega:
+                  </p>
+                  <p class="mat-body-2 color-on-surface">
+                    {{ entrega.lugarEntrega }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <app-listado-productos
+          [productos]="entrega.productos"
+        ></app-listado-productos>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+</div>

@@ -10,6 +10,8 @@ const initialState: ClientesState = {
   productosSeleccionados: [],
   pedidos: [],
   filtroPedido: '',
+  entregasProgramadas: [],
+  filtroEntrega: '',
 };
 
 export const ClientesStore = signalStore(

@@ -8,5 +8,7 @@ export const actionsStore = withMethods(
       patchState(state, { filtroProducto }),
     asignarFiltroPedidos: (filtroPedido: string) =>
       patchState(state, { filtroPedido }),
+    asignarFiltroEntregas: (filtroEntrega: string) =>
+      patchState(state, { filtroEntrega }),
   })
 );

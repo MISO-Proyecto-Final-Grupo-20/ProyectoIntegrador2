@@ -12,7 +12,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
       [rutaVolver]="rutaVolver"
       [mostrarAvatar]="true"
       [categoriaUsuario]="sesion.categoria"
-      [nombreUsuario]="sesion.nombreUsuario"
+      [nombreUsuario]="sesion.nombre"
     ></app-header>
     <div class="contenido-mobile ">
       <router-outlet></router-outlet>

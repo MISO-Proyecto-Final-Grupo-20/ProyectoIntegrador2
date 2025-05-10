@@ -1,7 +1,7 @@
 import { EstadoPedido } from './app.enum';
 import { Pedido, Producto, ProductoPedido } from './app.model';
 
-const productos: ProductoPedido[] = [
+export const productos: ProductoPedido[] = [
   {
     id: 1,
     imagen: 'https://i.ibb.co/Qvcf4M7R/Leche.png',

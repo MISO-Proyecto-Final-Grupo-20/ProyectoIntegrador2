@@ -82,6 +82,12 @@ public static class ComprasEndpoints
             return Results.Ok(resultado);
         });
         
+        app.MapGet("/productos", async (IProductosService productosService) =>
+        {
+            var resultado = await productosService.ObtenerProductosAsync();
+            return Results.Ok(resultado);
+        });
+        
 
     }
 }

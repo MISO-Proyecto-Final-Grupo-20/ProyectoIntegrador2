@@ -9,7 +9,7 @@ export enum TipoCategoria {
 }
 
 export interface Sesion {
-  nombreUsuario: string;
+  nombre: string;
   email: string;
   categoria: TipoCategoria;
 }
