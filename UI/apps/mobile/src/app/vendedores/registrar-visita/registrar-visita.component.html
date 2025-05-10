@@ -1,1 +1,137 @@
-<p>registrar-visita works!</p>
+<div class="p-16 column gap-20">
+  <h3 class="color-primary">{{ store.clienteSeleccionado()?.nombre }}</h3>
+
+  <mat-card class="sin-sombra-card">
+    <div class="p-16 row align-items-center">
+      <img src="assets/images/camara.svg" />
+      <h3 class="color-on-surface" i18n="registraTuVisita">
+        Registra tu visita
+      </h3>
+    </div>
+    <div class="p-12 column gap-16" [formGroup]="formulario">
+      <div class="row gap-16">
+        <mat-form-field appearance="outline" class="flex-1 calendario">
+          <mat-label i18n="fecha">Fecha</mat-label>
+          <input
+            formControlName="fecha"
+            data-testid="calendar-registrar-visita"
+            matInput
+            [matDatepicker]="fecha"
+          />
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="fecha"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #fecha></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="flex-1" color="accent" appearance="outline">
+          <mat-label i18n="hora">Hora</mat-label>
+          <input
+            type="time"
+            matInput
+            format="HH:mm"
+            formControlName="hora"
+            data-testid="timer-registrar-visita"
+            required
+          />
+          <mat-icon class="color-grey-700" matSuffix>access_time</mat-icon>
+        </mat-form-field>
+      </div>
+      @if (!!store.archivoSeleccionado()) {
+        <div
+          class="row gap-12 align-items-center nowrap p-10"
+          data-testid="archivo-seleccionado"
+        >
+          <mat-icon class="color-primary mat-icon-outlined"
+            >insert_drive_file</mat-icon
+          >
+          <div>
+            <h3 class="color-grey-700">
+              {{ store.archivoSeleccionado()?.name }}
+            </h3>
+            <p class="mat-body-1 color-grey-700">
+              {{ obtenerTamanioArchivo(store.archivoSeleccionado()?.size) }}
+            </p>
+          </div>
+        </div>
+      } @else {
+        <button
+          (click)="abrirModalAdjuntar()"
+          mat-stroked-button
+          data-testid="boton-adjuntar-evidencia"
+          i18n="adjuntarEvidencia"
+          color="primary"
+        >
+          Adjuntar evidencia
+        </button>
+      }
+      <div class="row justify-content-end">
+        <button
+          [disabled]="botonEstaDesabilitado"
+          mat-raised-button
+          i18n="guardar"
+          color="primary"
+          data-testid="boton-registrar-visita"
+          (click)="registrarVisitar()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
+  </mat-card>
+  <div class="column gap-6">
+    <p class="mat-body-1" i18n="visitasRealizadas">Visitas realizadas</p>
+    <div class="column gap-4">
+      @for (visita of store.visitasRegistradas(); track $index) {
+        <mat-card class="sin-sombra-card">
+          <mat-card-content>
+            <div class="column gap-8">
+              <div class="column gap-4">
+                <div class="row gap-4 align-items-center">
+                  <p class="mat-body-1 color-on-surface" i18n="visita">
+                    Visita
+                  </p>
+                  <p class="mat-body-1 color-on-surface"># {{ visita.id }}</p>
+                </div>
+                <div class="row align-items-center justify-content-between">
+                  <div class="row gap-4 align-items-center">
+                    <p class="mat-body-2 color-on-surface" i18n="fechaVisita">
+                      Fecha de visita:
+                    </p>
+                    <p class="mat-body-2 color-on-surface">
+                      {{ visita.fecha | date }}
+                    </p>
+                  </div>
+                  <div class="row gap-4 align-items-center">
+                    <p class="mat-body-2 color-on-surface" i18n="horaVisita">
+                      Hora de visita:
+                    </p>
+                    <p class="mat-body-2 color-on-surface">
+                      {{ obtenerHoraComoFecha(visita.hora) | date: 'hh:mm a' }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="row gap-12 align-items-center nowrap">
+                <mat-icon class="color-primary mat-icon-outlined"
+                  >insert_drive_file</mat-icon
+                >
+                <div>
+                  <p class="mat-body-1">
+                    {{ visita.archivo.nombre }}
+                  </p>
+                  <p class="mat-body-2 color-grey-700">
+                    {{ obtenerTamanioArchivo(visita.archivo.tamanio) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </div>
+</div>

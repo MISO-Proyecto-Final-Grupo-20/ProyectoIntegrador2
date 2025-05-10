@@ -107,14 +107,15 @@ describe('ClientesComponent', () => {
   );
 
   it('debe navegar a la ruta de crear pedido, cuando se le de click a "card-cliente"', async () => {
-    const esperado = 'home/vendedores/clientes/crearPedido';
+    const esperadoRuta = 'home/vendedores/clientes/crearPedido';
+    fixture.componentRef.setInput('ruta', esperadoRuta);
     const cardCliente = fixture.debugElement.queryAll(
       By.css('[data-testid="card-cliente"]')
     )[1];
 
     cardCliente.nativeElement.click();
 
-    expect(router.navigateByUrl).toHaveBeenCalledWith(esperado);
+    expect(router.navigateByUrl).toHaveBeenCalledWith(esperadoRuta);
   });
 
   it('debe seleccionar el cliente, cuando se le de click a "card-cliente"', () => {

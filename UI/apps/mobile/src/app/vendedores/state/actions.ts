@@ -10,5 +10,9 @@ export const actionsStore = withMethods(
       patchState(state, { clienteSeleccionado }),
     asignarFiltroProductos: (filtroProducto: string) =>
       patchState(state, { filtroProducto }),
+    seleccionarArchivo: (archivoSeleccionado: File | null) =>
+      patchState(state, { archivoSeleccionado }),
+    asignarFiltroRutasAsignadas: (filtroRutasAsignadas: Date | null) =>
+      patchState(state, { filtroRutasAsignadas }),
   })
 );

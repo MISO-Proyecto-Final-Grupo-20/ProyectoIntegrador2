@@ -1,6 +1,6 @@
 import { computed } from '@angular/core';
 import { StateSignals, withComputed } from '@ngrx/signals';
-import { Cliente, VendedoresState } from '../vendedores.model';
+import { Cliente, RutaAsignada, VendedoresState } from '../vendedores.model';
 
 import { UtilidadesCrearPedido } from '../../shared/utilidades-crear-pedido';
 
@@ -11,6 +11,8 @@ export const selectorsStore = withComputed((store) => {
     filtroProducto,
     productos,
     productosSeleccionados,
+    filtroRutasAsignadas,
+    rutasAsignadas,
   } = store as StateSignals<VendedoresState>;
   const productosFiltrados = computed(() =>
     UtilidadesCrearPedido.filtrarProductos(filtroProducto(), productos())
@@ -26,6 +28,9 @@ export const selectorsStore = withComputed((store) => {
         productosSeleccionados()
       )
     ),
+    rutasAsignadasPorFecha: computed(() =>
+      filtrarRutasAsignadasPorFecha(filtroRutasAsignadas(), rutasAsignadas())
+    ),
   };
 });
 
@@ -38,4 +43,14 @@ function filtrarClientes(filtro: string, clientes: Cliente[]) {
       nombre.normalize().toLowerCase().includes(normalizado) ||
       id.toString().normalize().toLowerCase().includes(normalizado)
   );
+}
+
+function filtrarRutasAsignadasPorFecha(
+  filtroFecha: Date | null,
+  rutasAsignadas: RutaAsignada[]
+) {
+  return rutasAsignadas.filter(({ fecha }) => {
+    if (!filtroFecha) return true;
+    return fecha.toDateString() === filtroFecha.toDateString();
+  });
 }

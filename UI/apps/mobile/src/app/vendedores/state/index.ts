@@ -12,6 +12,10 @@ const initialState: VendedoresState = {
   productosSeleccionados: [],
   filtroProducto: '',
   pedidosPendientes: [],
+  archivoSeleccionado: null,
+  visitasRegistradas: [],
+  rutasAsignadas: [],
+  filtroRutasAsignadas: null,
 };
 
 export const VendedoresStore = signalStore(

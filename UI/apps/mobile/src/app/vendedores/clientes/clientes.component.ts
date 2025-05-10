@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 
 import { CardInformacionComponent } from '../../shared/card-informacion/card-informacion.component';
 import { SharedModule } from '@storeflow/design-system';
@@ -12,9 +12,10 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CardInformacionComponent, SharedModule, ReactiveFormsModule],
   templateUrl: './clientes.component.html',
-  styleUrl: './clientes.component.scss',
 })
 export class ClientesComponent {
+  descripcion = input<string>();
+  ruta = input<string>();
   store = inject(VendedoresStore);
   router = inject(Router);
   controlBuscar = new FormControl('');
@@ -30,12 +31,8 @@ export class ClientesComponent {
     return $localize`:@@clientes:Clientes`;
   }
 
-  get descripcion() {
-    return $localize`:@@descripcionClientes:Gestiona tus clientes aquí`;
-  }
-
   seleccionarCliente(cliente: Cliente) {
-    this.router.navigateByUrl('home/vendedores/clientes/crearPedido');
+    this.router.navigateByUrl(this.ruta() as string);
     this.store.seleccionarCliente(cliente);
   }
 }

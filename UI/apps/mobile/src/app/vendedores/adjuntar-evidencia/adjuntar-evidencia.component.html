@@ -1,0 +1,41 @@
+<section>
+  <div class="row justify-content-end px-16 pt-12">
+    <mat-icon class="color-grey-800 cursor-pointer" mat-dialog-close
+      >close</mat-icon
+    >
+  </div>
+  <mat-dialog-content class="p-16">
+    <div class="column gap-17">
+      <h3 class="color-on-surface" i18n="adjuntarEvidencia">
+        Adjuntar evidencia
+      </h3>
+      <div class="row flex-1 gap-16">
+        <label class="subir-foto" for="camara">
+          <div class="contenedor-imagen bg-warn-50">
+            <mat-icon class="color-warn mat-icon-outlined">camera_alt</mat-icon>
+          </div>
+          <input
+            type="file"
+            data-testid="input-adjuntar-evidencia"
+            id="camara"
+            capture="environment"
+            accept="image/jpeg, image/png, image/bmp,video/*"
+            (change)="seleccionarArchivo($event)"
+          />
+        </label>
+        <label class="subir-foto" for="archivo">
+          <div class="contenedor-imagen bg-success-50">
+            <mat-icon class="color-success">image_search</mat-icon>
+          </div>
+          <input
+            type="file"
+            data-testid="input-adjuntar-evidencia"
+            id="archivo"
+            accept="image/jpeg, image/png, image/bmp,video/*"
+            (change)="seleccionarArchivo($event)"
+          />
+        </label>
+      </div>
+    </div>
+  </mat-dialog-content>
+</section>
