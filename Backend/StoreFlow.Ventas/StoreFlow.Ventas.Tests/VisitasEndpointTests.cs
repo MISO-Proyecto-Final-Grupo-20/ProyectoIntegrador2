@@ -5,6 +5,10 @@ using NSubstitute;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
+using StoreFlow.Ventas.API.Datos;
+using StoreFlow.Ventas.API.DTOs;
+using StoreFlow.Ventas.API.Entidades;
 
 namespace StoreFlow.Ventas.Tests;
 
@@ -178,6 +182,73 @@ public class VisitasEndpointTests : IAsyncLifetime
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
         var response = await _client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ConsultarVisitas_DebeRetornarOk_ConVisitasRegistradas()
+    {
+        using var scope = _app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<VentasDbContext>();
+
+        db.Visitas.Add(new Visita
+        {
+            IdVendedor = 1,
+            IdCliente = 2,
+            Fecha = DateTime.UtcNow,
+            Video = new Video
+            {
+                Url = "https://fake.blob/visita1.mp4",
+                Estado = EstadoProcesamiento.Procesado,
+                Recomendacion = "Mover productos al centro"
+            }
+        });
+        await db.SaveChangesAsync();
+
+        var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var visitas = await response.Content.ReadFromJsonAsync<List<VisitaResponse>>();
+        Assert.NotNull(visitas);
+        Assert.Single(visitas);
+        Assert.Equal("Procesado", visitas[0].Estado);
+    }
+
+    [Fact]
+    public async Task ConsultarVisitas_DebeRetornarOk_SinVisitas()
+    {
+        var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var response = await _client.GetAsync("/visitas?vendedorId=99&clienteId=88");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var visitas = await response.Content.ReadFromJsonAsync<List<VisitaResponse>>();
+        Assert.NotNull(visitas);
+        Assert.Empty(visitas);
+    }
+
+    [Fact]
+    public async Task ConsultarVisitas_DebeRetornar401_SiNoHayToken()
+    {
+        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ConsultarVisitas_DebeRetornar403_CuandoRolEsInvalido()
+    {
+        var jwt = GeneradorTokenPruebas.GenerarTokenCliente();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }

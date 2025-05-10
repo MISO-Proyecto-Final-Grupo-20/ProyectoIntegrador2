@@ -1,4 +1,6 @@
-﻿using StoreFlow.Ventas.API.Datos;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Ventas.API.Datos;
+using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
 using StoreFlow.Ventas.API.Servicios;
 
@@ -54,6 +56,30 @@ public static class VisitasEndPoints
                 Estado = visita.Video.Estado.ToString(),
                 mensaje = "Visita registrada con éxito."
             });
+        }).RequireAuthorization("Vendedor");
+
+
+        app.MapGet("/visitas", async (
+            int vendedorId,
+            int clienteId,
+            VentasDbContext dbContext) =>
+        {
+            var visitas = await dbContext.Visitas
+                .Include(v => v.Video)
+                .Where(v => v.IdVendedor == vendedorId && v.IdCliente == clienteId)
+                .OrderByDescending(v => v.Fecha)
+                .ToListAsync();
+
+            var respuesta = visitas.Select(v => new VisitaResponse(
+                v.Id,
+                v.Fecha,
+                v.Video?.Estado.ToString() ?? "SinVideo",
+                v.Video?.Recomendacion ?? string.Empty,
+                v.Video?.Url ?? string.Empty
+            )).ToList();
+
+            return Results.Ok(respuesta);
+            return Results.Ok(respuesta);
         }).RequireAuthorization("Vendedor");
     }
 }
