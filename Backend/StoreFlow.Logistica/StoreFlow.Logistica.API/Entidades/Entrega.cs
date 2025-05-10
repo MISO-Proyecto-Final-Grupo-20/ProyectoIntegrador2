@@ -1,6 +1,4 @@
-﻿using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
-using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
-using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
+﻿using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
 namespace StoreFlow.Logistica.API.Entidades;
 
@@ -9,32 +7,19 @@ public class Entrega
    
     private Entrega() { }
     
-    public Entrega(SolicitudDePedido solicitud, List<InformacionPoducto> informacionProductos, InformacionCliente informacionCliente, InformacionVendedor? informacionVendedor, int idPedido)
+    public Entrega(PedidoResponse pedido)
     {
-        
-        var productosPedidos = from productoSolicitado in solicitud.ProductosSolicitados
-            join infoProducto in informacionProductos
-                on productoSolicitado.Id equals infoProducto.Id into productoJoin
-            from infoProducto in productoJoin.DefaultIfEmpty()
-            select new ProductoPedido(
-                productoSolicitado.Id,
-                productoSolicitado.Cantidad,
-                productoSolicitado.Precio,
-                productoSolicitado.TieneInventario,
-                infoProducto?.Codigo ?? string.Empty,
-                infoProducto?.Nombre ?? string.Empty,
-                infoProducto?.Imagen ?? string.Empty
-            );
-
-        IdPedido = idPedido;
-        IdCliente = solicitud.IdCliente;
-        NombreCliente = informacionCliente.NombreCliente;
-        DireccionEntrega = informacionCliente.LugarEntrega;
-        IdVendedor = informacionVendedor?.Id;
-        NombreVendedor = informacionVendedor?.Nombre;
-        FechaCreacion = solicitud.FechaCreacion;
-        FechaProgramadaEntrega = solicitud.FechaCreacion.AddDays(3);
-        ProductosPedidos = productosPedidos.ToList();
+        IdPedido = pedido.Numero;
+        IdCliente = pedido.IdCliente;
+        NombreCliente = pedido.NombreCliente;
+        DireccionEntrega = pedido.LugarEntrega;
+        FechaCreacion = pedido.FechaRegistro;
+        FechaProgramadaEntrega = pedido.FechaEntrega;
+        ProductosPedidos = pedido.Productos
+        .Select( p => new ProductoPedido(
+            p.Id,p.Cantidad, p.Precio,  p.Codigo, p.Nombre, p.Imagen
+            
+        )).ToList();
     }
     public int Id { get; private set; }
     public int IdCliente { get; private set; }
@@ -43,11 +28,7 @@ public class Entrega
     public DateTime FechaProgramadaEntrega { get; private set; }
     public string NombreCliente { get; private set; }
     public string DireccionEntrega { get; private set; }
-    public int? IdVendedor { get; private set; }
-    public string? NombreVendedor { get; private set; }
     public List<ProductoPedido> ProductosPedidos { get; private set; }
-
-    
     
 }
 
@@ -56,12 +37,11 @@ public class ProductoPedido
     private ProductoPedido()
     {
     }
-    public ProductoPedido(int idProducto, int cantidad, decimal precio, bool tieneInventario, string? codigo, string? nombre, string? imagen)
+    public ProductoPedido(int idProducto, int cantidad, decimal precio,  string? codigo, string? nombre, string? imagen)
     {
         IdProducto = idProducto;
         Cantidad = cantidad;
         Precio = precio;
-        TieneInventario = tieneInventario;
         Codigo = codigo;
         Nombre = nombre;
         Imagen = imagen;
@@ -70,7 +50,6 @@ public class ProductoPedido
     public int IdProducto { get; private set; }
     public int Cantidad { get; private set; }
     public decimal Precio { get; private set; }
-    public bool TieneInventario { get; private set; }
     public string? Codigo { get; private set; }
     public string? Nombre { get; private set; }
     public string? Imagen { get; private set; }

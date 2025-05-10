@@ -109,8 +109,7 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
             When(PedidoRegistrado)
                 .Then(context =>
                 {
-                    context.Publish(new ProgramarEntrega(context.Message.IdProceso, context.Message.IdPedido,
-                        context.Saga.SolicitudDePedido));
+                    context.Publish(new ProgramarEntrega(context.Message.IdProceso, context.Message.pedido));
                 }).TransitionTo(ProgramandoEntrega));
         
         During(ProgramandoEntrega,

@@ -23,7 +23,7 @@ public class LogisticaDbContext(DbContextOptions<LogisticaDbContext> options) : 
 
         modelBuilder.Entity<ProductoPedido>(entidad =>
         {
-            entidad.ToTable("ProductosPedidos");
+            entidad.ToTable("EntregasProductos");
             entidad.HasKey(e => new {e.IdEntrega, e.IdProducto});
             entidad.Property(e => e.IdProducto).ValueGeneratedNever();
 

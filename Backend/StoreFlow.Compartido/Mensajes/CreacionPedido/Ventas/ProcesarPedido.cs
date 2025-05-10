@@ -20,7 +20,18 @@ public record RegistrarPedido(
     InformacionCliente InformacionCliente,
     InformacionVendedor? InformacionVendedor);
 
-public record PedidoRegistrado(Guid IdProceso, int IdPedido);
+public record PedidoRegistrado(Guid IdProceso, PedidoResponse pedido);
+
+public record PedidoResponse(int Numero, int IdCliente, DateTime FechaRegistro, DateTime FechaEntrega, string LugarEntrega, EstadoPedido Estado,   ProductoPedidoResponse[] Productos, decimal Total, string NombreCliente);
+
+
+public record ProductoPedidoResponse(int Id, int Cantidad, decimal Precio, string? Codigo, string? Nombre, string? Imagen);
+
+public enum EstadoPedido
+{
+    Pendiente = 0
+}
+
 
 
 
