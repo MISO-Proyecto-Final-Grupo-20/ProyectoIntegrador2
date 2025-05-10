@@ -9,12 +9,14 @@ import { AnalisisTiendasUrls } from '../analisis-tiendas.urls';
 import { AnalisisVisita } from '../analisis-tiendas.model';
 import { By } from '@angular/platform-browser';
 import { ModalObservacionesService } from '../modal-observaciones/modal-obsevaciones.service';
+import { AlertaService, Utilidades } from '@storeflow/design-system';
 
 describe('AnalisisTiendasContainerComponent', () => {
   let component: AnalisisTiendasContainerComponent;
   let fixture: ComponentFixture<AnalisisTiendasContainerComponent>;
   let httpMock: HttpTestingController;
   let modalObservacionesService: Partial<ModalObservacionesService>;
+  let alerta: Partial<AlertaService>;
 
   const analisisVisitas: AnalisisVisita[] = [
     {
@@ -46,6 +48,13 @@ describe('AnalisisTiendasContainerComponent', () => {
     };
     TestBed.overrideProvider(ModalObservacionesService, {
       useValue: modalObservacionesService,
+    });
+    alerta = {
+      abrirAlerta: jest.fn(),
+    };
+
+    TestBed.overrideProvider(AlertaService, {
+      useValue: alerta,
     });
     await TestBed.configureTestingModule({
       providers: [
@@ -96,6 +105,30 @@ describe('AnalisisTiendasContainerComponent', () => {
     fixture.detectChanges();
     expect(modalObservacionesService.abrirModal).toHaveBeenCalledWith(
       analisisVisitas[0].id
+    );
+  });
+
+  it('debe descargar el archivo cuando se le de click al "analisis-tiendas-descargar-archivo"', () => {
+    const idVisita = analisisVisitas[0].id;
+    const url = AnalisisTiendasUrls.descargarArchivo.replace(
+      '[idVisita]',
+      idVisita.toString()
+    );
+    const blobFake = new Blob(['video data'], { type: 'video/mp4' });
+    const spyDescargar = jest.spyOn(Utilidades, 'descargarArchivo');
+    obtenerAnalisiVisitas();
+    fixture.detectChanges();
+    const descargarArchivo = fixture.debugElement.query(
+      By.css('[data-testid="analisis-tiendas-descargar-archivo"]')
+    );
+    descargarArchivo.nativeElement.click();
+    const peticion = httpMock.expectOne(url);
+    expect(peticion.request.method).toEqual('GET');
+    expect(peticion.request.responseType).toEqual('blob');
+    peticion.flush(blobFake);
+    expect(spyDescargar).toHaveBeenCalledWith(
+      blobFake,
+      `Visita_${idVisita}.mp4`
     );
   });
 
