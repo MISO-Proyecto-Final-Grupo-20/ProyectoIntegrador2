@@ -65,3 +65,7 @@
 .bg-success-600 {
   background-color: map-get($success, 600);
 }
+
+.bg-success-50 {
+  background-color: map-get($success, 50);
+}

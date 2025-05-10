@@ -10,9 +10,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter } from '@angular/router';
 import {
   AuthInterceptor,
+  CalendarAdapter,
   StoreFlowInterceptor,
 } from '@storeflow/design-system';
 import { appRoutes } from './app.routes';
+import { provideNativeDateAdapter, DateAdapter } from '@angular/material/core';
 
 registerLocaleData(localeEsCO, 'es-CO');
 
@@ -25,5 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([StoreFlowInterceptor, AuthInterceptor])
     ),
+    provideNativeDateAdapter(),
+    { provide: DateAdapter, useClass: CalendarAdapter },
   ],
 };

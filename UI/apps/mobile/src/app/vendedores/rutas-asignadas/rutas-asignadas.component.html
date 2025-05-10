@@ -1,1 +1,60 @@
-<p>rutas-asignadas works!</p>
+<div class="p-16 column gap-16">
+  <app-card-informacion
+    [titulo]="titulo"
+    [descripcion]="descripcion"
+  ></app-card-informacion>
+  <div class="row gap-10 align-items-center">
+    <mat-form-field appearance="outline" class="flex-1 bg-white">
+      <mat-label i18n="filtrarPorFecha">Filtrar por fecha</mat-label>
+      <input
+        [formControl]="controlFecha"
+        data-testid="calendar-filtar-fecha-rutas-asignadas"
+        matInput
+        [matDatepicker]="fecha"
+      />
+      <mat-hint>DD/MM/YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="fecha"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #fecha></mat-datepicker>
+    </mat-form-field>
+    <button
+      mat-stroked-button
+      color="primary"
+      data-testid="boton-filtrar-rutas-asignadas"
+      i18n="filtrar"
+      class="bg-white"
+      (click)="filtrarRutasAsignadas()"
+    >
+      Filtrar
+    </button>
+  </div>
+  <div class="column gap-8">
+    @for (rutaAsignada of store.rutasAsignadasPorFecha(); track $index) {
+      <mat-card class="sin-sombra-card">
+        <mat-card-content>
+          <div>
+            <h3 class="color-on-surface">{{ rutaAsignada.cliente }}</h3>
+            <div class="row gap-4 align-items-center">
+              <p class="mat-body-2 color-on-surface" i18n="direccion">
+                Dirección:
+              </p>
+              <p class="mat-body-2 color-on-surface">
+                {{ rutaAsignada.direccion }}
+              </p>
+            </div>
+            <div class="row gap-4 align-items-center">
+              <p class="mat-body-2 color-on-surface" i18n="fechaVisita">
+                Fecha de visita:
+              </p>
+              <p class="mat-body-2 color-on-surface">
+                {{ rutaAsignada.fecha | date }}
+              </p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</div>

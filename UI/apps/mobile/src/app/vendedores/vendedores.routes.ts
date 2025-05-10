@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { ClientesComponent } from './clientes/clientes.component';
 import { MenuNavegacionVendedoresComponent } from './menu-navegacion-vendedores/menu-navegacion-vendedores.component';
 import { RegistrarVisitaComponent } from './registrar-visita/registrar-visita.component';
 import { RutasAsignadasComponent } from './rutas-asignadas/rutas-asignadas.component';
@@ -11,6 +10,8 @@ import { ClienteSeleccionadoGuard } from './vendedores.guard';
 import { VendedoresStore } from './state';
 import { VendedoresService } from './services/vendedores.service';
 import { ModalAgregarProductoService } from './modal-agregar-producto/modal-agregar-producto.service';
+import { ConsultaClientesShellComponent } from './consulta-clientes-shell/consulta-clientes-shell.component';
+import { RegistrarVisitaContainerComponent } from './registrar-visita-container/registrar-visita-container.component';
 
 export const VendedoresRoutes: Route[] = [
   {
@@ -26,11 +27,12 @@ export const VendedoresRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: ClientesComponent,
+            component: ConsultaClientesShellComponent,
           },
           {
             path: 'crearPedido',
             canActivate: [ClienteSeleccionadoGuard],
+            data: { redirectTo: 'home/vendedores/clientes' },
             component: CrearPedidoAClienteComponent,
             children: [
               {
@@ -46,8 +48,19 @@ export const VendedoresRoutes: Route[] = [
         ],
       },
       {
-        path: 'registrarVisita',
-        component: RegistrarVisitaComponent,
+        path: 'registrarVisitas',
+        children: [
+          {
+            path: '',
+            component: RegistrarVisitaContainerComponent,
+          },
+          {
+            path: 'cliente',
+            canActivate: [ClienteSeleccionadoGuard],
+            data: { redirectTo: 'home/vendedores/registrarVisitas' },
+            component: RegistrarVisitaComponent,
+          },
+        ],
       },
       {
         path: 'rutasAsignadas',

@@ -42,7 +42,7 @@ export const configuracionMenuVendedores: ConfiguracionMenu[] = [
   {
     titulo: $localize`:@@menuRegistrarVisita:Registrar visita`,
     imagen: { src: 'assets/images/icon-principal.svg', width: 33, height: 29 },
-    ruta: 'vendedores/registrarVisita',
+    ruta: 'vendedores/registrarVisitas',
   },
   {
     titulo: $localize`:@@menuRutasAsignadas:Rutas asignadas`,
@@ -56,6 +56,7 @@ export const MensajesAlertas = {
   clienteRegistradoExitoso: $localize`:@@mensajeClienteRegistrado:Cliente registrado`,
   noHaySuficienteInventario: $localize`:@@mensajeNoHaySuficienteInventario:No hay sufiente inventario`,
   pedidoCreado: $localize`:@@mensajePedidoCreado:Pedido creado`,
+  registroVisitaExitoso: $localize`:@@mensajeRegistroVisitaExitoso:Visita registrada`,
 };
 
 export const ConfiguracionEstadosPedidos: Record<

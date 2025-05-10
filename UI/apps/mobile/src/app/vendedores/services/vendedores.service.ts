@@ -1,9 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Cliente } from '../vendedores.model';
+import {
+  Cliente,
+  RegistrarVisita,
+  RutaAsignada,
+  Visita,
+} from '../vendedores.model';
 import { VendedoresUrls } from '../vendedores.urls';
-import { mockClientes } from '../mock-vendedores';
+import {
+  mockClientes,
+  mockRutasAsignadas,
+  mockVisitas,
+} from '../mock-vendedores';
 import { Pedido, Producto, RegistroPedido } from '../../app.model';
 import { AppsUrls } from '../../app.urls';
 import { mockProductos, mocksPedidos } from '../../app.mocks';
@@ -49,5 +58,35 @@ export class VendedoresService {
     );
     return this.http.get<Pedido[]>(url);
     return of(mocksPedidos);
+  }
+
+  registrarVisita(
+    idCliente: number,
+    visita: RegistrarVisita
+  ): Observable<void> {
+    const url = VendedoresUrls.visitas.replace(
+      '[idCliente]',
+      idCliente.toString()
+    );
+    const formData = new FormData();
+    formData.append('fecha', visita.fecha.toString());
+    formData.append('hora', visita.hora);
+    formData.append('archivo', visita.archivo);
+    return this.http.post<void>(url, formData);
+    return of(void 0);
+  }
+
+  obtenerRegistroVisitas(idCliente: number): Observable<Visita[]> {
+    const url = VendedoresUrls.visitas.replace(
+      '[idCliente]',
+      idCliente.toString()
+    );
+    return this.http.get<Visita[]>(url);
+    return of(mockVisitas);
+  }
+
+  obtenerRutasAsignadas(): Observable<RutaAsignada[]> {
+    return this.http.get<RutaAsignada[]>(VendedoresUrls.obtenerRutasAsignadas);
+    return of(mockRutasAsignadas);
   }
 }
