@@ -33,4 +33,11 @@ export class Utilidades {
       return `${Math.round(gb)} GB`;
     }
   }
+
+  static obtenerHoraComoFecha(hora: string): Date {
+    const [horas, minutos] = hora.split(':');
+    const fecha = new Date();
+    fecha.setHours(Number(horas), Number(minutos), 0, 0);
+    return fecha;
+  }
 }

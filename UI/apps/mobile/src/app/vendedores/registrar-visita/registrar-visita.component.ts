@@ -51,10 +51,7 @@ export class RegistrarVisitaComponent {
   }
 
   obtenerHoraComoFecha(hora: string) {
-    const [horas, minutos] = hora.split(':');
-    const fecha = new Date();
-    fecha.setHours(Number(horas), Number(minutos), 0, 0);
-    return fecha;
+    return Utilidades.obtenerHoraComoFecha(hora);
   }
 
   obtenerTamanioArchivo(tamanio: number | undefined) {

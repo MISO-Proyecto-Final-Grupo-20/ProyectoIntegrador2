@@ -1,1 +1,84 @@
-<p>analisis-tiendas-container works!</p>
+<div class="px-16 py-8 column gap-12">
+  <mat-card class="sin-sombra-card">
+    <mat-card-content>
+      <div class="row gap-8 align-items-center">
+        <img src="/assets/images/video.svg" width="35" height="31" />
+        <h3 i18n="analisisTiendas">Análisis de tiendas</h3>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (tieneAnalisisVisitas) {
+    <mat-card class="sin-sombra-card" data-testid="analisis-visitas">
+      <mat-card-content class="p-12">
+        @for (visita of analisisVisitas; track $index; let last = $last) {
+          <div class="pt-4 pb-2">
+            <div class="px-12 column gap-8">
+              <div class="row align-items-center">
+                <div class="row gap-8 flex-1 align-items-center">
+                  <h3 class="color-on-surface">Surtimax</h3>
+                  <div class="row gap-4">
+                    <p class="mat-body-1 color-primary" i18n="visita">Visita</p>
+                    <p class="mat-body-1 color-primary">#{{ visita.id }}</p>
+                  </div>
+                </div>
+                <div
+                  class="row flex-1 align-items-center justify-content-between"
+                >
+                  <div class="row gap-4">
+                    <p class="mat-body-2 color-on-surface" i18n="fechaVisita">
+                      Fecha de visita:
+                    </p>
+                    <p class="mat-body-2 color-on-surface">
+                      {{ visita.fecha | date }}
+                    </p>
+                  </div>
+                  <div class="row gap-4">
+                    <p class="mat-body-2 color-on-surface" i18n="horaVisita">
+                      Hora de visita:
+                    </p>
+                    <p class="mat-body-2 color-on-surface">
+                      {{ obtenerHoraComoFecha(visita.hora) | date: 'hh:mm a' }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row gap-4 align-items-center nowrap p-8 bg-grey-100 radius-4 align-items-center flex-1 cursor-pointer"
+              >
+                <mat-icon class="color-primary mat-icon-outlined font-size-16"
+                  >insert_drive_file</mat-icon
+                >
+                <div>
+                  <p class="mat-body-1 color-grey-700">
+                    {{ visita.archivo.nombre }}
+                  </p>
+                  <p class="mat-body-1 color-grey-700">
+                    {{ obtenerTamanioArchivo(visita.archivo.tamanio) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-end">
+              <button
+                mat-button
+                color="primary"
+                i18n="observacion"
+                data-testid="boton-abrir-observacion"
+                (click)="abrirModalObservacion(visita.id)"
+              >
+                Observación
+                @if (visita.observaciones?.length) {
+                  <span>({{ visita.observaciones?.length }})</span>
+                }
+              </button>
+            </div>
+          </div>
+          @if (!last) {
+            <mat-divider></mat-divider>
+          }
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

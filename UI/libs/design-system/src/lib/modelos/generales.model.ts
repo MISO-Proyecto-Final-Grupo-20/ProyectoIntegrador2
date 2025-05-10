@@ -27,3 +27,8 @@ export interface OpcionLista {
 export type SignalsOf<T extends Record<string, any>> = {
   [K in keyof T]: Signal<T[K]>;
 } & WritableStateSource<T>;
+
+export interface Archivo {
+  nombre: string;
+  tamanio: number;
+}
