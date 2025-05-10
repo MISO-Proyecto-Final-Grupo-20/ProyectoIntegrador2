@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.EndPoints;
+using StoreFlow.Ventas.API.Servicios;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using StoreFlow.Ventas.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +15,11 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
-    
-    opciones.AddPolicy("Cliente" , policy =>
+
+    opciones.AddPolicy("Cliente", policy =>
         policy.RequireRole("Cliente"));
-    
-    opciones.AddPolicy("Vendedor" , policy =>
+
+    opciones.AddPolicy("Vendedor", policy =>
         policy.RequireRole("Vendedor"));
 });
 
@@ -40,6 +40,7 @@ builder.Host.ConfigurarObservabilidad("Ventas");
 
 builder.Services.AddDbContext<VentasDbContext>(options => { options.UseNpgsql(connectionString); });
 builder.Services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
 var app = builder.Build();
 
@@ -50,6 +51,7 @@ app.UseAuthorization();
 
 app.MapCrearPedidoEndPont();
 app.MapPlanesDeVentasEndPoints();
+app.MapVisitasEndPoints();
 
 
 using (var scope = app.Services.CreateScope())
