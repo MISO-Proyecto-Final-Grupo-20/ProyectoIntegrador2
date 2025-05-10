@@ -1,7 +1,3 @@
-mat-list-item {
-  border-bottom: 1px solid #ededed;
-}
-
 .max-tamanio-30 {
   max-width: 30px;
   max-height: 30px;
@@ -14,4 +10,8 @@ mat-list-item {
 
 .min-width-27 {
   min-width: 27px;
+}
+
+mat-list-item {
+  border-bottom: 1px solid #ededed;
 }

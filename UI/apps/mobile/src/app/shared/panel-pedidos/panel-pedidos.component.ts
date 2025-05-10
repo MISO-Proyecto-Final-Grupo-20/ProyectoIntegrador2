@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@storeflow/design-system';
 import { Pedido } from '../../app.model';
 import { ConfiguracionEstadosPedidos } from '../../app.constantes';
+import { ListadoProductosComponent } from '../listado-productos/listado-productos.component';
 
 @Component({
   selector: 'app-panel-pedidos',
   standalone: true,
-  imports: [SharedModule, CommonModule],
+  imports: [SharedModule, CommonModule, ListadoProductosComponent],
   templateUrl: './panel-pedidos.component.html',
-  styleUrl: './panel-pedidos.component.scss',
 })
 export class PanelPedidosComponent {
   pedidos = input<Pedido[]>([]);

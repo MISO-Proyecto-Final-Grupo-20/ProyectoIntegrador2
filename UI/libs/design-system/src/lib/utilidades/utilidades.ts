@@ -7,11 +7,11 @@ export class Utilidades {
     if (!sesion) return {} as Sesion;
     const claimsBase =
       'http://schemas.microsoft.com/ws/2008/06/identity/claims';
-    const nombreUsuario = sesion[`${claimsBase}/nombre`] ?? sesion['correo'];
+    const nombre = sesion['nombre'] ?? sesion['correo'];
     const categoria = sesion[`${claimsBase}/role`] as TipoCategoria;
 
     return {
-      nombreUsuario,
+      nombre,
       email: sesion['correo'],
       categoria: categoria,
     };

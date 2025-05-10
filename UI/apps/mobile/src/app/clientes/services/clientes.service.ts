@@ -5,6 +5,8 @@ import { ClientesUrls } from '../clientes.urls';
 import { mockProductos, mocksPedidos } from '../../app.mocks';
 import { Pedido, Producto, RegistroPedido } from '../../app.model';
 import { AppsUrls } from '../../app.urls';
+import { EntregaProgramada } from '../clientes.model';
+import { mocksEntregasProgramadas } from '../clientesMocks';
 
 @Injectable()
 export class ClientesService {
@@ -31,5 +33,12 @@ export class ClientesService {
   obtenerPedidos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(ClientesUrls.obtenerPedidosPendientes);
     return of(mocksPedidos);
+  }
+
+  obtenerEntregasProgramadas(): Observable<EntregaProgramada[]> {
+    return this.http.get<EntregaProgramada[]>(
+      ClientesUrls.obtenerEntregasProgramadas
+    );
+    return of(mocksEntregasProgramadas);
   }
 }
