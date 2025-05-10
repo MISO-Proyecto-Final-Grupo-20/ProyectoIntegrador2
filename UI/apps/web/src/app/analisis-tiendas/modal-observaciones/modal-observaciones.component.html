@@ -1,0 +1,33 @@
+<section>
+  <div class="row justify-content-between px-16 py-12 align-items-center">
+    <h3 class="color-on-surface" i18n="ingresaObsevacionesVideo">
+      Ingresa las observaciones del video
+    </h3>
+    <mat-icon class="color-grey-800 cursor-pointer" mat-dialog-close
+      >close</mat-icon
+    >
+  </div>
+  <div class="px-16 pb-16 column gap-17">
+    <mat-form-field appearance="outline" class="height-116">
+      <mat-label i18n="observaciones">Observaciones</mat-label>
+      <textarea
+        rows="5"
+        data-testid="input-analisis-tienda-observaciones"
+        matInput
+        [formControl]="controlObservaciones"
+      ></textarea>
+    </mat-form-field>
+    <div class="row justify-content-end">
+      <button
+        mat-raised-button
+        color="primary"
+        i18n="guardar"
+        data-testid="boton-analisis-tienda-guardar"
+        [disabled]="controlObservaciones.invalid"
+        (click)="guardarObservaciones()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</section>

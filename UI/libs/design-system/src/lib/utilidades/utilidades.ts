@@ -33,4 +33,34 @@ export class Utilidades {
       return `${Math.round(gb)} GB`;
     }
   }
+
+  static obtenerHoraComoFecha(hora: string): Date {
+    const [horas, minutos] = hora.split(':');
+    const fecha = new Date();
+    fecha.setHours(Number(horas), Number(minutos), 0, 0);
+    return fecha;
+  }
+
+  static descargarArchivo(archivo: Blob, nombreArchivo: string): void {
+    const url = URL.createObjectURL(archivo);
+    const extension = Utilidades.obtenerExtensionPorMIME(archivo.type);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${nombreArchivo}${extension}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  static obtenerExtensionPorMIME(mimeType: string): string {
+    const extensionMap: { [key: string]: string } = {
+      'video/mp4': '.mp4',
+      'video/webm': '.webm',
+      'video/ogg': '.ogg',
+      'video/avi': '.avi',
+      'video/mkv': '.mkv',
+    };
+    return extensionMap[mimeType] || '';
+  }
 }

@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Compras;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Inventarios;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Logistica;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Usuarios;
 using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 
@@ -9,14 +10,18 @@ namespace StoreFlow.Orquestador.Worker.CreacionPedido;
 public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedidoState>
 {
     public State ValidandoInventario { get; private set; }
-    public State RegistrandoPedido { get; private set; }
+    
     public State ObteniendoInformacionClienteYVendedor { get; private set; }
     public State ObteniendoInformacionProductos { get; private set; }
+    public State RegistrandoPedido { get; private set; }
+    public State ProgramandoEntrega { get; private set; }
     public Event<ProcesarPedido> IniciarProcesarPedido { get; private set; }
     public Event<InformacionProductoObtenida> InformacionProductoObtenida { get; private set; }
     public Event<InformacionClienteYVendedorObtenida> InformacionClienteYVendedorObtenida { get; private set; }
     public Event<InventarioValidado> InventarioValidado { get; private set; }
-    public Event<PedidoRegistrado> PedidoRegistrado { get; set; }
+    public Event<PedidoRegistrado> PedidoRegistrado { get; private set; }
+    public Event<EntregaProgramada> EntregaProgramada { get; private set; }
+    
 
     
     public CreacionPedidoMachineState()
@@ -48,6 +53,12 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
         });
         
         Event(() => PedidoRegistrado, x =>
+        {
+            x.CorrelateById(context => context.Message.IdProceso);
+            x.SelectId(context => context.Message.IdProceso);
+        });
+        
+        Event(() => EntregaProgramada, x =>
         {
             x.CorrelateById(context => context.Message.IdProceso);
             x.SelectId(context => context.Message.IdProceso);
@@ -96,11 +107,17 @@ public class CreacionPedidoMachineState : MassTransitStateMachine<CreacionPedido
 
         During(RegistrandoPedido,
             When(PedidoRegistrado)
+                .Then(context =>
+                {
+                    context.Publish(new ProgramarEntrega(context.Message.IdProceso, context.Message.IdPedido,
+                        context.Saga.SolicitudDePedido));
+                }).TransitionTo(ProgramandoEntrega));
+        
+        During(ProgramandoEntrega,
+                When(EntregaProgramada)
                 .Finalize()
         );
     }
 
     
-
-   
 }

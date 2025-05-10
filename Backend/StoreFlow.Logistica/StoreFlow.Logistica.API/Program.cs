@@ -1,6 +1,8 @@
 using StoreFlow.Compartidos.Core.Infraestructura;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using StoreFlow.Logistica.API.Datos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +13,14 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
-});
+    
+    opciones.AddPolicy("Cliente", policy =>
+        policy.RequireRole("Cliente"));
 
+    opciones.AddPolicy("Vendedor", policy =>
+        policy.RequireRole("Vendedor"));
+});
+builder.Services.AddDbContext<LogisticaDbContext>(options => { options.UseNpgsql(connectionString); });
 builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
 builder.Host.ConfigurarObservabilidad("Logistica");
 
@@ -34,6 +42,12 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<LogisticaDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
 

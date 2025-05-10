@@ -1,3 +1,4 @@
+import { Archivo } from '@storeflow/design-system';
 import { Pedido, Producto, ProductoSeleccionado } from '../app.model';
 
 export interface VendedoresState {
@@ -24,11 +25,6 @@ export interface RegistrarVisita {
   fecha: Date;
   hora: string;
   archivo: File;
-}
-
-interface Archivo {
-  nombre: string;
-  tamanio: number;
 }
 
 export interface Visita {

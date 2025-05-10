@@ -20,7 +20,7 @@ public record RegistrarPedido(
     InformacionCliente InformacionCliente,
     InformacionVendedor? InformacionVendedor);
 
-public record PedidoRegistrado(Guid IdProceso);
+public record PedidoRegistrado(Guid IdProceso, int IdPedido);
 
 
 

@@ -13,7 +13,8 @@ public class ConsumidorConfirmarPedido(ILogger<RegistrarPedido> logger, VentasDb
     {
         var solicitud = context.Message.SolicitudValiada;
         var pedido = new Pedido(solicitud, context.Message.InformacionProductos, context.Message.InformacionCliente, context.Message.InformacionVendedor);
-
         await ventasDbContext.GuardarPedidoAsync(pedido);
+
+        await context.Publish(new PedidoRegistrado(context.Message.IdProceso, pedido.Id));
     }
 }
