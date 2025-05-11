@@ -39,10 +39,10 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("1"), "idVendedor");
-        form.Add(new StringContent("1"), "idCliente");
+        form.Add(new StringContent("2025-05-01"), "fecha");
+        form.Add(new StringContent("01:01"), "hora");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };
@@ -67,10 +67,11 @@ public class VisitasEndpointTests : IAsyncLifetime
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
         using var form = new MultipartFormDataContent();
-        form.Add(new StringContent("1"), "idVendedor");
-        form.Add(new StringContent("1"), "idCliente");
+        form.Add(new StringContent("2025-05-01"), "fecha");
+        form.Add(new StringContent("01:01"), "hora");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };
@@ -84,7 +85,7 @@ public class VisitasEndpointTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task RegistrarVisita_DebeRetornar400_CuandoNoHayIdVendedor()
+    public async Task RegistrarVisita_DebeRetornar400_CuandoNoHayHora()
     {
         var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
@@ -95,9 +96,9 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("1"), "idCliente");
+        form.Add(new StringContent("2025-05-01"), "fecha");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };
@@ -107,11 +108,11 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var content = await response.Content.ReadAsStringAsync();
-        Assert.Contains("idVendedor", content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("hora", content, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public async Task RegistrarVisita_DebeRetornar400_CuandoNoHayIdCliente()
+    public async Task RegistrarVisita_DebeRetornar400_CuandoNoHayFecha()
     {
         var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
@@ -122,9 +123,9 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("1"), "idVendedor");
+        form.Add(new StringContent("01:01"), "hora");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };
@@ -134,7 +135,7 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var content = await response.Content.ReadAsStringAsync();
-        Assert.Contains("idCliente", content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("fecha", content, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -146,10 +147,10 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("1"), "idVendedor");
-        form.Add(new StringContent("1"), "idCliente");
+        form.Add(new StringContent("2025-05-01"), "fecha");
+        form.Add(new StringContent("01:01"), "hora");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };
@@ -172,10 +173,10 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("1"), "idVendedor");
-        form.Add(new StringContent("1"), "idCliente");
+        form.Add(new StringContent("2025-05-01"), "fecha");
+        form.Add(new StringContent("01:01"), "hora");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
         };

@@ -10,7 +10,8 @@ public static class VisitasEndPoints
 {
     public static void MapVisitasEndPoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/visitas", async (
+        app.MapPost("/visitas/{clienteId:int}", async (
+            int clienteId,
             HttpRequest request,
             VentasDbContext dbContext,
             IBlobStorageService blobStorageService) =>
@@ -19,24 +20,29 @@ public static class VisitasEndPoints
                 return Results.BadRequest("Debe enviar el video como multipart/form-data.");
 
             var form = await request.ReadFormAsync();
+            var fechaStr = form["fecha"];
+            var horaStr = form["hora"];
+
+            if (string.IsNullOrWhiteSpace(fechaStr))
+                return Results.BadRequest("Faltan campos requerido: fecha");
+            if (string.IsNullOrWhiteSpace(fechaStr) || string.IsNullOrWhiteSpace(horaStr))
+                return Results.BadRequest("Faltan campos requerido:hora");
+
             var archivoVideo = form.Files.FirstOrDefault();
 
             if (archivoVideo is null || archivoVideo.Length == 0)
                 return Results.BadRequest("El video es obligatorio.");
 
-            if (!form.TryGetValue("idVendedor", out var idVendedorStr) ||
-                !form.TryGetValue("idCliente", out var idClienteStr) ||
-                !int.TryParse(idVendedorStr, out var idVendedor) ||
-                !int.TryParse(idClienteStr, out var idCliente))
-                return Results.BadRequest("Debe incluir los campos idVendedor e idCliente.");
+
+            var vendedorId = UtilidadesEndPoints.RecuperarIdUsuarioToken(request.HttpContext);
 
             var nombreArchivo = $"visita_{Guid.NewGuid()}.mp4";
             var url = await blobStorageService.SubirVideoAsync(archivoVideo, nombreArchivo);
 
             var visita = new Visita
             {
-                IdVendedor = idVendedor,
-                IdCliente = idCliente,
+                IdVendedor = vendedorId,
+                IdCliente = clienteId,
                 Fecha = DateTime.UtcNow,
                 Video = new Video
                 {
