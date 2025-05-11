@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0"/>
+        <PackageReference Include="Azure.Core" Version="1.46.1"/>
         <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4"/>
