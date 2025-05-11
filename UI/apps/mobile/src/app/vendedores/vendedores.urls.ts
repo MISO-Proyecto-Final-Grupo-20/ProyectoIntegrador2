@@ -5,5 +5,5 @@ export const VendedoresUrls = {
   crearPedidoCliente: `${environment.apiUrl}/ventas/pedidos/[idCliente]`,
   obtenerPedidosPendientesCliente: `${environment.apiUrl}/ventas/pedidos/pendientes/[idCliente]`,
 	visitas: `${environment.apiUrl}/visitas/[idCliente]`,
-  obtenerRutasAsignadas: `${environment.apiUrl}/rutasAsignadas`,
+  obtenerRutasAsignadas: `${environment.apiUrl}/ventas/rutasAsignadas`,
 };

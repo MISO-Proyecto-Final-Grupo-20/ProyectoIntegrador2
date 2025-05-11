@@ -9,14 +9,9 @@ public static class GeneradorTokenPruebas
 {
     public static readonly string ClavePruebas = "q9zM3u9Y5xUq4OEt5nq3P9+0uOaIxQeH+dE68Z8+WBA=";
 
-    public static string GenerarTokenUsuarioCcp(string correo = "admin@correo.com")
+    public static string? GenerarTokenCliente(string correo = "cliente@correo.com")
     {
-        return GenerarToken(correo, "UsuarioCcp");
-    }
-
-    public static string GenerarTokenVendedor(string correo = "vendedor@correo.com")
-    {
-        return GenerarToken(correo,"Vendedor");
+        return GenerarToken(correo,"Cliente");
     }
 
     private static string GenerarToken(string correo, string rol)
@@ -24,7 +19,8 @@ public static class GeneradorTokenPruebas
         var claims = new[]
         {
             new Claim("correo", correo),
-            new Claim(ClaimTypes.Role, rol)
+            new Claim(ClaimTypes.Role, rol),
+            new Claim("idUsuario", "1")
         };
         var clave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ClavePruebas));
         var credenciales = new SigningCredentials(clave, SecurityAlgorithms.HmacSha256);
@@ -35,4 +31,6 @@ public static class GeneradorTokenPruebas
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    
 }

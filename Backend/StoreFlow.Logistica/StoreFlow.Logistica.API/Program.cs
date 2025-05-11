@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Logistica.API.Datos;
+using StoreFlow.Logistica.API.Endpoints;
 using StoreFlow.Logistica.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +46,7 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapEntregasEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

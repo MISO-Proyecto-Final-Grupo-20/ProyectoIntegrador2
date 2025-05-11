@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Logistica.API.Datos;
+using StoreFlow.Logistica.API.Endpoints;
 using StoreFlow.Logistica.API.Servicios;
 using StoreFlow.Logistica.Tests.Utilidades;
 
@@ -14,7 +15,7 @@ namespace StoreFlow.Logistica.Tests
 {
     public static class TestApplicationFactory
     {
-        public static WebApplication Create(string? databaseName = null)
+        public static WebApplication Create(IEntregaServicio entregaServicioMock, string? databaseName = null)
         {
             var builder = WebApplication.CreateBuilder(new WebApplicationOptions
             {
@@ -46,8 +47,8 @@ namespace StoreFlow.Logistica.Tests
                 opciones.AddPolicy("Vendedor" , policy =>
                     policy.RequireRole("Vendedor"));
                 
-                opciones.AddPolicy("UsuariosCcpOVendedor", policy =>
-                    policy.RequireRole("UsuarioCcp", "Vendedor"));
+                opciones.AddPolicy("Cliente", policy =>
+                    policy.RequireRole("Cliente"));
             });
 
             var nombreDb = databaseName ?? "TestDb";
@@ -57,12 +58,12 @@ namespace StoreFlow.Logistica.Tests
             builder.Services.AddDbContext<LogisticaDbContext>(options =>
                 options.UseInMemoryDatabase(nombreDb));
 
-            builder.Services.AddScoped<IEntregaServicio, EntregaServicio>();
+            builder.Services.AddScoped<IEntregaServicio>(_ => entregaServicioMock);
 
 
             var app = builder.Build();
 
-            // app.MapComprasEndpoints();
+            app.MapEntregasEndpoints();
 
             return app;
         }

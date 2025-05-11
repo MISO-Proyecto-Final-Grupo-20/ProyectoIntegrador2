@@ -1,28 +1,37 @@
-﻿using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 using StoreFlow.Logistica.API.Datos;
+using StoreFlow.Logistica.API.DTOs;
 using StoreFlow.Logistica.API.Entidades;
 
 namespace StoreFlow.Logistica.API.Servicios;
 
 public interface IEntregaServicio
 {
-    Task GuardarEntregaAsync( PedidoResponse pedido);
+    Task GuardarEntregaAsync(PedidoResponse pedido);
+    Task<EntregaProgramadaResponse[]> ObtenerEntregasClienteAsync(int idCliente);
 }
 
-public class EntregaServicio : IEntregaServicio
+public class EntregaServicio(LogisticaDbContext contexto) : IEntregaServicio
 {
-    private readonly LogisticaDbContext _contexto;
-
-    public EntregaServicio(LogisticaDbContext contexto)
-    {
-        _contexto = contexto;
-    }    
-    
-    public async Task GuardarEntregaAsync( PedidoResponse pedido)
+    public async Task GuardarEntregaAsync(PedidoResponse pedido)
     {
         var entrega = new Entrega(pedido);
-        await _contexto.Entregas.AddAsync(entrega);
-        await _contexto.SaveChangesAsync();
+        await contexto.Entregas.AddAsync(entrega);
+        await contexto.SaveChangesAsync();
     }
-    
+
+    public async Task<EntregaProgramadaResponse[]> ObtenerEntregasClienteAsync(int idCliente)
+    {
+        return await contexto
+            .Entregas
+            .Include(e => e.ProductosPedidos)
+            .Where(e => e.IdCliente == idCliente)
+            .Select(e => new EntregaProgramadaResponse(e.Id, e.IdPedido, e.FechaProgramadaEntrega, e.DireccionEntrega,
+                e.ProductosPedidos.Select(p =>
+                    new ProductoPedidoResponse(p.IdProducto, p.Cantidad, p.Precio, p.Codigo, p.Nombre, p.Imagen)
+                ).ToArray()
+            ))
+            .ToArrayAsync();
+    }
 }
