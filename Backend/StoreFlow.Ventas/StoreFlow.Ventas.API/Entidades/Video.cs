@@ -7,6 +7,10 @@ public class Video
     public string Url { get; set; } = null!;
     public string? Recomendacion { get; set; }
 
+    public string? NombreOriginal { get; set; }
+
+    public long TamanioBytes { get; set; }
+
     public EstadoProcesamiento Estado { get; set; } = EstadoProcesamiento.Pendiente;
 
     public int VisitaId { get; set; }

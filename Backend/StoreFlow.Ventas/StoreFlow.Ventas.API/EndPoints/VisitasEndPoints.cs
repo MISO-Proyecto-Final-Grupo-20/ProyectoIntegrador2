@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
@@ -28,9 +29,26 @@ public static class VisitasEndPoints
             if (string.IsNullOrWhiteSpace(fechaStr) || string.IsNullOrWhiteSpace(horaStr))
                 return Results.BadRequest("Faltan campos requerido:hora");
 
-            if (!DateTime.TryParse($"{fechaStr} {horaStr}", out var fechaHora))
+            var fechaLimpia =
+                fechaStr.ToString().Split("00:00:00")[0].Trim(); // elimina zona horaria y texto descriptivo
+            var hora = horaStr.ToString().Trim();
+
+            Console.WriteLine($"{fechaLimpia} {hora}");
+
+            if (!DateTime.TryParse($"{fechaLimpia} {hora}", out var fechaHora))
                 return Results.BadRequest("Fecha u hora inválida.");
 
+
+            Console.WriteLine("fecha reconstruida:{0}", fechaHora);
+
+            var fechaHoraUtc = new DateTime(
+                fechaHora.Year,
+                fechaHora.Month,
+                fechaHora.Day,
+                fechaHora.Hour,
+                fechaHora.Minute,
+                fechaHora.Second,
+                DateTimeKind.Utc);
             var archivoVideo = form.Files.FirstOrDefault();
 
             if (archivoVideo is null || archivoVideo.Length == 0)
@@ -46,11 +64,13 @@ public static class VisitasEndPoints
             {
                 IdVendedor = vendedorId,
                 IdCliente = clienteId,
-                Fecha = fechaHora,
+                Fecha = fechaHoraUtc,
                 Video = new Video
                 {
                     Url = url,
-                    Estado = EstadoProcesamiento.Pendiente
+                    Estado = EstadoProcesamiento.Pendiente,
+                    NombreOriginal = archivoVideo.FileName,
+                    TamanioBytes = archivoVideo.Length
                 }
             };
 
@@ -83,12 +103,11 @@ public static class VisitasEndPoints
             var respuesta = visitas.Select(v => new VisitaResponse(
                 v.Id,
                 v.Fecha,
-                v.Video?.Estado.ToString() ?? "SinVideo",
-                v.Video?.Recomendacion ?? string.Empty,
-                v.Video?.Url ?? string.Empty
+                v.Fecha.ToString("hh:mm"),
+                new ArchivoResponse(
+                    string.IsNullOrEmpty(v.Video?.NombreOriginal) ? "" : v.Video?.NombreOriginal,
+                    v.Video.TamanioBytes)
             )).ToList();
-
-            return Results.Ok(respuesta);
             return Results.Ok(respuesta);
         }).RequireAuthorization("Vendedor");
     }

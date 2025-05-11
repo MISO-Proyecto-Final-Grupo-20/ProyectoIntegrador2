@@ -39,7 +39,7 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         using var form = new MultipartFormDataContent();
         form.Add(videoContent, "video", "visita.mp4");
-        form.Add(new StringContent("2025-05-01"), "fecha");
+        form.Add(new StringContent("Sun May 11 2025 00:00:00 GMT-0500 (hora estándar de Colombia)"), "fecha");
         form.Add(new StringContent("01:01"), "hora");
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
@@ -204,6 +204,7 @@ public class VisitasEndpointTests : IAsyncLifetime
         form.Add(new StringContent("2025-05-01"), "fecha");
         form.Add(new StringContent("01:01"), "hora");
 
+
         var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
         {
             Content = form
@@ -246,7 +247,6 @@ public class VisitasEndpointTests : IAsyncLifetime
         var visitas = await response.Content.ReadFromJsonAsync<List<VisitaResponse>>();
         Assert.NotNull(visitas);
         Assert.Single(visitas);
-        Assert.Equal("Procesado", visitas[0].Estado);
     }
 
     [Fact]
