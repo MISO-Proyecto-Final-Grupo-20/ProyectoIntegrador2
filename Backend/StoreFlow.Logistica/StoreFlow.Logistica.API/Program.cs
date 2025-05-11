@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using StoreFlow.Logistica.API.Datos;
+using StoreFlow.Logistica.API.Endpoints;
+using StoreFlow.Logistica.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,12 +38,16 @@ builder.Services.AddCors(options =>
 });
 // Add services to the container.
 
+builder.Services.AddScoped<IEntregaServicio, EntregaServicio>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapEntregasEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

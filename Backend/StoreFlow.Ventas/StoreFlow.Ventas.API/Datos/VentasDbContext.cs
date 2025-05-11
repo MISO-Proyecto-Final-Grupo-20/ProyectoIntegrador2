@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compartidos.Core.Mensajes.CreacionPedido.Ventas;
 using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
 

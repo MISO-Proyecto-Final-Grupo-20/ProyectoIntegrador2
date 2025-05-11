@@ -5,5 +5,5 @@ export const ClientesUrls = {
   validarInventarioProducto: `${environment.apiUrl}/inventarios/existeProducto`,
   crearPedido: `${environment.apiUrl}/ventas/pedidos`,
   obtenerPedidosPendientes: `${environment.apiUrl}/ventas/pedidos/pendientes/`,
-  obtenerEntregasProgramadas: `${environment.apiUrl}/entregasProgramadas/`,
+  obtenerEntregasProgramadas: `${environment.apiUrl}/logistica/entregasProgramadas/`,
 };

@@ -127,7 +127,7 @@ services:
       timeout: 5s
       retries: 5
   
-  logisitca:
+  logistica:
     build: 
       context: Backend
       dockerfile: StoreFlow.Logistica/StoreFlow.Logistica.API/Dockerfile 
