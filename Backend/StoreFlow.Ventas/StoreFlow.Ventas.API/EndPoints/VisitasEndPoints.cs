@@ -106,9 +106,71 @@ public static class VisitasEndPoints
                 v.Fecha.ToString("hh:mm"),
                 new ArchivoResponse(
                     string.IsNullOrEmpty(v.Video?.NombreOriginal) ? "" : v.Video?.NombreOriginal,
-                    v.Video.TamanioBytes)
+                    v.Video.TamanioBytes,
+                    v.Video.Url)
             )).ToList();
             return Results.Ok(respuesta);
         }).RequireAuthorization("Vendedor");
+
+        app.MapGet("/visitas/analisis", async (
+            VentasDbContext dbContext,
+            HttpContext httpContext) =>
+        {
+            var visitas = await dbContext.Visitas
+                .Include(v => v.Video)
+                .Where(v =>
+                    v.Video != null &&
+                    v.Video.Estado == EstadoProcesamiento.Procesado)
+                .OrderByDescending(v => v.Fecha)
+                .ToListAsync();
+
+            var respuesta = visitas.Select(v => new AnalisisVisitaResponse(
+                v.Id,
+                v.IdCliente.ToString(),
+                v.Fecha,
+                v.Fecha.ToString("hh:mm"),
+                new ArchivoResponse(
+                    v.Video!.NombreOriginal,
+                    v.Video.TamanioBytes,
+                    v.Video.Url
+                ),
+                v.Video.Recomendacion
+            )).ToList();
+
+            return Results.Ok(respuesta);
+        }).RequireAuthorization("SoloUsuariosCcp");
+
+        app.MapPost("/visitas/analisis/{idVisita:int}/observaciones", async (
+            int idVisita,
+            HttpRequest request,
+            VentasDbContext dbContext,
+            HttpContext httpContext) =>
+        {
+            using var reader = new StreamReader(request.Body);
+            var nuevaObservacion = await reader.ReadToEndAsync();
+
+            if (string.IsNullOrWhiteSpace(nuevaObservacion))
+                return Results.BadRequest("La recomendación no puede estar vacía.");
+
+            var visita = await dbContext.Visitas
+                .Include(v => v.Video)
+                .FirstOrDefaultAsync(v => v.Id == idVisita);
+
+            if (visita is null)
+                return Results.NotFound("No se encontró la visita.");
+
+            if (visita.Video is null)
+                return Results.BadRequest("La visita no tiene un video asociado.");
+
+            visita.Video.Recomendacion = nuevaObservacion;
+            await dbContext.SaveChangesAsync();
+
+            return Results.Ok(new
+            {
+                mensaje = "Recomendación actualizada con éxito.",
+                visita.Id,
+                nuevaObservacion
+            });
+        }).RequireAuthorization("SoloUsuariosCcp");
     }
 }
