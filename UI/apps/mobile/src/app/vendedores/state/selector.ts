@@ -51,6 +51,9 @@ function filtrarRutasAsignadasPorFecha(
 ) {
   return rutasAsignadas.filter(({ fecha }) => {
     if (!filtroFecha) return true;
-    return fecha.toDateString() === filtroFecha.toDateString();
+    const fechaAsignada = new Date(fecha);
+    const fechaFiltro = new Date(filtroFecha);
+
+    return fechaAsignada.toDateString() === fechaFiltro.toDateString();
   });
 }

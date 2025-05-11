@@ -37,5 +37,5 @@ export interface Visita {
 export interface RutaAsignada {
   cliente: string;
   direccion: string;
-  fecha: Date;
+  fecha: Date | string;
 }

@@ -11,6 +11,7 @@ using StoreFlow.Ventas.API.Servicios;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using StoreFlow.Compartidos.Core.Infraestructura;
 
 namespace StoreFlow.Ventas.Tests;
 

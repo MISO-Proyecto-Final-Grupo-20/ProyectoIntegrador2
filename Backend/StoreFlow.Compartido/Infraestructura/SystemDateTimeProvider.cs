@@ -1,4 +1,4 @@
-﻿namespace StoreFlow.Ventas.API.Servicios;
+﻿namespace StoreFlow.Compartidos.Core.Infraestructura;
 
 public class SystemDateTimeProvider : IDateTimeProvider
 {

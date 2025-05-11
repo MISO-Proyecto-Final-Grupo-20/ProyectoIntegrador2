@@ -18,7 +18,7 @@ import { VendedoresStore } from '../state';
   styleUrl: './rutas-asignadas.component.scss',
 })
 export class RutasAsignadasComponent {
-  controlFecha = new FormControl();
+  controlFecha = new FormControl(new Date());
   store = inject(VendedoresStore);
   get titulo() {
     return $localize`:@@rutasAsignadas:Rutas asignadas`;

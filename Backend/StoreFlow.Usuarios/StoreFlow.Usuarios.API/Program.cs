@@ -18,6 +18,9 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
+    
+    opciones.AddPolicy("Vendedor", policy =>
+        policy.RequireRole("Vendedor"));
 });
 
 builder.Services.ConfigurarMasstransitRabbitMq(Assembly.GetExecutingAssembly());
@@ -43,6 +46,7 @@ builder.Services.AddDbContext<UsuariosDbContext>(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IUsuariosServicios, UsuariosServicios>();
+builder.Services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
 builder.Services.AddSingleton<ProveedorToken>();
 
 var app = builder.Build();
@@ -63,6 +67,7 @@ app.UseHttpsRedirection();
 app.MapUsuariosEndpoints();
 app.MapCrearClienteEndpoints();
 app.MapCrearVendedorEndpoints();
+app.MapRutasVendedores();
 
 //Aplicar migraciones
 using (var scope = app.Services.CreateScope())
