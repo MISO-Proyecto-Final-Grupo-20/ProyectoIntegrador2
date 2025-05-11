@@ -43,9 +43,10 @@ builder.Services.AddScoped<IEntregaServicio, EntregaServicio>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapEntregasEndpoints();
 
 using (var scope = app.Services.CreateScope())
