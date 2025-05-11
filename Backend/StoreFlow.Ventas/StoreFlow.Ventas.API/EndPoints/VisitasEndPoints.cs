@@ -59,11 +59,12 @@ public static class VisitasEndPoints
         }).RequireAuthorization("Vendedor");
 
 
-        app.MapGet("/visitas", async (
-            int vendedorId,
+        app.MapGet("/visitas/{clienteId:int}", async (
             int clienteId,
-            VentasDbContext dbContext) =>
+            VentasDbContext dbContext,
+            HttpContext httpContext) =>
         {
+            var vendedorId = UtilidadesEndPoints.RecuperarIdUsuarioToken(httpContext);
             var visitas = await dbContext.Visitas
                 .Include(v => v.Video)
                 .Where(v => v.IdVendedor == vendedorId && v.IdCliente == clienteId)

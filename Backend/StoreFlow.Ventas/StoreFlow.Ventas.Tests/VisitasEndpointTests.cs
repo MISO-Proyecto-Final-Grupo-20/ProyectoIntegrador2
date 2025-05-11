@@ -194,7 +194,7 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         db.Visitas.Add(new Visita
         {
-            IdVendedor = 1,
+            IdVendedor = 2,
             IdCliente = 2,
             Fecha = DateTime.UtcNow,
             Video = new Video
@@ -209,7 +209,7 @@ public class VisitasEndpointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
+        var response = await _client.GetAsync("/visitas/2");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -225,7 +225,7 @@ public class VisitasEndpointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var response = await _client.GetAsync("/visitas?vendedorId=99&clienteId=88");
+        var response = await _client.GetAsync("/visitas/88");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -237,7 +237,7 @@ public class VisitasEndpointTests : IAsyncLifetime
     [Fact]
     public async Task ConsultarVisitas_DebeRetornar401_SiNoHayToken()
     {
-        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
+        var response = await _client.GetAsync("/visitas/2");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -248,7 +248,7 @@ public class VisitasEndpointTests : IAsyncLifetime
         var jwt = GeneradorTokenPruebas.GenerarTokenCliente();
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-        var response = await _client.GetAsync("/visitas?vendedorId=1&clienteId=2");
+        var response = await _client.GetAsync("/visitas/2");
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
