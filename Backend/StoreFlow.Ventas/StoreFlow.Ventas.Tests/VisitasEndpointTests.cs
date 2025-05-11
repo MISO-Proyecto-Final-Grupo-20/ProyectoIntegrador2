@@ -139,6 +139,34 @@ public class VisitasEndpointTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task RegistrarVisita_DebeRetornar400_CuandoFechaHoraInvalida()
+    {
+        var jwt = GeneradorTokenPruebas.GenerarTokenVendedor();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var contenidoBytes = new byte[] { 0x01 };
+        var videoContent = new StreamContent(new MemoryStream(contenidoBytes));
+        videoContent.Headers.ContentType = new MediaTypeHeaderValue("video/mp4");
+
+        using var form = new MultipartFormDataContent();
+        form.Add(videoContent, "video", "visita.mp4");
+        form.Add(new StringContent("no sirve"), "fecha");
+        form.Add(new StringContent("ocho am"), "hora");
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "/visitas/1")
+        {
+            Content = form
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+        var response = await _client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var content = await response.Content.ReadAsStringAsync();
+        Assert.Contains("Fecha u hora inválida.", content, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task RegistrarVisita_DebeRetornar401_SiNoHayToken()
     {
         var contenidoBytes = new byte[] { 0x01 };
@@ -186,6 +214,7 @@ public class VisitasEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
+
 
     [Fact]
     public async Task ConsultarVisitas_DebeRetornarOk_ConVisitasRegistradas()

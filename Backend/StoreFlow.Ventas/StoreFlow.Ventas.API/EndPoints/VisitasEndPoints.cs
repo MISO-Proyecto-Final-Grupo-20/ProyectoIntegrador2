@@ -28,6 +28,9 @@ public static class VisitasEndPoints
             if (string.IsNullOrWhiteSpace(fechaStr) || string.IsNullOrWhiteSpace(horaStr))
                 return Results.BadRequest("Faltan campos requerido:hora");
 
+            if (!DateTime.TryParse($"{fechaStr} {horaStr}", out var fechaHora))
+                return Results.BadRequest("Fecha u hora inválida.");
+
             var archivoVideo = form.Files.FirstOrDefault();
 
             if (archivoVideo is null || archivoVideo.Length == 0)
@@ -43,7 +46,7 @@ public static class VisitasEndPoints
             {
                 IdVendedor = vendedorId,
                 IdCliente = clienteId,
-                Fecha = DateTime.UtcNow,
+                Fecha = fechaHora,
                 Video = new Video
                 {
                     Url = url,
