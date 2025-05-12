@@ -11,17 +11,20 @@ import {
 import { AnalisisTiendasUrls } from '../analisis-tiendas.urls';
 import { AlertaService, TipoAlerta } from '@storeflow/design-system';
 import { MensajesAnalisisTienda } from '../analisis-tiendas.constantes';
+import { DatosModalObservaciones } from '../analisis-tiendas.model';
 
 describe('ModalObservacionesComponent', () => {
   let component: ModalObservacionesComponent;
   let fixture: ComponentFixture<ModalObservacionesComponent>;
   let httpMock: HttpTestingController;
   let alerta: Partial<AlertaService>;
-  const idVisita = 123;
+  const datosModal: DatosModalObservaciones = {
+    idVisita: 123,
+  };
 
   beforeEach(async () => {
     TestBed.overrideProvider(MAT_DIALOG_DATA, {
-      useValue: idVisita,
+      useValue: datosModal,
     });
 
     TestBed.overrideProvider(MatDialogRef, {
@@ -71,6 +74,7 @@ describe('ModalObservacionesComponent', () => {
 
   it('Debe guardar las observaciones cuando se le de click al "boton-analisis-tienda-guardar"', () => {
     const observaciones = 'Observaciones';
+    const idVisita = datosModal.idVisita;
     component.controlObservaciones.setValue(observaciones);
     fixture.detectChanges();
     const botonGuardar = fixture.debugElement.query(

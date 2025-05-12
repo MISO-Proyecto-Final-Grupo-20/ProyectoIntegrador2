@@ -46,7 +46,7 @@
               <div
                 class="row gap-4 align-items-center nowrap p-8 bg-grey-100 radius-4 align-items-center flex-1 cursor-pointer"
                 data-testid="analisis-tiendas-descargar-archivo"
-                (click)="descargarArchivo(visita.id)"
+                (click)="descargarArchivo(visita.archivo)"
               >
                 <mat-icon class="color-primary mat-icon-outlined font-size-16"
                   >insert_drive_file</mat-icon
@@ -67,11 +67,11 @@
                 color="primary"
                 i18n="observacion"
                 data-testid="boton-abrir-observacion"
-                (click)="abrirModalObservacion(visita.id)"
+                (click)="abrirModalObservacion(visita.id, visita.observaciones)"
               >
                 Observación
-                @if (visita.observaciones?.length) {
-                  <span>({{ visita.observaciones?.length }})</span>
+                @if (visita.observaciones) {
+                  <span>(1)</span>
                 }
               </button>
             </div>
