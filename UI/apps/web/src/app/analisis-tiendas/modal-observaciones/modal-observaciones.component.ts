@@ -39,13 +39,11 @@ export class ModalObservacionesComponent {
       )
       .subscribe({
         next: () => {
-          this.service
-            .obtenerAnalisisVisitas();
           this.alertaService.abrirAlerta({
             tipo: TipoAlerta.Success,
             descricion: MensajesAnalisisTienda.guardarObservacionesExitoso,
           });
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         },
       });
   }

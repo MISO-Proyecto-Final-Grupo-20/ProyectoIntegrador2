@@ -33,14 +33,7 @@ export class AnalisisTiendasContainerComponent {
   }
 
   constructor() {
-    this.service
-      .obtenerAnalisisVisitas()
-      .pipe(take(1))
-      .subscribe({
-        next: (analisisVisitas) => {
-          this.analisisVisitas = [...analisisVisitas];
-        },
-      });
+    this.obtenerAnalisisVisitas();
   }
 
   obtenerHoraComoFecha(hora: string) {
@@ -56,7 +49,23 @@ export class AnalisisTiendasContainerComponent {
       idVisita,
       observaciones,
     };
-    this.modalObservacionesService.abrirModal(datosModal);
+    this.modalObservacionesService
+      .abrirModal(datosModal)
+      .pipe(take(1))
+      .subscribe((huboCambios) => {
+        if (huboCambios) this.obtenerAnalisisVisitas();
+      });
+  }
+
+  obtenerAnalisisVisitas() {
+    this.service
+      .obtenerAnalisisVisitas()
+      .pipe(take(1))
+      .subscribe({
+        next: (analisisVisitas) => {
+          this.analisisVisitas = [...analisisVisitas];
+        },
+      });
   }
 
   descargarArchivo(archivo: Archivo) {
