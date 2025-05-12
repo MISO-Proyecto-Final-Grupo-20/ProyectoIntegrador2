@@ -48,12 +48,12 @@ export const mockRutasAsignadas: RutaAsignada[] = [
   {
     cliente: 'Surtimax',
     direccion: 'Cr 238#47- 889',
-    fecha: new Date(2025, 5, 3),
+    fecha: '2025-05-10T00:00:00',
   },
   {
     cliente: 'Autoservicio Laguna',
     direccion: 'Cr 238#47- 889',
-    fecha: new Date(2025, 5, 4),
+    fecha: new Date(2025, 5, 5),
   },
   {
     cliente: 'Autoservicio chapinero',
@@ -63,6 +63,6 @@ export const mockRutasAsignadas: RutaAsignada[] = [
   {
     cliente: 'Fruver',
     direccion: 'Cr 238#47- 889',
-    fecha: new Date(2025, 5, 4),
+    fecha: '2025-05-11T00:00:00',
   },
 ];

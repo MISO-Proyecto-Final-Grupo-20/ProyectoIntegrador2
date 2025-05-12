@@ -162,7 +162,7 @@ export const effectsStore = withMethods(
           service.obtenerRutasAsignadas().pipe(
             tap((rutasAsignadas) =>
               patchState(store, {
-                filtroRutasAsignadas: null,
+                filtroRutasAsignadas: new Date(),
                 rutasAsignadas: [...rutasAsignadas],
               })
             )
