@@ -8,6 +8,7 @@ import {
 } from '@storeflow/design-system';
 import { AnalisisTiendasService } from '../analisis-tiendas.service';
 import { MensajesAnalisisTienda } from '../analisis-tiendas.constantes';
+import { DatosModalObservaciones } from '../analisis-tiendas.model';
 
 @Component({
   selector: 'app-modal-observaciones',
@@ -25,12 +26,15 @@ export class ModalObservacionesComponent {
     null,
     Validators.required
   );
-  constructor(@Inject(MAT_DIALOG_DATA) public idVisita: number) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public datos: DatosModalObservaciones) {
+    if (this.datos?.observaciones)
+      this.controlObservaciones.setValue(this.datos?.observaciones);
+  }
 
   guardarObservaciones() {
     this.service
       .guardarObservaciones(
-        this.idVisita,
+        this.datos.idVisita,
         this.controlObservaciones.value as string
       )
       .subscribe({
@@ -39,7 +43,7 @@ export class ModalObservacionesComponent {
             tipo: TipoAlerta.Success,
             descricion: MensajesAnalisisTienda.guardarObservacionesExitoso,
           });
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         },
       });
   }

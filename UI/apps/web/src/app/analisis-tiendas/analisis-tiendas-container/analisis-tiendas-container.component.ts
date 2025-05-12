@@ -2,15 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   AlertaService,
+  Archivo,
   SharedModule,
-  TipoAlerta,
   Utilidades,
 } from '@storeflow/design-system';
 import { AnalisisTiendasService } from '../analisis-tiendas.service';
 import { take } from 'rxjs';
-import { AnalisisVisita } from '../analisis-tiendas.model';
+import {
+  AnalisisVisita,
+  DatosModalObservaciones,
+} from '../analisis-tiendas.model';
 import { ModalObservacionesService } from '../modal-observaciones/modal-obsevaciones.service';
-import { MensajesAnalisisTienda } from '../analisis-tiendas.constantes';
 
 @Component({
   selector: 'app-analisis-tiendas-container',
@@ -31,14 +33,7 @@ export class AnalisisTiendasContainerComponent {
   }
 
   constructor() {
-    this.service
-      .obtenerAnalisisVisitas()
-      .pipe(take(1))
-      .subscribe({
-        next: (analisisVisitas) => {
-          this.analisisVisitas = [...analisisVisitas];
-        },
-      });
+    this.obtenerAnalisisVisitas();
   }
 
   obtenerHoraComoFecha(hora: string) {
@@ -49,23 +44,31 @@ export class AnalisisTiendasContainerComponent {
     return Utilidades.obtenerTamanioArchivo(tamanio as number);
   }
 
-  abrirModalObservacion(idVisita: number) {
-    this.modalObservacionesService.abrirModal(idVisita);
+  abrirModalObservacion(idVisita: number, observaciones: string | undefined) {
+    const datosModal: DatosModalObservaciones = {
+      idVisita,
+      observaciones,
+    };
+    this.modalObservacionesService
+      .abrirModal(datosModal)
+      .pipe(take(1))
+      .subscribe((huboCambios) => {
+        if (huboCambios) this.obtenerAnalisisVisitas();
+      });
   }
 
-  descargarArchivo(idVisita: number) {
-    const nombreArchivo = `Visita_${idVisita}.mp4`;
+  obtenerAnalisisVisitas() {
     this.service
-      .descargarArchivo(idVisita)
+      .obtenerAnalisisVisitas()
       .pipe(take(1))
       .subscribe({
-        next: (archivo) => {
-          Utilidades.descargarArchivo(archivo, nombreArchivo);
-          this.alerta.abrirAlerta({
-            tipo: TipoAlerta.Success,
-            descricion: MensajesAnalisisTienda.descargaArchivoExitoso,
-          });
+        next: (analisisVisitas) => {
+          this.analisisVisitas = [...analisisVisitas];
         },
       });
+  }
+
+  descargarArchivo(archivo: Archivo) {
+    Utilidades.descargarArchivoDesdeUrl(archivo);
   }
 }

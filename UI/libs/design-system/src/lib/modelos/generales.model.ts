@@ -31,4 +31,5 @@ export type SignalsOf<T extends Record<string, any>> = {
 export interface Archivo {
   nombre: string;
   tamanio: number;
+  url?: string;
 }

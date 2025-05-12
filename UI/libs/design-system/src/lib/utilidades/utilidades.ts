@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Sesion, TipoCategoria } from '../modelos/generales.model';
+import { Archivo, Sesion, TipoCategoria } from '../modelos/generales.model';
 
 export class Utilidades {
   static obtenerSesion(): Sesion {
@@ -41,26 +41,12 @@ export class Utilidades {
     return fecha;
   }
 
-  static descargarArchivo(archivo: Blob, nombreArchivo: string): void {
-    const url = URL.createObjectURL(archivo);
-    const extension = Utilidades.obtenerExtensionPorMIME(archivo.type);
+  static descargarArchivoDesdeUrl(archivo: Archivo): void {
+    if (!archivo.url) return;
     const a = document.createElement('a');
-    a.href = url;
-    a.download = `${nombreArchivo}${extension}`;
-    document.body.appendChild(a);
+    a.href = archivo.url;
+    a.download = archivo.nombre;
     a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
-  static obtenerExtensionPorMIME(mimeType: string): string {
-    const extensionMap: { [key: string]: string } = {
-      'video/mp4': '.mp4',
-      'video/webm': '.webm',
-      'video/ogg': '.ogg',
-      'video/avi': '.avi',
-      'video/mkv': '.mkv',
-    };
-    return extensionMap[mimeType] || '';
+    URL.revokeObjectURL(archivo.url);
   }
 }

@@ -6,7 +6,10 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { AnalisisTiendasUrls } from '../analisis-tiendas.urls';
-import { AnalisisVisita } from '../analisis-tiendas.model';
+import {
+  AnalisisVisita,
+  DatosModalObservaciones,
+} from '../analisis-tiendas.model';
 import { By } from '@angular/platform-browser';
 import { ModalObservacionesService } from '../modal-observaciones/modal-obsevaciones.service';
 import { AlertaService, Utilidades } from '@storeflow/design-system';
@@ -27,6 +30,7 @@ describe('AnalisisTiendasContainerComponent', () => {
       archivo: {
         nombre: 'Pedido semana 15',
         tamanio: 123456,
+        url: 'https://example.com/video.mp4',
       },
     },
     {
@@ -37,8 +41,9 @@ describe('AnalisisTiendasContainerComponent', () => {
       archivo: {
         nombre: 'Pedido semana 15',
         tamanio: 123456,
+        url: 'https://example.com/video.mp4',
       },
-      observaciones: ['No se pudo realizar la visita'],
+      observaciones: 'No se pudo realizar la visita',
     },
   ];
 
@@ -52,6 +57,7 @@ describe('AnalisisTiendasContainerComponent', () => {
     alerta = {
       abrirAlerta: jest.fn(),
     };
+    URL.revokeObjectURL = jest.fn();
 
     TestBed.overrideProvider(AlertaService, {
       useValue: alerta,
@@ -97,39 +103,30 @@ describe('AnalisisTiendasContainerComponent', () => {
 
   it('debe abrir el modal de observaciones cuando se le de click al "boton-abrir-observacion"', () => {
     obtenerAnalisiVisitas();
+    const esperado: DatosModalObservaciones = {
+      idVisita: analisisVisitas[1].id,
+      observaciones: analisisVisitas[1].observaciones,
+    };
+
     fixture.detectChanges();
-    const boton = fixture.debugElement.query(
+    const boton = fixture.debugElement.queryAll(
       By.css('[data-testid="boton-abrir-observacion"]')
-    );
+    )[1];
     boton.nativeElement.click();
     fixture.detectChanges();
-    expect(modalObservacionesService.abrirModal).toHaveBeenCalledWith(
-      analisisVisitas[0].id
-    );
+    expect(modalObservacionesService.abrirModal).toHaveBeenCalledWith(esperado);
   });
 
   it('debe descargar el archivo cuando se le de click al "analisis-tiendas-descargar-archivo"', () => {
-    const idVisita = analisisVisitas[0].id;
-    const url = AnalisisTiendasUrls.descargarArchivo.replace(
-      '[idVisita]',
-      idVisita.toString()
-    );
-    const blobFake = new Blob(['video data'], { type: 'video/mp4' });
-    const spyDescargar = jest.spyOn(Utilidades, 'descargarArchivo');
+    const archivo = analisisVisitas[0].archivo;
+    const spyDescargar = jest.spyOn(Utilidades, 'descargarArchivoDesdeUrl');
     obtenerAnalisiVisitas();
     fixture.detectChanges();
     const descargarArchivo = fixture.debugElement.query(
       By.css('[data-testid="analisis-tiendas-descargar-archivo"]')
     );
     descargarArchivo.nativeElement.click();
-    const peticion = httpMock.expectOne(url);
-    expect(peticion.request.method).toEqual('GET');
-    expect(peticion.request.responseType).toEqual('blob');
-    peticion.flush(blobFake);
-    expect(spyDescargar).toHaveBeenCalledWith(
-      blobFake,
-      `Visita_${idVisita}.mp4`
-    );
+    expect(spyDescargar).toHaveBeenCalledWith(archivo);
   });
 
   function obtenerAnalisiVisitas() {
