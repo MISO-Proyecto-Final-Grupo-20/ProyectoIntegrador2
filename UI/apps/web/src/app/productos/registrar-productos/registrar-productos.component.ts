@@ -15,17 +15,19 @@ import { MensajesProductos } from '../productos.contantes';
 import { RegistrarProducto } from '../productos.model';
 import { ProductosService } from '../productos.service';
 import { RegistrarProductosMasivoService } from '../registrar-productos-masivo/registrar-productos-masivo.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-registrar-productos',
   standalone: true,
   imports: [SharedModule, ReactiveFormsModule],
-  providers: [ProductosService, RegistrarProductosMasivoService],
+  providers: [ProductosService, RegistrarProductosMasivoService, AppService],
   templateUrl: './registrar-productos.component.html',
 })
 export class RegistrarProductosComponent {
   modalRegistrarMasivo = inject(RegistrarProductosMasivoService);
   service = inject(ProductosService);
+  appService = inject(AppService);
   alertaService = inject(AlertaService);
   listadoFabricantes = signal<ListadoFabricantes[]>([]);
   formulario = new FormGroup({
@@ -49,7 +51,7 @@ export class RegistrarProductosComponent {
   }
 
   obtenerListadoFabricantes() {
-    this.service.obtenerListadoFabricantes().subscribe({
+    this.appService.obtenerListadoFabricantes().subscribe({
       next: (fabricantes) => {
         this.listadoFabricantes.set(fabricantes);
       },

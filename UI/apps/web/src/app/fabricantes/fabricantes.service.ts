@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Fabricante } from './fabricante.model';
 import { FabricantesUrls } from './fabricantes.urls';
 
@@ -17,6 +17,5 @@ export class FabricantesService {
       fabricante,
       { headers }
     );
-
   }
 }

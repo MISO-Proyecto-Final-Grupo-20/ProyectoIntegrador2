@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { RegistrarBodegaComponent } from '../registrar-bodega/registrar-bodega.component';
 
 @Component({
   selector: 'app-compras-bodega-container',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './compras-bodega-container.component.html',
-  styleUrl: './compras-bodega-container.component.scss',
+  imports: [RegistrarBodegaComponent],
+  template: `<div class="px-16 py-8 ">
+    <app-registrar-bodega></app-registrar-bodega>
+  </div>`,
 })
 export class ComprasBodegaContainerComponent {}

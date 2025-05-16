@@ -1,0 +1,31 @@
+.max-tamanio {
+  max-width: 30px;
+  max-height: 41px;
+}
+
+.contenedor-imagen {
+  min-width: 30px;
+  height: 41px;
+}
+
+.min-width-116 {
+  min-width: 116px;
+}
+
+.width-30 {
+  width: 30px;
+}
+
+.width-60 {
+  width: 40%;
+}
+
+mat-list-item {
+  border-bottom: 1px solid #ededed;
+  height: auto !important;
+  min-height: 65px !important;
+}
+
+mat-dialog-content {
+  padding: 0px !important;
+}
