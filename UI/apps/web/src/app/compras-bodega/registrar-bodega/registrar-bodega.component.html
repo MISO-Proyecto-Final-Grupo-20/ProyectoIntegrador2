@@ -1,0 +1,59 @@
+<mat-card class="sin-sombra-card">
+  <div class="row gap-8 align-items-center p-16">
+    <img src="/assets/images/bolsa.svg" width="34" height="31" />
+    <h3 i18n="bodegas.registrar.titulo">Compras y bodegas</h3>
+  </div>
+  <div class="p-12 column gap-16" [formGroup]="formulario">
+    <div class="row gap-8 align-items-center">
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="fabricante">Fabricante</mat-label>
+        <mat-select
+          data-testid="select-fabricante-registrar-bodega"
+          formControlName="fabricante"
+        >
+          @for (fabricante of store.listadoFabricantes(); track fabricante.id) {
+            <mat-option [value]="fabricante.id">
+              {{ fabricante.nombre }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="flex-1">
+        <mat-label i18n="bodegas.registrar.bodegaDestino"
+          >Bodega destinó</mat-label
+        >
+        <mat-select
+          data-testid="select-bodega-destino-registrar-bodega"
+          formControlName="bodega"
+        >
+          @for (bodega of store.listadoBodegas(); track bodega.id) {
+            <mat-option [value]="bodega.id">
+              {{ bodega.descripcion }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        data-testid="boton-agregar-producto-registrar-bodega"
+        mat-button
+        color="primary"
+        (click)="abrirModalSeleccionarProductos()"
+        i18n="agregarProducto"
+      >
+        Agregar productos ({{ store.cantidadProductosSeleccionados() }})
+      </button>
+    </div>
+    <div class="row justify-content-end">
+      <button
+        mat-raised-button
+        color="primary"
+        data-testid="boton-registrar-bodega"
+        i18n="guardar"
+        (click)="registrarCompraBodega()"
+        [disabled]="desabilitarBotonRegistrar"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</mat-card>

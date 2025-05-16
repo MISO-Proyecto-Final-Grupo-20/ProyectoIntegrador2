@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { ListadoFabricantes } from '../app-model';
 import { productosSimulados } from './productos.mock';
 import { RegistrarProducto, ResultadoCargaMasiva } from './productos.model';
 import { ProductosUrls } from './productos.urls';
@@ -9,16 +8,6 @@ import { ProductosUrls } from './productos.urls';
 @Injectable()
 export class ProductosService {
   http = inject(HttpClient);
-
-  obtenerListadoFabricantes(): Observable<ListadoFabricantes[]> {
-    return this.http.get<ListadoFabricantes[]>(
-      ProductosUrls.obtenerListadoFabricantes
-    );
-    // return of([
-    //   { id: 1, nombre: 'Fabricante 1' },
-    //   { id: 2, nombre: 'Fabricante 2' },
-    // ]);
-  }
 
   guardarProducto(producto: RegistrarProducto): Observable<void> {
     return this.http.post<void>(ProductosUrls.guardarProducto, producto);

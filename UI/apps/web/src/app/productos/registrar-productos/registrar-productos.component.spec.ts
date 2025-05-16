@@ -14,6 +14,8 @@ import { ProductosService } from '../productos.service';
 import { ProductosUrls } from '../productos.urls';
 import { RegistrarProductosMasivoService } from '../registrar-productos-masivo/registrar-productos-masivo.service';
 import { RegistrarProductosComponent } from './registrar-productos.component';
+import { AppsUrls } from '../../app.urls';
+import { AppService } from '../../app.service';
 
 describe('RegistrarProductosComponent', () => {
   let component: RegistrarProductosComponent;
@@ -43,6 +45,7 @@ describe('RegistrarProductosComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         ProductosService,
+        AppService,
         HttpTestingController,
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -69,9 +72,7 @@ describe('RegistrarProductosComponent', () => {
       { id: 2, nombre: 'Fabricante 2' },
     ];
 
-    const peticion = httpMock.expectOne(
-      ProductosUrls.obtenerListadoFabricantes
-    );
+    const peticion = httpMock.expectOne(AppsUrls.obtenerListadoFabricantes);
     peticion.flush(fabricantes);
     expect(peticion.request.method).toEqual('GET');
     expect(component.listadoFabricantes()).toEqual(fabricantes);

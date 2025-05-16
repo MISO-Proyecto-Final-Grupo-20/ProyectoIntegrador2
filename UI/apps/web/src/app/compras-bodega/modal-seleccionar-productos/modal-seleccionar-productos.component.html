@@ -1,0 +1,85 @@
+<section>
+  <div class="row justify-content-between align-items-center py-12 px-16">
+    <h3 class="color-on-surface" i18n="nuevaCompra">Nueva compra</h3>
+    <mat-icon class="color-grey-800 cursor-pointer" mat-dialog-close
+      >close</mat-icon
+    >
+  </div>
+  <div class="pb-16 px-16 column gap-17">
+    <div class="p-10 column gap-16">
+      <mat-dialog-content>
+        <mat-list>
+          @for (producto of store.productos(); track producto.id) {
+            <mat-list-item>
+              <div class="row justify-content-between align-items-center">
+                <div class="row gap-20 align-items-center nowrap width-60">
+                  <div
+                    class="contenedor-imagen column align-items-center justify-content-center"
+                  >
+                    <img
+                      class="max-tamanio"
+                      [src]="producto.imagen"
+                      i18n-alt="@@imagenProducto"
+                      alt="imagen producto"
+                    />
+                  </div>
+                  <div class="column gap-2 flex-1">
+                    <p class="mat-body-1 color-grey-800 white-space-normal">
+                      {{ producto.nombre }}
+                    </p>
+                    <p class="color-accent">
+                      {{ producto.precio | number }} COP
+                    </p>
+                  </div>
+                </div>
+                <div class="row min-width-116 gap-13 align-items-center nowrap">
+                  <button
+                    data-testid="boton-restar-producto"
+                    mat-icon-button
+                    (click)="restarProducto(producto)"
+                  >
+                    <mat-icon class="color-primary">remove</mat-icon>
+                  </button>
+                  <h3 class="color-grey-800 width-30 text-center">
+                    {{ obtenerCantidad(producto.id) }}
+                  </h3>
+                  <button
+                    data-testid="boton-sumar-producto"
+                    mat-icon-button
+                    (click)="sumarProducto(producto)"
+                  >
+                    <mat-icon class="color-primary">add</mat-icon>
+                  </button>
+                </div>
+                <mat-checkbox
+                  data-testid="checkbox-seleccionar-producto-registrar-bodega"
+                  [checked]="esProductoSeleccionado(producto)"
+                  (change)="seleccionarProducto(producto, $event)"
+                  color="primary"
+                >
+                </mat-checkbox>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      </mat-dialog-content>
+      <div class="row justify-content-end">
+        <h3 class="color-warn">
+          {{ totalValorProductosSeleccionados | number }} COP
+        </h3>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <button
+        data-testid="boton-agregar-producto-registrar-bodega"
+        mat-raised-button
+        color="primary"
+        i18n="agregar"
+        (click)="agregarProductos()"
+        [disabled]="desabilitarBoton"
+      >
+        Agregar
+      </button>
+    </div>
+  </div>
+</section>
