@@ -1,33 +1,570 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="es-CO" datatype="plaintext" original="ng2.template">
+  <file source-language="es" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="menuCrearPedido" datatype="html">
+        <source>Crear un pedido</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuConsultarPedido" datatype="html">
+        <source>Consultar pedido</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuEntregasProgramadas" datatype="html">
+        <source>Entregas programadas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuClientes" datatype="html">
+        <source>Clientes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuRegistrarVisita" datatype="html">
+        <source>Registrar visita</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuRutasAsignadas" datatype="html">
+        <source>Rutas asignadas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="mensajeCredencialesIncorrectas" datatype="html">
+        <source>No se pudo autenticar. Verifica tu correo o contraseña.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="mensajeClienteRegistrado" datatype="html">
+        <source>Cliente registrado</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="mensajeNoHaySuficienteInventario" datatype="html">
+        <source>No hay sufiente inventario</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="mensajePedidoCreado" datatype="html">
+        <source>Pedido creado</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="mensajeRegistroVisitaExitoso" datatype="html">
+        <source>Visita registrada</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pendiente" datatype="html">
+        <source>Pendiente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="enCamino" datatype="html">
+        <source>En camino</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="entregado" datatype="html">
+        <source>Entregado</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/app.constantes.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="productos" datatype="html">
+        <source>Productos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/clientes.constantes.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/vendedores.constantes.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pedidosPendientes" datatype="html">
+        <source>Pedidos pendientes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/clientes.constantes.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/vendedores.constantes.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9008793761127582236" datatype="html">
+        <source>Buscar pedido </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/consultar-pedido/consultar-pedido.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <note priority="1" from="description">pedido.buscarPedido</note>
+      </trans-unit>
+      <trans-unit id="tituloConsultarPedido" datatype="html">
+        <source>Consultar pedido</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/consultar-pedido/consultar-pedido.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionConsultarPedido" datatype="html">
+        <source>Aquí puedes encontrar todos tus pedidos y sus estados</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/consultar-pedido/consultar-pedido.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tituloCrearPedido" datatype="html">
+        <source>Crear un pedido</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/crear-pedido/crear-pedido.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionCrearPedido" datatype="html">
+        <source>Selecciona los productos que necesitas y la cantidad</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/crear-pedido/crear-pedido.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6280558657625851715" datatype="html">
+        <source>Buscar entrega </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <note priority="1" from="description">entregas.buscarEntrega</note>
+      </trans-unit>
+      <trans-unit id="3096646265919543857" datatype="html">
+        <source> Entrega #<x id="INTERPOLATION" equiv-text="{{ entrega.numero }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6485909127475809932" datatype="html">
+        <source>Fecha de entrega:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/panel-pedidos/panel-pedidos.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <note priority="1" from="description">fechaEntrega</note>
+      </trans-unit>
+      <trans-unit id="463136397122489606" datatype="html">
+        <source> Lugar de entrega: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/panel-pedidos/panel-pedidos.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+        <note priority="1" from="description">lugarEntrega</note>
+      </trans-unit>
+      <trans-unit id="tituloEntregas" datatype="html">
+        <source>Entregas programadas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionEntregas" datatype="html">
+        <source>Consulta la fecha de tu pedido y su estado</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/entregas-programadas/entregas-programadas.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2334758840166384270" datatype="html">
+        <source> Crear pedido </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/clientes/modal-crear-pedido/modal-crear-pedido.component.html</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/modal-crear-pedido/modal-crear-pedido.component.html</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+        <note priority="1" from="description">crearPedido</note>
+      </trans-unit>
       <trans-unit id="983519587781663433" datatype="html">
         <source>Bienvenido</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
+        <note priority="1" from="description">login.bienvenido</note>
       </trans-unit>
       <trans-unit id="671442144102308031" datatype="html">
         <source> Selecciona la categoría a la que perteneces </source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
-          <context context-type="linenumber">8,9</context>
+          <context context-type="linenumber">8,11</context>
         </context-group>
+        <note priority="1" from="description">login.seleccioneCategoria</note>
       </trans-unit>
       <trans-unit id="6629419484562012536" datatype="html">
         <source> Vendedor <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">20,22</context>
         </context-group>
+        <note priority="1" from="description">login.vendedor</note>
       </trans-unit>
       <trans-unit id="6547329153703848894" datatype="html">
         <source> Cliente <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon iconPositionEnd&gt;"/>keyboard_arrow_right<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/mobile/src/app/login/menu-login/menu-login.component.html</context>
-          <context context-type="linenumber">28,30</context>
+          <context context-type="linenumber">30,32</context>
+        </context-group>
+        <note priority="1" from="description">login.cliente</note>
+      </trans-unit>
+      <trans-unit id="2712792118170043577" datatype="html">
+        <source>Registro de cliente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.cliente</note>
+      </trans-unit>
+      <trans-unit id="5357661269973482487" datatype="html">
+        <source>Nombre</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.nombre</note>
+      </trans-unit>
+      <trans-unit id="4478830886294309643" datatype="html">
+        <source>Correo electronico</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.correo</note>
+      </trans-unit>
+      <trans-unit id="27938269079184046" datatype="html">
+        <source>Dirección</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.direccion</note>
+      </trans-unit>
+      <trans-unit id="7132730488496169673" datatype="html">
+        <source>Contraseña</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.contrasena</note>
+      </trans-unit>
+      <trans-unit id="4734704209129309911" datatype="html">
+        <source>La contraseña no es válida. Debe tener al menos 8 caracteres, incluir una letra mayúscula, un número y un carácter especial.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">64,67</context>
+        </context-group>
+        <note priority="1" from="description">login.registroCliente.contrasenaInvalida</note>
+      </trans-unit>
+      <trans-unit id="4113182804267037649" datatype="html">
+        <source> Guardar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/login/registro-cliente/registro-cliente.component.html</context>
+          <context context-type="linenumber">80,81</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">79,80</context>
+        </context-group>
+        <note priority="1" from="description">guardar</note>
+      </trans-unit>
+      <trans-unit id="4811891349770272642" datatype="html">
+        <source> Agregar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/agregar-producto/agregar-producto.component.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+        <note priority="1" from="description">agregar</note>
+      </trans-unit>
+      <trans-unit id="655856028981699158" datatype="html">
+        <source> Ingresa tus datos para acceder a tu información. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+        <note priority="1" from="description">login.descripcion</note>
+      </trans-unit>
+      <trans-unit id="6597520566647669940" datatype="html">
+        <source>Correo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+        <note priority="1" from="description">login.correo</note>
+      </trans-unit>
+      <trans-unit id="7904313455104046575" datatype="html">
+        <source> Ingresar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+        <note priority="1" from="description">login.ingresar</note>
+      </trans-unit>
+      <trans-unit id="7835686155076916349" datatype="html">
+        <source> ¿Aún no tienes cuenta? </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">64,66</context>
+        </context-group>
+        <note priority="1" from="description">login.notienescuenta</note>
+      </trans-unit>
+      <trans-unit id="7771885555989141749" datatype="html">
+        <source> Registrate aquí </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.html</context>
+          <context context-type="linenumber">73,75</context>
+        </context-group>
+        <note priority="1" from="description">login.registrate</note>
+      </trans-unit>
+      <trans-unit id="tituloCliente" datatype="html">
+        <source>Cliente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tituloVendedor" datatype="html">
+        <source>Vendedor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/login/login.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tituloMenuNavegacion" datatype="html">
+        <source>Hola <x id="PH" equiv-text="this.sesion.nombre"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/menu-navegacion/menu-navegacion.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionMenuNavegacion" datatype="html">
+        <source>Gestiona tus pedidos y solicitudes aquí</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/menu-navegacion/menu-navegacion.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3102051245208106779" datatype="html">
+        <source>Buscar producto </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/productos/productos.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+        <note priority="1" from="description">producto.buscarProducto</note>
+      </trans-unit>
+      <trans-unit id="3511297967450280463" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>add_shopping_cart<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Ver carrito (<x id="INTERPOLATION" equiv-text="{{ cantidadProductosSeleccionados() }}"/>)
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/shared/productos/productos.component.html</context>
+          <context context-type="linenumber">60,63</context>
+        </context-group>
+        <note priority="1" from="description">ver-carrito</note>
+      </trans-unit>
+      <trans-unit id="8919602728420281870" datatype="html">
+        <source> Adjuntar evidencia </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/adjuntar-evidencia/adjuntar-evidencia.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">67,68</context>
+        </context-group>
+        <note priority="1" from="description">adjuntarEvidencia</note>
+      </trans-unit>
+      <trans-unit id="8278462462199686935" datatype="html">
+        <source>Buscar cliente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/clientes/clientes.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <note priority="1" from="description">clientes.buscarcliente</note>
+      </trans-unit>
+      <trans-unit id="5655096433688757336" datatype="html">
+        <source> Cliente #<x id="INTERPOLATION" equiv-text="{{ cliente.id }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/clientes/clientes.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+        <note priority="1" from="description">cliente</note>
+      </trans-unit>
+      <trans-unit id="5381903537606462908" datatype="html">
+        <source>Dirección:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/clientes/clientes.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+        <note priority="1" from="description">direccion</note>
+      </trans-unit>
+      <trans-unit id="clientes" datatype="html">
+        <source>Clientes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/clientes/clientes.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionClientes" datatype="html">
+        <source>Gestiona tus clientes aquí</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/consulta-clientes-shell/consulta-clientes-shell.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descripcionClientesRegistrarVisita" datatype="html">
+        <source>Documenta las visitas a tus clientes aquí</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita-container/registrar-visita-container.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4197159786725604872" datatype="html">
+        <source> Registra tu visita </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+        <note priority="1" from="description">registraTuVisita</note>
+      </trans-unit>
+      <trans-unit id="7944442845393176638" datatype="html">
+        <source>Fecha</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+        <note priority="1" from="description">fecha</note>
+      </trans-unit>
+      <trans-unit id="4550363912694193808" datatype="html">
+        <source>Hora</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <note priority="1" from="description">hora</note>
+      </trans-unit>
+      <trans-unit id="3613070748748358303" datatype="html">
+        <source>Visitas realizadas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">85,86</context>
+        </context-group>
+        <note priority="1" from="description">visitasRealizadas</note>
+      </trans-unit>
+      <trans-unit id="7256034353511726715" datatype="html">
+        <source> Visita </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+        <note priority="1" from="description">visita</note>
+      </trans-unit>
+      <trans-unit id="611236275735924557" datatype="html">
+        <source> Fecha de visita: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">101,102</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+        <note priority="1" from="description">fechaVisita</note>
+      </trans-unit>
+      <trans-unit id="8975904145016714219" datatype="html">
+        <source> Hora de visita: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/registrar-visita/registrar-visita.component.html</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+        <note priority="1" from="description">horaVisita</note>
+      </trans-unit>
+      <trans-unit id="8785643963436720341" datatype="html">
+        <source>Filtrar por fecha</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+        <note priority="1" from="description">filtrarPorFecha</note>
+      </trans-unit>
+      <trans-unit id="6651808523186989469" datatype="html">
+        <source> Filtrar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <note priority="1" from="description">filtrar</note>
+      </trans-unit>
+      <trans-unit id="207837035421465242" datatype="html">
+        <source> Dirección: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+        <note priority="1" from="description">direccion</note>
+      </trans-unit>
+      <trans-unit id="rutasAsignadas" datatype="html">
+        <source>Rutas asignadas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="rutasAsignadasDescripcion" datatype="html">
+        <source>Consulta tus próximas visitas</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/mobile/src/app/vendedores/rutas-asignadas/rutas-asignadas.component.ts</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
     </body>

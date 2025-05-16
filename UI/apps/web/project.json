@@ -6,9 +6,9 @@
   "sourceRoot": "apps/web/src",
   "tags": [],
   "i18n": {
-    "sourceLocale": "es-CO",
+    "sourceLocale": "es",
     "locales": {
-      "en-US": "apps/web/src/locale/messages.en-US.xlf"
+      "en": "apps/web/src/locale/messages.en.xlf"
     }
   },
   "targets": {
@@ -30,6 +30,12 @@
         "scripts": []
       },
       "configurations": {
+        "en": {
+          "localize": ["en"]
+        },
+        "es": {
+          "localize": ["es"]
+        },
         "en-US": {
           "localize": ["en-US"]
         },

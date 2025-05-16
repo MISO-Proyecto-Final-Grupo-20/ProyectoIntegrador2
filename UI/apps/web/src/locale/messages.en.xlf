@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="es-CO" target-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="5726015335467913420" datatype="html">
+        <source>Análisis de tiendas</source>
+        <target>Store Analysis</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+        <note priority="1" from="description">analisisTiendas</note>
+      </trans-unit>
+      <trans-unit id="1023785676465580428" datatype="html">
+        <source>Visita</source>
+        <target>Visit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+        <note priority="1" from="description">visita</note>
+      </trans-unit>
+      <trans-unit id="611236275735924557" datatype="html">
+        <source> Fecha de visita: </source>
+        <target> Visit date: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <note priority="1" from="description">fechaVisita</note>
+      </trans-unit>
+      <trans-unit id="8975904145016714219" datatype="html">
+        <source> Hora de visita: </source>
+        <target> Visit time: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <note priority="1" from="description">horaVisita</note>
+      </trans-unit>
+      <trans-unit id="568377578473832978" datatype="html">
+        <source> Observación <x id="START_BLOCK_IF" equiv-text="@if (visita.observaciones) {"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>(1)<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/></source>
+        <target> Observation <x id="START_BLOCK_IF" equiv-text="@if (visita.observaciones) {"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>(1)<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
+          <context context-type="linenumber">72,76</context>
+        </context-group>
+        <note priority="1" from="description">observacion</note>
+      </trans-unit>
+      <trans-unit id="observacionguardada" datatype="html">
+        <source>Observación guardada</source>
+        <target>Observation saved</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas.constantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="descargaexitosa" datatype="html">
+        <source>Descarga exitosa</source>
+        <target>Download successful</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas.constantes.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6519453392598038567" datatype="html">
+        <source> Ingresa las observaciones del video </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">ingresaObsevacionesVideo</note>
+      </trans-unit>
+      <trans-unit id="2182608854672241685" datatype="html">
+        <source>Observaciones</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+        <note priority="1" from="description">observaciones</note>
+      </trans-unit>
+      <trans-unit id="4113182804267037649" datatype="html">
+        <source> Guardar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/fabricantes/registrar-fabricante/registrar-fabricante.component.html</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos-masivo/registrar-productos-masivo.component.html</context>
+          <context context-type="linenumber">89,90</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">90,93</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+        <note priority="1" from="description">guardar</note>
+      </trans-unit>
+      <trans-unit id="registroCompraExitoso" datatype="html">
+        <source>Compra registrada</source>
+        <target>Purchase registered</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/compras-bodega.constantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3892714019470618784" datatype="html">
+        <source>Nueva compra</source>
+        <target>New purchase</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/modal-seleccionar-productos/modal-seleccionar-productos.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <note priority="1" from="description">nuevaCompra</note>
+      </trans-unit>
+      <trans-unit id="imagenProducto" datatype="html">
+        <source>imagen producto</source>
+        <target>product image</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/modal-seleccionar-productos/modal-seleccionar-productos.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4811891349770272642" datatype="html">
+        <source> Agregar </source>
+        <target> Add </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/modal-seleccionar-productos/modal-seleccionar-productos.component.html</context>
+          <context context-type="linenumber">81,82</context>
+        </context-group>
+        <note priority="1" from="description">agregar</note>
+      </trans-unit>
+      <trans-unit id="8472949945303365012" datatype="html">
+        <source>Compras y bodegas</source>
+        <target>Purchases and warehouses</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">bodegas.registrar.titulo</note>
+      </trans-unit>
+      <trans-unit id="8997869893979094697" datatype="html">
+        <source>Fabricante</source>
+        <target>Manufacturer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+        <note priority="1" from="description">fabricante</note>
+      </trans-unit>
+      <trans-unit id="3955306167478003511" datatype="html">
+        <source>Bodega destinó</source>
+        <target>Warehouse destination</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+        <note priority="1" from="description">bodegas.registrar.bodegaDestino</note>
+      </trans-unit>
+      <trans-unit id="5363140058988930666" datatype="html">
+        <source> Agregar productos (<x id="INTERPOLATION" equiv-text="{{ store.cantidadProductosSeleccionados() }}"/>) </source>
+        <target> Add products (<x id="INTERPOLATION" equiv-text="{{ store.cantidadProductosSeleccionados() }}"/>) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+        <note priority="1" from="description">agregarProducto</note>
+      </trans-unit>
+      <trans-unit id="8926257270786919634" datatype="html">
+        <source>Registrar fabricante</source>
+        <target>Register manufacturer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/fabricantes/registrar-fabricante/registrar-fabricante.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">fabricante.registrarFabricante</note>
+      </trans-unit>
+      <trans-unit id="8196411060713515960" datatype="html">
+        <source>Ingrese el nombre</source>
+        <target>Enter the name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/fabricantes/registrar-fabricante/registrar-fabricante.component.html</context>
+          <context context-type="linenumber">13,15</context>
+        </context-group>
+        <note priority="1" from="description">fabricante.registrarFabricante.nombre</note>
+      </trans-unit>
+      <trans-unit id="4492971225334020052" datatype="html">
+        <source>Ingrese el correo</source>
+        <target>Enter the email</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/fabricantes/registrar-fabricante/registrar-fabricante.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+        <note priority="1" from="description">fabricante.registrarFabricante.correo</note>
+      </trans-unit>
+      <trans-unit id="menuFabricantes" datatype="html">
+        <source>Fabricantes</source>
+        <target>Manufacturers</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuProductos" datatype="html">
+        <source>Productos</source>
+        <target>Products</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuVendedores" datatype="html">
+        <source>Vendedores</source>
+        <target>Sellers</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuPlanesVenta" datatype="html">
+        <source>Planes de venta</source>
+        <target>Sales plans</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuInformes" datatype="html">
+        <source>Informes</source>
+        <target>Reports</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuComprasBodega" datatype="html">
+        <source>Compras y bodegas</source>
+        <target>Purchases and warehouses</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuAnalisisTiendas" datatype="html">
+        <source>Análisis de tiendas</source>
+        <target>Store Analysis</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menuProgramacionRutas" datatype="html">
+        <source>Programación de rutas</source>
+        <target>Route programming</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7838748802290050050" datatype="html">
+        <source>Informes</source>
+        <target>Reports</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">informes.titulo</note>
+      </trans-unit>
+      <trans-unit id="8206640963561191344" datatype="html">
+        <source>Vendedor</source>
+        <target>Seller</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/listado-informes/listado-informes.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <note priority="1" from="description">vendedor</note>
+      </trans-unit>
+      <trans-unit id="6578461190184666788" datatype="html">
+        <source>Fecha inicial</source>
+        <target>Start date</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+        <note priority="1" from="description">fechaInicial</note>
+      </trans-unit>
+      <trans-unit id="5936502369539023977" datatype="html">
+        <source>Fecha final</source>
+        <target>End date</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+        <note priority="1" from="description">fechaFinal</note>
+      </trans-unit>
+      <trans-unit id="7072282989020813528" datatype="html">
+        <source>Producto</source>
+        <target>Product</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/listado-informes/listado-informes.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+        <note priority="1" from="description">producto</note>
+      </trans-unit>
+      <trans-unit id="415176692150431860" datatype="html">
+        <source> Consultar </source>
+        <target> Consult </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+        <note priority="1" from="description">consultar</note>
+      </trans-unit>
+      <trans-unit id="3270890763840172163" datatype="html">
+        <source> Fecha de venta </source>
+        <target> Sale date </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/listado-informes/listado-informes.component.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+        <note priority="1" from="description">fechaVenta</note>
+      </trans-unit>
+      <trans-unit id="5426109382041281633" datatype="html">
+        <source>Cantidad</source>
+        <target>Quantity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/listado-informes/listado-informes.component.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+        <note priority="1" from="description">vendedor</note>
+      </trans-unit>
+      <trans-unit id="7234775538879041503" datatype="html">
+        <source> Empieza realizando una consulta para mostrar más detalles. </source>
+        <target> Start by making a query to show more details. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/informes/listado-informes/listado-informes.component.html</context>
+          <context context-type="linenumber">39,41</context>
+        </context-group>
+        <note priority="1" from="description">informes.empty</note>
+      </trans-unit>
+      <trans-unit id="983519587781663433" datatype="html">
+        <source>Bienvenido</source>
+        <target>Welcome</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+        <note priority="1" from="description">login.bienvenido</note>
+      </trans-unit>
+      <trans-unit id="655856028981699158" datatype="html">
+        <source> Ingresa tus datos para acceder a tu información. </source>
+        <target> Enter your details to access your information. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <note priority="1" from="description">login.descripcion</note>
+      </trans-unit>
+      <trans-unit id="6597520566647669940" datatype="html">
+        <source>Correo</source>
+        <target>Email</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <note priority="1" from="description">login.correo</note>
+      </trans-unit>
+      <trans-unit id="7132730488496169673" datatype="html">
+        <source>Contraseña</source>
+        <target>Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+        <note priority="1" from="description">login.contrasena</note>
+      </trans-unit>
+      <trans-unit id="7904313455104046575" datatype="html">
+        <source> Ingresar </source>
+        <target> Enter </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+        <note priority="1" from="description">login.ingresar</note>
+      </trans-unit>
+      <trans-unit id="7835686155076916349" datatype="html">
+        <source> ¿Aún no tienes cuenta? </source>
+        <target> Don't have an account yet? </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+        <note priority="1" from="description">login.notienescuenta</note>
+      </trans-unit>
+      <trans-unit id="7771885555989141749" datatype="html">
+        <source> Registrate aquí </source>
+        <target> Register here </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+        <note priority="1" from="description">login.registrate</note>
+      </trans-unit>
+      <trans-unit id="mensajeCredencialesIncorrectas" datatype="html">
+        <source>No se pudo autenticar. Verifica tu correo o contraseña.</source>
+        <target>Authentication failed. Check your email or password.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/login/login.constantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="registroPlanesVentaExitoso" datatype="html">
+        <source>Plan de ventas guardado</source>
+        <target>Sales plan saved</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/planes-venta.constantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="290788818536696409" datatype="html">
+        <source>Planes de ventas</source>
+        <target>Sales plans</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">planesVentas.registrar.titulo</note>
+      </trans-unit>
+      <trans-unit id="8525610044323204416" datatype="html">
+        <source>Periodo de tiempo</source>
+        <target>Time period</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
+          <context context-type="linenumber">10,13</context>
+        </context-group>
+        <note priority="1" from="description">planesVentas.registrar.periodoTiempo</note>
+      </trans-unit>
+      <trans-unit id="8626489820391721142" datatype="html">
+        <source>Valor de ventas</source>
+        <target>Sales value</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
+          <context context-type="linenumber">25,28</context>
+        </context-group>
+        <note priority="1" from="description">planesVentas.registrar.valorVentas</note>
+      </trans-unit>
+      <trans-unit id="50788757349753147" datatype="html">
+        <source> Selecciona un vendedor </source>
+        <target> Select a seller </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+        <note priority="1" from="description">planesVentas.registrar.seleccionaVendedor</note>
+      </trans-unit>
+      <trans-unit id="registroProductoExitoso" datatype="html">
+        <source>Producto guardado</source>
+        <target>Product saved</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/productos.contantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="686046997678232183" datatype="html">
+        <source> Arrastra o adjunta tu archivo </source>
+        <target> Drag or attach your file </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos-masivo/registrar-productos-masivo.component.html</context>
+          <context context-type="linenumber">25,28</context>
+        </context-group>
+        <note priority="1" from="description">producto.masivo.arrastraAdjuntaTuArchivo</note>
+      </trans-unit>
+      <trans-unit id="305305266255948980" datatype="html">
+        <source> CVS • Máx. 00MB </source>
+        <target> CVS • Max. 00MB </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos-masivo/registrar-productos-masivo.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+        <note priority="1" from="description">producto.masivo.tamanioArchivo</note>
+      </trans-unit>
+      <trans-unit id="6552464204992084835" datatype="html">
+        <source> Adjuntar archivo <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+                type=&quot;file&quot;
+                (change)=&quot;adjuntarArchivo($event)&quot;
+                accept=&quot;.csv,text/csv&quot;
+                data-testid=&quot;producto-cargar-masivo&quot;
+                name=&quot;archivo&quot;
+                id=&quot;subirArchivo&quot;
+              /&gt;"/></source>
+        <target> Attach file <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+                type=&quot;file&quot;
+                (change)=&quot;adjuntarArchivo($event)&quot;
+                accept=&quot;.csv,text/csv&quot;
+                data-testid=&quot;producto-cargar-masivo&quot;
+                name=&quot;archivo&quot;
+                id=&quot;subirArchivo&quot;
+              /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos-masivo/registrar-productos-masivo.component.html</context>
+          <context context-type="linenumber">40,49</context>
+        </context-group>
+        <note priority="1" from="description">producto.masivo.adjuntarArchivo</note>
+      </trans-unit>
+      <trans-unit id="9142832346699035323" datatype="html">
+        <source>Registrar producto</source>
+        <target>Register product</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.titulo</note>
+      </trans-unit>
+      <trans-unit id="5357661269973482487" datatype="html">
+        <source>Nombre</source>
+        <target>Name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.nombre</note>
+      </trans-unit>
+      <trans-unit id="994468399508042264" datatype="html">
+        <source>Fabricante asociado</source>
+        <target>Associated manufacturer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">19,22</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.fabricanteAsociado</note>
+      </trans-unit>
+      <trans-unit id="4506945638080056600" datatype="html">
+        <source>Código del producto</source>
+        <target>Product code</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">36,39</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.codigo</note>
+      </trans-unit>
+      <trans-unit id="5574854353527372166" datatype="html">
+        <source>Precio del producto</source>
+        <target>Product price</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">47,50</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.precio</note>
+      </trans-unit>
+      <trans-unit id="4420845625143861351" datatype="html">
+        <source>Ruta imagen del producto</source>
+        <target>Product image path</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">61,64</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.imagen</note>
+      </trans-unit>
+      <trans-unit id="8655267627887849874" datatype="html">
+        <source> Registrar masivo </source>
+        <target> Register mass </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
+          <context context-type="linenumber">79,83</context>
+        </context-group>
+        <note priority="1" from="description">producto.registrarProducto.registrarMasivo</note>
+      </trans-unit>
+      <trans-unit id="2564259826566640521" datatype="html">
+        <source> Carga exitosa </source>
+        <target> Successful upload </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">producto.masivo.cargaExitosa</note>
+      </trans-unit>
+      <trans-unit id="2244399101692788454" datatype="html">
+        <source> Productos cargados </source>
+        <target> Loaded products </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.html</context>
+          <context context-type="linenumber">28,31</context>
+        </context-group>
+        <note priority="1" from="description">producto.masivo.productosCargados</note>
+      </trans-unit>
+      <trans-unit id="producto.masivo.cargadosCorrectamente" datatype="html">
+        <source><x id="PH" equiv-text="this.productos.length"/> productos cargados correctamente</source>
+        <target><x id="PH" equiv-text="this.productos.length"/> products loaded correctly</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="producto.masivo.erroresNoCargados" datatype="html">
+        <source> Ver <x id="PH" equiv-text="this.errores.length"/> errores no cargados</source>
+        <target> See <x id="PH" equiv-text="this.errores.length"/> products not loaded</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7630228174223298575" datatype="html">
+        <source>Registrar vendedor</source>
+        <target>Register seller</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+        <note priority="1" from="description">vendedor.registrarVendedor.titulo</note>
+      </trans-unit>
+      <trans-unit id="registrarVendedorExitoso" datatype="html">
+        <source>Vendedor guardado</source>
+        <target>Seller saved</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/web/src/app/vendedores/vendedores.constantes.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
