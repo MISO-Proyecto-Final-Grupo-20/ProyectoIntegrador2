@@ -33,59 +33,66 @@ public class InventariosDbContext(DbContextOptions<InventariosDbContext> options
 
     public async Task<bool> ExisteInventarioSuficienteAsync(int idProducto, int cantidad)
     {
-        var inventario = await Inventarios
-            .FirstOrDefaultAsync(i => i.IdProducto == idProducto);
+        var cantidadTotal = await Inventarios
+            .Where(i => i.IdProducto == idProducto)
+            .SumAsync(i => i.Cantidad);
 
-        return inventario != null && inventario.Cantidad >= cantidad;
+        return cantidadTotal >= cantidad;
     }
 
     public async Task<SolicitudDePedido> ValidarPedidoConInventarioAsync(SolicitudDePedido pedido)
     {
-        var idSProductosSolicitados = pedido.ProductosSolicitados
-            .Select(p => p.Id)
-            .ToList();
+        var idsProductos = pedido.ProductosSolicitados.Select(p => p.Id).ToList();
 
         var inventarios = await Inventarios
-            .Where(i => idSProductosSolicitados.Contains(i.IdProducto))
+            .Where(i => idsProductos.Contains(i.IdProducto))
             .ToListAsync();
 
         var productosConEstadoInventario = pedido.ProductosSolicitados
-            .Select(productoSolicitado =>
+            .Select(producto =>
             {
-                var inventario = inventarios.FirstOrDefault(i => i.IdProducto == productoSolicitado.Id);
-                var tieneInventario = inventario != null && inventario.Cantidad >= productoSolicitado.Cantidad;
+                var totalDisponible = inventarios
+                    .Where(i => i.IdProducto == producto.Id)
+                    .Sum(i => i.Cantidad);
 
-                return productoSolicitado with { TieneInventario = tieneInventario };
+                var tieneInventario = totalDisponible >= producto.Cantidad;
+                return producto with { TieneInventario = tieneInventario };
             })
             .ToArray();
 
         var pedidoValidado = pedido with { ProductosSolicitados = productosConEstadoInventario };
 
-        await DescontarInventarioAsync(pedidoValidado);
+        await DescontarInventarioAsync(pedidoValidado, inventarios);
 
         return pedidoValidado;
     }
 
-    private async Task DescontarInventarioAsync(SolicitudDePedido pedido)
+    private async Task DescontarInventarioAsync(SolicitudDePedido pedido, List<Inventario> inventarios)
     {
         var productosConInventario = pedido.ProductosSolicitados
             .Where(p => p.TieneInventario)
             .ToList();
 
-        var inventarios = await Inventarios
-            .Where(i => productosConInventario.Select(p => p.Id).Contains(i.IdProducto))
-            .ToListAsync();
+        foreach (var producto in productosConInventario)
+        {
+            var cantidadRestante = producto.Cantidad;
 
-        (from inventario in inventarios
-                join productoSolicitado in productosConInventario
-                    on inventario.IdProducto equals productoSolicitado.Id
-                select new { inventarios = inventario, productoSolicitado })
-            .ToList()
-            .ForEach(x =>
+            var inventariosProducto = inventarios
+                .Where(i => i.IdProducto == producto.Id && i.Cantidad > 0)
+                .OrderByDescending(i => i.Cantidad)
+                .ToList();
+
+            foreach (var inventario in inventariosProducto)
             {
-                x.inventarios.Cantidad -= x.productoSolicitado.Cantidad;
-                Inventarios.Update(x.inventarios);
-            });
+                if (cantidadRestante == 0) break;
+
+                var descuento = Math.Min(cantidadRestante, inventario.Cantidad);
+                inventario.Cantidad -= descuento;
+                cantidadRestante -= descuento;
+
+                Inventarios.Update(inventario);
+            }
+        }
 
         await SaveChangesAsync();
     }
