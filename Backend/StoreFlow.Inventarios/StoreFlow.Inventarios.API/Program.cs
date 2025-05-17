@@ -4,6 +4,7 @@ using StoreFlow.Inventarios.API.Datos;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using StoreFlow.Inventarios.API.Endpoints;
+using StoreFlow.Inventarios.API.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddAuthorization(opciones =>
 {
     opciones.AddPolicy("SoloUsuariosCcp", policy =>
         policy.RequireRole("UsuarioCcp"));
-    
+
     opciones.AddPolicy("Cliente", policy =>
         policy.RequireRole("Cliente"));
 });
@@ -33,6 +34,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<InventariosDbContext>(options => { options.UseNpgsql(connectionString); });
+builder.Services.AddScoped<IRegistrarCompraService, RegistrarCompraService>();
 
 
 var app = builder.Build();
@@ -43,6 +45,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapInventariosEndpoints();
+app.MapComprasEndPoints();
 
 
 using (var scope = app.Services.CreateScope())

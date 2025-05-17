@@ -13,12 +13,23 @@ public static class ComprasEndPoints
             RegistroCompraBodegaDto dto,
             IRegistrarCompraService servicio) =>
         {
-            await servicio.RegistrarCompraAsync(dto);
-            return Results.Ok(new
+            try
             {
-                mensaje = "Compra registrada exitosamente.",
-                totalProductos = dto.Productos.Sum(p => p.Cantidad)
-            });
+                if (dto.Productos is null || dto.Productos.Count == 0)
+                    return Results.BadRequest("Debe registrar al menos un producto.");
+
+                await servicio.RegistrarCompraAsync(dto);
+
+                return Results.Ok(new
+                {
+                    mensaje = "Compra registrada exitosamente.",
+                    totalProductos = dto.Productos.Sum(p => p.Cantidad)
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
         }).RequireAuthorization("SoloUsuariosCcp");
 
         app.MapGet("/bodegas", async (InventariosDbContext dbContext) =>
