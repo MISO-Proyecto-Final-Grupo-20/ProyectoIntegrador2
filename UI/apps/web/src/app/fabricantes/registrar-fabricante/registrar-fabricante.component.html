@@ -1,6 +1,6 @@
 <mat-card class="sin-sombra-card">
   <div class="row gap-8 align-items-center p-16">
-    <img src="/assets/images/notas.svg" width="34" height="31" />
+    <img src="assets/images/notas.svg" width="34" height="31" />
     <h3 i18n="fabricante.registrarFabricante">Registrar fabricante</h3>
   </div>
   <div class="p-12 column gap-16" [formGroup]="formulario">
@@ -31,7 +31,7 @@
         [disabled]="formulario.invalid"
         mat-raised-button
         color="primary"
-        i18n="fabricante.guardar"
+        i18n="guardar"
         (click)="guardarFabricante()"
       >
         Guardar

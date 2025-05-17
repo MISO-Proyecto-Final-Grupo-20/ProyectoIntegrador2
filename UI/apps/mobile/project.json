@@ -6,9 +6,9 @@
   "sourceRoot": "apps/mobile/src",
   "tags": [],
   "i18n": {
-    "sourceLocale": "es-CO",
+    "sourceLocale": "es",
     "locales": {
-      "en-US": "apps/mobile/src/locale/messages.en-US.xlf"
+      "en": "apps/mobile/src/locale/messages.en.xlf"
     }
   },
   "targets": {
@@ -27,11 +27,15 @@
           "includePaths": ["libs/design-system/src/lib/styles"]
         },
         "styles": ["apps/mobile/src/styles.scss"],
-        "scripts": []
+        "scripts": [],
+        "localize": ["es", "en"]
       },
       "configurations": {
-        "en-US": {
-          "localize": ["en-US"]
+        "en": {
+          "localize": ["en"]
+        },
+        "es": {
+          "localize": ["es"]
         },
         "production": {
           "budgets": [

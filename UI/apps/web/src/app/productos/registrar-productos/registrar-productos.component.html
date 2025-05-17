@@ -1,6 +1,6 @@
 <mat-card class="sin-sombra-card">
   <div class="row gap-8 align-items-center p-16">
-    <img src="/assets/images/carrito-compras.svg" width="34" height="31" />
+    <img src="assets/images/carrito-compras.svg" width="34" height="31" />
     <h3 i18n="producto.registrarProducto.titulo">Registrar producto</h3>
   </div>
   <div class="p-12 column gap-16" [formGroup]="formulario">
@@ -39,7 +39,7 @@
             matInput
             data-testid="input-registrar-producto-codigo"
             formControlName="codigo"
-            type="number"
+            type="text"
           />
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex-1">
@@ -81,7 +81,7 @@
 
       <button
         [disabled]="formulario.invalid"
-        i18n="producto.registrarProducto.guardar"
+        i18n="guardar"
         mat-raised-button
         color="primary"
         data-testid="boton-guardar-producto"
