@@ -3,6 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StoreFlow.Inventarios.API.Datos;
@@ -11,11 +12,12 @@ using StoreFlow.Inventarios.API.Datos;
 
 namespace StoreFlow.Inventarios.API.Migrations
 {
-    [ExcludeFromCodeCoverage]
     [DbContext(typeof(InventariosDbContext))]
-    partial class InventariosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250517175114_AgregarBodegaEInventarioPorBodega")]
+    partial class AgregarBodegaEInventarioPorBodega
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
