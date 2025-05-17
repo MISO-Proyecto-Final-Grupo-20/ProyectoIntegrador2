@@ -4,7 +4,8 @@ public record ProductoResponse(
     string Imagen,
     string Nombre,
     string Codigo,
-    decimal Precio);
+    decimal Precio,
+    int Id);
 
 public record ProductoCatalogoResponse(
     int Id,

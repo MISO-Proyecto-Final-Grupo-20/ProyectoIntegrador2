@@ -43,10 +43,11 @@ public class ProductosService(ComprasDbContext db) : IProductosService
                 p.ImagenUrl,
                 p.Nombre,
                 p.Id.ToString(),
-                p.Precio))
+                p.Precio,
+                p.Id))
             .ToArray();
     }
-    
+
     public async Task<List<InformacionPoducto>> ObtenerProductosAsync(int[] idsProductos)
     {
         var productos = await db.Productos
