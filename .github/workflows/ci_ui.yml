@@ -54,7 +54,7 @@ jobs:
             ${{ runner.os }}-nx-
 
       - name: Build ${{ matrix.app }} app
-        run: npx nx build ${{ matrix.app }} --configuration=production
+        run: npx nx build ${{ matrix.app }} --localize --configuration=production
         working-directory: UI/
         
       - name: Run tests for ${{ matrix.app }} app

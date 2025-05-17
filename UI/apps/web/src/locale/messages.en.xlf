@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="es-CO" target-language="en" datatype="plaintext" original="ng2.template">
+  <file source-language="es" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="5726015335467913420" datatype="html">
         <source>Análisis de tiendas</source>
-        <target>Store Analysis</target>
+        <target>Store analysis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas-container/analisis-tiendas-container.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -57,7 +57,7 @@
       </trans-unit>
       <trans-unit id="descargaexitosa" datatype="html">
         <source>Descarga exitosa</source>
-        <target>Download successful</target>
+        <target>Successful download</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/analisis-tiendas.constantes.ts</context>
           <context context-type="linenumber">3</context>
@@ -65,6 +65,7 @@
       </trans-unit>
       <trans-unit id="6519453392598038567" datatype="html">
         <source> Ingresa las observaciones del video </source>
+        <target> Enter the video observations </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
           <context context-type="linenumber">4,6</context>
@@ -73,6 +74,7 @@
       </trans-unit>
       <trans-unit id="2182608854672241685" datatype="html">
         <source>Observaciones</source>
+        <target>Observations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -81,6 +83,7 @@
       </trans-unit>
       <trans-unit id="4113182804267037649" datatype="html">
         <source> Guardar </source>
+        <target> Save </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/analisis-tiendas/modal-observaciones/modal-observaciones.component.html</context>
           <context context-type="linenumber">29,30</context>
@@ -91,7 +94,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/fabricantes/registrar-fabricante/registrar-fabricante.component.html</context>
-          <context context-type="linenumber">37,39</context>
+          <context context-type="linenumber">37,38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/planes-venta/registrar-planes-ventas/registrar-planes-venta.component.html</context>
@@ -103,7 +106,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
-          <context context-type="linenumber">90,93</context>
+          <context context-type="linenumber">90,91</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/vendedores/registrar-vendedores/registrar-vendedores.component.html</context>
@@ -165,7 +168,7 @@
       </trans-unit>
       <trans-unit id="3955306167478003511" datatype="html">
         <source>Bodega destinó</source>
-        <target>Warehouse destination</target>
+        <target>Destination warehouse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/compras-bodega/registrar-bodega/registrar-bodega.component.html</context>
           <context context-type="linenumber">23,25</context>
@@ -258,7 +261,7 @@
       </trans-unit>
       <trans-unit id="menuAnalisisTiendas" datatype="html">
         <source>Análisis de tiendas</source>
-        <target>Store Analysis</target>
+        <target>Store analysis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
           <context context-type="linenumber">35</context>
@@ -266,7 +269,7 @@
       </trans-unit>
       <trans-unit id="menuProgramacionRutas" datatype="html">
         <source>Programación de rutas</source>
-        <target>Route programming</target>
+        <target>Route scheduling</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/home/home.constantes.ts</context>
           <context context-type="linenumber">40</context>
@@ -327,7 +330,7 @@
       </trans-unit>
       <trans-unit id="415176692150431860" datatype="html">
         <source> Consultar </source>
-        <target> Consult </target>
+        <target> Search </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/informes/formulario-consulta-informes/formulario-consulta-informes.component.html</context>
           <context context-type="linenumber">73,74</context>
@@ -372,7 +375,7 @@
       </trans-unit>
       <trans-unit id="655856028981699158" datatype="html">
         <source> Ingresa tus datos para acceder a tu información. </source>
-        <target> Enter your details to access your information. </target>
+        <target> Enter your data to access your information. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -407,7 +410,7 @@
       </trans-unit>
       <trans-unit id="7904313455104046575" datatype="html">
         <source> Ingresar </source>
-        <target> Enter </target>
+        <target> Log in </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/login/admin-shell/admin-shell.component.html</context>
           <context context-type="linenumber">56,57</context>
@@ -434,7 +437,7 @@
       </trans-unit>
       <trans-unit id="mensajeCredencialesIncorrectas" datatype="html">
         <source>No se pudo autenticar. Verifica tu correo o contraseña.</source>
-        <target>Authentication failed. Check your email or password.</target>
+        <target>Could not authenticate. Check your email or password.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/login/login.constantes.ts</context>
           <context context-type="linenumber">2</context>
@@ -593,7 +596,7 @@
       </trans-unit>
       <trans-unit id="8655267627887849874" datatype="html">
         <source> Registrar masivo </source>
-        <target> Register mass </target>
+        <target> Bulk register </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/productos/registrar-productos/registrar-productos.component.html</context>
           <context context-type="linenumber">79,83</context>
@@ -611,7 +614,7 @@
       </trans-unit>
       <trans-unit id="2244399101692788454" datatype="html">
         <source> Productos cargados </source>
-        <target> Loaded products </target>
+        <target> Products uploaded </target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.html</context>
           <context context-type="linenumber">28,31</context>
@@ -620,7 +623,7 @@
       </trans-unit>
       <trans-unit id="producto.masivo.cargadosCorrectamente" datatype="html">
         <source><x id="PH" equiv-text="this.productos.length"/> productos cargados correctamente</source>
-        <target><x id="PH" equiv-text="this.productos.length"/> products loaded correctly</target>
+        <target><x id="PH" equiv-text="this.productos.length"/> products uploaded successfully</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -628,7 +631,7 @@
       </trans-unit>
       <trans-unit id="producto.masivo.erroresNoCargados" datatype="html">
         <source> Ver <x id="PH" equiv-text="this.errores.length"/> errores no cargados</source>
-        <target> See <x id="PH" equiv-text="this.errores.length"/> products not loaded</target>
+        <target> See <x id="PH" equiv-text="this.errores.length"/> errors not uploaded</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/web/src/app/productos/resultado-carga-masiva/resultado-carga-masiva.component.ts</context>
           <context context-type="linenumber">32</context>

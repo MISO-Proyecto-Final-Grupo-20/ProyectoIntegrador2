@@ -27,14 +27,17 @@
           "includePaths": ["libs/design-system/src/lib/styles"]
         },
         "styles": ["apps/web/src/styles.scss"],
-        "scripts": []
+        "scripts": [],
+        "localize": ["es", "en"]
       },
       "configurations": {
         "en": {
-          "localize": ["en"]
+          "localize": ["en"],
+          "baseHref": "/en/"
         },
         "es": {
-          "localize": ["es"]
+          "localize": ["es"],
+          "baseHref": "/es/"
         },
         "en-US": {
           "localize": ["en-US"]
