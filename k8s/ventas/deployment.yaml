@@ -39,3 +39,23 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: OTEL_ENDPOINT
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AZURE_STORAGE_CONNECTION_STRING
+            - name: AZURE_OPENAI_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AZURE_OPENAI_ENDPOINT
+            - name: AZURE_OPENAI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AZURE_OPENAI_KEY
+            - name: AZURE_OPENAI_DEPLOYMENT
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AZURE_OPENAI_DEPLOYMENT                  
