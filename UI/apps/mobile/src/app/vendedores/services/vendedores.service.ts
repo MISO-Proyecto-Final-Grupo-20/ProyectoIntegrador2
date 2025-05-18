@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Capacitor } from '@capacitor/core';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
@@ -60,21 +61,58 @@ export class VendedoresService {
     return of(mocksPedidos);
   }
 
-  registrarVisita(
-    idCliente: number,
-    visita: RegistrarVisita
-  ): Observable<void> {
-    const url = VendedoresUrls.visitas.replace(
-      '[idCliente]',
-      idCliente.toString()
-    );
-    const formData = new FormData();
-    formData.append('fecha', visita.fecha.toString());
-    formData.append('hora', visita.hora);
-    formData.append('archivo', visita.archivo);
-    return this.http.post<void>(url, formData);
-    return of(void 0);
+  // registrarVisita(
+  //   idCliente: number,
+  //   visita: RegistrarVisita
+  // ): Observable<void> {
+  //   const url = VendedoresUrls.visitas.replace(
+  //     '[idCliente]',
+  //     idCliente.toString()
+  //   );
+  //   const formData = new FormData();
+  //   formData.append('fecha', visita.fecha.toString());
+  //   formData.append('hora', visita.hora);
+  //   formData.append('archivo', visita.archivo);
+  //   return this.http.post<void>(url, formData);
+  //   return of(void 0);
+  // }
+  
+  registrarVisita(idCliente: number, visita: RegistrarVisita): Observable<void> {
+  const url = VendedoresUrls.visitas.replace('[idCliente]', idCliente.toString());
+  const formData = new FormData();
+  formData.append('fecha', visita.fecha.toString());
+  formData.append('hora', visita.hora);
+  formData.append('archivo', visita.archivo);
+
+  // Detectar si estás en móvil nativo (Android/iOS)
+  if (Capacitor.isNativePlatform()) {
+    // Usar fetch para evitar que Capacitor intercepte la llamada
+    const token = localStorage.getItem('store_token');
+    return new Observable<void>((observer) => {
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: token ?? '' // si tienes token
+        }
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          observer.next();
+          observer.complete();
+        })
+        .catch((error) => {
+          console.error('Error al registrar visita con fetch:', error);
+          observer.error(error);
+        });
+    });
   }
+
+  // En navegador, usar HttpClient normalmente
+  return this.http.post<void>(url, formData);
+}
 
   obtenerRegistroVisitas(idCliente: number): Observable<Visita[]> {
     const url = VendedoresUrls.visitas.replace(
