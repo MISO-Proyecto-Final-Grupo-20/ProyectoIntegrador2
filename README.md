@@ -2,8 +2,9 @@
 
 Administrador logístico para suplir tiendas y supermercados.
 
-## Creación del ambiente
-[Guía de Creación](/creacion_ambiente_storeflow_limpio.md)
+## 📚 Documentación
+
+- 🔧 [Documentación Técnica](./docs/tecnica/index.md)
 
 ## Ingresa a la aplicación web
 
