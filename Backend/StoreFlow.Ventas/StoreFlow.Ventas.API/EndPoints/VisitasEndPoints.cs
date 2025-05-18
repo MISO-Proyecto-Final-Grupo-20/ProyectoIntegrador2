@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using StoreFlow.Compartidos.Core.Infraestructura;
 using StoreFlow.Ventas.API.Datos;
 using StoreFlow.Ventas.API.DTOs;
 using StoreFlow.Ventas.API.Entidades;
@@ -15,40 +16,14 @@ public static class VisitasEndPoints
             int clienteId,
             HttpRequest request,
             VentasDbContext dbContext,
-            IBlobStorageService blobStorageService) =>
+            IBlobStorageService blobStorageService,
+            IDateTimeProvider dateTimeProvider) =>
         {
             if (!request.HasFormContentType)
                 return Results.BadRequest("Debe enviar el video como multipart/form-data.");
 
             var form = await request.ReadFormAsync();
-            var fechaStr = form["fecha"];
-            var horaStr = form["hora"];
 
-            if (string.IsNullOrWhiteSpace(fechaStr))
-                return Results.BadRequest("Faltan campos requerido: fecha");
-            if (string.IsNullOrWhiteSpace(fechaStr) || string.IsNullOrWhiteSpace(horaStr))
-                return Results.BadRequest("Faltan campos requerido:hora");
-
-            var fechaLimpia =
-                fechaStr.ToString().Split("00:00:00")[0].Trim(); // elimina zona horaria y texto descriptivo
-            var hora = horaStr.ToString().Trim();
-
-            Console.WriteLine($"{fechaLimpia} {hora}");
-
-            if (!DateTime.TryParse($"{fechaLimpia} {hora}", out var fechaHora))
-                return Results.BadRequest("Fecha u hora inválida.");
-
-
-            Console.WriteLine("fecha reconstruida:{0}", fechaHora);
-
-            var fechaHoraUtc = new DateTime(
-                fechaHora.Year,
-                fechaHora.Month,
-                fechaHora.Day,
-                fechaHora.Hour,
-                fechaHora.Minute,
-                fechaHora.Second,
-                DateTimeKind.Utc);
             var archivoVideo = form.Files.FirstOrDefault();
 
             if (archivoVideo is null || archivoVideo.Length == 0)
@@ -64,7 +39,7 @@ public static class VisitasEndPoints
             {
                 IdVendedor = vendedorId,
                 IdCliente = clienteId,
-                Fecha = fechaHoraUtc,
+                Fecha = dateTimeProvider.UtcNow,
                 Video = new Video
                 {
                     Url = url,

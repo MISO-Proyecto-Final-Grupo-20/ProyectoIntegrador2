@@ -8,55 +8,57 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StoreFlow.Inventarios.API.Datos;
 using StoreFlow.Inventarios.API.Endpoints;
+using StoreFlow.Inventarios.API.Servicios;
 
-namespace StoreFlow.Inventarios.Tests
+namespace StoreFlow.Inventarios.Tests;
+
+public static class TestApplicationFactory
 {
-    public static class TestApplicationFactory
+    public static WebApplication Create(string nombreBaseDatos = "InventarioTestDb")
     {
-        public static WebApplication Create()
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
-            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-            {
-                ApplicationName = typeof(Program).Assembly.FullName,
-                EnvironmentName = "Testing"
-            });
+            ApplicationName = typeof(Program).Assembly.FullName,
+            EnvironmentName = "Testing"
+        });
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        RoleClaimType = ClaimTypes.Role,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
-                    };
-                });
-
-            builder.Services.AddAuthorization(opciones =>
-            {
-                opciones.AddPolicy("SoloUsuariosCcp", policy =>
-                    policy.RequireRole("UsuarioCcp"));
-                
-                opciones.AddPolicy("Cliente", policy =>
-                    policy.RequireRole("Cliente"));
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    RoleClaimType = ClaimTypes.Role,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GeneradorTokenPruebas.ClavePruebas))
+                };
             });
 
-            builder.WebHost.UseTestServer();
+        builder.Services.AddAuthorization(opciones =>
+        {
+            opciones.AddPolicy("SoloUsuariosCcp", policy =>
+                policy.RequireRole("UsuarioCcp"));
 
-            builder.Services.AddDbContext<InventariosDbContext>(options =>
-                options.UseInMemoryDatabase("InventarioTestDb"));
+            opciones.AddPolicy("Cliente", policy =>
+                policy.RequireRole("Cliente"));
+        });
 
-            
+        builder.WebHost.UseTestServer();
 
-            var app = builder.Build();
+        builder.Services.AddDbContext<InventariosDbContext>(options =>
+            options.UseInMemoryDatabase(nombreBaseDatos));
+        builder.Services.AddScoped<IRegistrarCompraService, RegistrarCompraService>();
 
-            app.MapInventariosEndpoints();
 
-            return app;
-        }
+        var app = builder.Build();
+
+        app.MapInventariosEndpoints();
+        app.MapComprasEndPoints();
+
+        return app;
     }
 }

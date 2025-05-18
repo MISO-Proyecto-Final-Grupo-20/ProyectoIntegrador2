@@ -29,6 +29,17 @@ export class RegistrarVisitaComponent {
 
   constructor() {
     this.store.obtenerRegistroVisitas();
+    const ahora = new Date();
+    const hora = ahora.toTimeString().slice(0, 5); // Formato HH:mm
+
+    this.formulario.setValue({
+      fecha: ahora,
+      hora: hora,
+    });
+
+    this.formulario.get('fecha')?.disable();
+    this.formulario.get('hora')?.disable();
+
   }
 
   abrirModalAdjuntar() {
@@ -40,12 +51,24 @@ export class RegistrarVisitaComponent {
   }
 
   registrarVisitar() {
-    const { fecha, hora } = this.formulario.value;
+    const fecha = this.formulario.get('fecha')?.value as Date;
+    const hora = this.formulario.get('hora')?.value as string;
+    const archivo = this.store.archivoSeleccionado();
+
+    console.log('Archivo seleccionado:', archivo);
+
+    if (!archivo || !(archivo instanceof File)) {
+      console.error('Archivo inválido:', archivo);
+      alert('Debes seleccionar un archivo válido antes de continuar.');
+      return;
+    }
+
     const datosVisita: RegistrarVisita = {
       hora,
       fecha,
-      archivo: this.store.archivoSeleccionado(),
-    } as RegistrarVisita;
+      archivo,
+    };
+
     this.store.registrarVisita(datosVisita);
     this.formulario.reset();
   }

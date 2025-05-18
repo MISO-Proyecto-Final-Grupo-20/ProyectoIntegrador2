@@ -17,6 +17,7 @@
             data-testid="calendar-registrar-visita"
             matInput
             [matDatepicker]="fecha"
+            [disabled]="true"
           />
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
@@ -34,6 +35,7 @@
             format="HH:mm"
             formControlName="hora"
             data-testid="timer-registrar-visita"
+            [disabled]="true"
             required
           />
           <mat-icon class="color-grey-700" matSuffix>access_time</mat-icon>
