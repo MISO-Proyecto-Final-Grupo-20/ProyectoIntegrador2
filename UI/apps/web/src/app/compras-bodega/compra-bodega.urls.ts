@@ -1,6 +1,6 @@
 import { environment } from '../../environments/environment';
 
 export const ComprasBodegaUrls = {
-  obtenerListadoBodegas: `${environment.apiUrl}/compras/listadoBodegas`,
-  bodegas: `${environment.apiUrl}/compras/bodegas`,
+  obtenerListadoBodegas: `${environment.apiUrl}/inventarios/bodegas`,
+  bodegas: `${environment.apiUrl}/inventarios/compras`,
 };
