@@ -5,6 +5,7 @@ Administrador logístico para suplir tiendas y supermercados.
 ## 📚 Documentación
 
 - 🔧 [Documentación Técnica](./docs/tecnica/index.md)
+- 👥 [Guía del Usuario](docs/usuario/index.md)
 
 ## Ingresa a la aplicación web
 
