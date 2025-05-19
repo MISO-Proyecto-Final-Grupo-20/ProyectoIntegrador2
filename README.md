@@ -2,8 +2,10 @@
 
 Administrador logístico para suplir tiendas y supermercados.
 
-## Creación del ambiente
-[Guía de Creación](/creacion_ambiente_storeflow_limpio.md)
+## 📚 Documentación
+
+- 🔧 [Documentación Técnica](./docs/tecnica/index.md)
+- 👥 [Guía del Usuario](docs/usuario/index.md)
 
 ## Ingresa a la aplicación web
 
@@ -15,4 +17,4 @@ La aplicación web está destinada para los adminsitradores de CCP.
 
 Si eres un cliente de nosotros podrás instalar la aplicación StoreFlow en dispositivos android.
 
-[Descarga la app](https://github.com/MISO-Proyecto-Final-Grupo-20/ProyectoIntegrador2/blob/main/UI/apps/mobile/apk/storeflow.apk)
+[Descarga la app](https://github.com/MISO-Proyecto-Final-Grupo-20/ProyectoIntegrador2/blob/main/Apk/storeflow.apk)
